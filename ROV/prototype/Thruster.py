@@ -1,3 +1,5 @@
+from RotDirection import RotDirection
+
 import time
 
 class Thruster:
@@ -9,28 +11,33 @@ class Thruster:
         self.pi = pi
         self.pinNum = pinNum
         self.rotDirection = rotDirection
-
-        pi.set_servo_pulsewidth(pinNum, 0)
+        self.speed = 0
 
     def arm(self):
-        print("arming")
         self.pi.set_servo_pulsewidth(self.pinNum, 0)
         time.sleep(1)
-        self.pi.set_servo_pulsewidth(self.pinNum, Thruster.maxForward)
-        time.sleep(1)
-        self.pi.set_servo_pulsewidth(self.pinNum, Thruster.maxReverse)
-        time.sleep(2)
-        self.pi.set_servo_pulsewidth(self.pinNum, 1500)
-        time.sleep(2)
 
-    # def setUp(self):
-    #
-    # def setSpeed(self, speed):
-    #
-    # def getSpeed(self):
-    #
-    # dep stop():
-    #
-    # def setDirection(self, rotDirection):
-    #
-    # def getDirection(self):
+        self.pi.set_servo_pulsewidth(self.pinNum, self.stopped)
+        time.sleep(1)
+
+    def setSpeed(self, speed):
+        speed = self.rotDirection.value * speed
+        self.speed = Thruster.stopped + ((Thruster.maxForward - Thruster.maxReverse) / 2) * speed
+        print(self.rotDirection.value)
+        print(self.speed)
+        self.pi.set_servo_pulsewidth(self.pinNum, self.speed)
+
+    def getSpeed(self):
+        return self.speed
+
+    def stop(self):
+        self.pi.set_servo_pulsewidth(self.pinNum, self.stopped)
+        self.speed = self.stopped
+
+    def setRotDirection(self, rotDirection):
+        self.rotDirection = rotDirection
+
+    def getRotDirection(self):
+        return self.rotDirection
+
+    def brake(linearSpeed): pass
