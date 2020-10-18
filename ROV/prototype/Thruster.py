@@ -23,8 +23,10 @@ class Thruster:
     def setSpeed(self, speed):
         speed = self.rotDirection.value * speed
         self.speed = Thruster.stopped + ((Thruster.maxForward - Thruster.maxReverse) / 2) * speed
-        print(self.rotDirection.value)
-        print(self.speed)
+
+        if self.speed >  Thruster.maxForward or self.speed < Thruster.maxReverse:
+            return
+
         self.pi.set_servo_pulsewidth(self.pinNum, self.speed)
 
     def getSpeed(self):

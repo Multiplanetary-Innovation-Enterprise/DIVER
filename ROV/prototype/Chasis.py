@@ -1,8 +1,9 @@
 from Thruster import Thruster
 from RotDirection import RotDirection
-from KeyboardInput import KeyboardInput
 
 class Chasis:
+    speed = 0
+
     def __init__(self, pi):
         self.xThruster = Thruster(pi, 4, RotDirection.Clockwise)
         self.yThruster = Thruster(pi, 5, RotDirection.Clockwise)
@@ -29,3 +30,15 @@ class Chasis:
 
     def stop(self):
         self.move(0, 0, 0)
+
+    def setSpeed(self, speed):
+        self.speed = speed
+
+    def getSpeed(self):
+        return self.speed
+
+    def increaseSpeed(self, speed):
+        self.speed += speed
+
+    def decreaseSpeed(self, speed):
+        self.speed -= speed

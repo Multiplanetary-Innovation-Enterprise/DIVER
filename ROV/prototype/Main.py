@@ -1,4 +1,3 @@
-from __future__ import annotations
 from Thruster import Thruster
 from RotDirection import RotDirection
 from KeyboardInput import KeyboardInput
@@ -6,18 +5,15 @@ from Chasis import Chasis
 from Display import Display
 from Processor import Processor
 import keyboard
-from ObserverPattern import Observer, Observable
-from typing import List
-from random import randrange
-from abc import ABC, abstractmethod
-#import os
-#import time
-#os.system ("sudo pigpiod")
-#time.sleep(1)
 
-#import pigpio
+import os
+import time
+os.system ("sudo pigpiod")
+time.sleep(1)
 
-#pi = pigpio.pi();
+import pigpio
+
+pi = pigpio.pi();
 
 # processor = Processor()
 #
@@ -53,10 +49,13 @@ print("armed")
 # time.sleep(5)
 # thruster.stop()
 
-subject = KeyboardInput()
+keyboard = KeyboardInput()
+chasis = Chasis(pi)
+chasis.arm()
 
-observer_a = Processor()
-subject.attach(observer_a)
+processor = Processor(chasis)
+keyboard.attach(processor)
+
 display = Display()
 display.construct()
 #subject.notify()

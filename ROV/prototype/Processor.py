@@ -1,10 +1,13 @@
 import queue
 
 from ObserverPattern import Observer, Observable
+from Command import Command
+from Chasis import Chasis
 
 class Processor(Observer):
-    def __init__(self):
+    def __init__(self, chasis: Chasis):
         self.queue = queue.Queue(maxsize=1000)
+        self.chasis = chasis
 
     def enqueue(): pass
 
@@ -12,5 +15,6 @@ class Processor(Observer):
 
     def processQueue(): pass
 
-    def update(self, observable: Observable):
+    def update(self, command: Command):
         print("Updated!!!\n")
+        command.execute(self.chasis)

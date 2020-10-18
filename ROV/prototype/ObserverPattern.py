@@ -1,6 +1,8 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 
+from Command import Command
+
 class Observable(ABC):
     @abstractmethod
     def attach(self, observer: Observer):
@@ -11,10 +13,10 @@ class Observable(ABC):
         pass
 
     @abstractmethod
-    def notify(self):
+    def notify(self, command: Command):
         pass
 
 class Observer(ABC):
     @abstractmethod
-    def update(self, observable: Observable):
+    def update(self, command: Command):
         pass
