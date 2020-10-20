@@ -4,13 +4,13 @@ from abc import ABC, abstractmethod
 from Command import Command
 
 class Observable(ABC):
-    @abstractmethod
-    def attach(self, observer: Observer):
-        pass
+    observers: List[Observer] = []
 
-    @abstractmethod
+    def attach(self, observer: Observer):
+        self.observers.append(observer)
+
     def detach(self, observer: Observer):
-        pass
+        self.observers.remove(observer)
 
     @abstractmethod
     def notify(self, command: Command):

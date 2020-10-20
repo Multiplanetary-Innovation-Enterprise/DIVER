@@ -35,7 +35,7 @@ class Chasis:
         self.speed = speed
 
     def getSpeed(self):
-        return self.speed
+        return round(self.speed, 2)
 
     def increaseSpeed(self, speed):
         self.speed += speed

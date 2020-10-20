@@ -15,22 +15,7 @@ import pigpio
 
 pi = pigpio.pi();
 
-# processor = Processor()
-#
-# keyboard = KeyboardInput()
-# keyboard.attach(keyboard)
-# #keyboard.notify()
-#
-#
-# #chasis = Chasis(pi)
-# display = Display()
-# display.construct()
-
-
-
 print("arming....")
-#chasis.arm()
-print("armed")
 #chasis.move(0.5, 0.5, 0.5)
 #chasis.stop()
 # thruster = Thruster(pi, 4, RotDirection.Clockwise)
@@ -48,14 +33,14 @@ print("armed")
 # print("dir: " + str(thruster.getRotDirection()))
 # time.sleep(5)
 # thruster.stop()
-
+print("Initializing. Please wait...\n")
 keyboard = KeyboardInput()
 chasis = Chasis(pi)
 chasis.arm()
+print("armed")
 
 processor = Processor(chasis)
 keyboard.attach(processor)
 
 display = Display()
 display.construct()
-#subject.notify()
