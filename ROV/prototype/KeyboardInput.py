@@ -2,6 +2,7 @@ import keyboard
 
 from Input import Input
 
+#Represents a keyboard input
 class KeyboardInput(Input):
     def __init__(self):
         #Move forward controls

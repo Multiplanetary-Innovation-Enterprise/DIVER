@@ -3,7 +3,9 @@ from abc import ABC, abstractmethod
 
 from Chasis import Chasis
 
+#Represents a command that can be sent to the ROV
 class Command(ABC):
+    #Executes the command and provided with a reference to the chasis
     @abstractmethod
     def execute(self, chasis: Chasis):
         pass

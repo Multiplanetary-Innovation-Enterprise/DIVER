@@ -5,37 +5,50 @@ from Command import Command
 from MoveCommands  import MoveX
 from SpeedCommands import IncreaseSpeed, DecreaseSpeed
 
+#Represents a generic input device
 class Input(Observable):
-    def increaseSpeed(self, e):
+    #Increases the speed of the chasis by sending an increase speed command
+    def increaseSpeed(self, event):
         self.notify(IncreaseSpeed())
 
-    def decreaseSpeed(self, e):
+    #Decreases the speed of the chasis by sending a decrease speed command
+    def decreaseSpeed(self, event):
         self.notify(DecreaseSpeed())
 
-    def forward(self, e):
+    #Sends a move forward command
+    def forward(self, event):
         self.notify(MoveX(1))
         print("forward\n")
 
-    def backward(self, e):
+    #Sends a move backwards command
+    def backward(self, event):
         self.notify(MoveX(-1))
         print("backward\n")
 
-    def stopX(self, e):
+    #Sends a stop moving in x-axis command
+    def stopX(self, event):
         self.notify(MoveX(0))
         print("Stop X\n")
 
-    def right(self, e):pass
+    #Sends a move right command
+    def right(self, event):pass
 
-    def stopY(self, e):pass
+    #Sends a move left command
+    def left(self, event):pass
 
-    def up(self, e):pass
+    #Sends a stop moving in y-axis command
+    def stopY(self, event):pass
 
-    def down(self, e):pass
+    #Sends a move up command
+    def up(self, event):pass
 
-    def stopZ(self, e):pass
+    #Sends a move down command
+    def down(self, event):pass
 
-    def left(self, e):pass
+    #Sends a stop moving in z-axis command
+    def stopZ(self, event):pass
 
+    #Sends a command to all observers
     def notify(self, command: Command):
         for observer in self.observers:
             observer.update(command)

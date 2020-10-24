@@ -1,7 +1,8 @@
 import tkinter as tk
 
+#Represents the GUI for the ROV
 class Display:
-    #Make good GUI TODO
+    #Creates the display
     def construct(self):
         window = tk.Tk()
 
