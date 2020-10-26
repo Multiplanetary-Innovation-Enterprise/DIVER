@@ -24,9 +24,10 @@ unsigned long rpmEndTime;
 int bucketRPMs = 0;
 int bucketCount = 0; //keep track of how many go by
 //values ill need from the ME team for tracking RPMs
-const int distBucketToBucket = 1;
-const int distTrackLength = 1;
-const int numberOfBuckets = 1;
+const int distBucketToBucket = 1; //1.5ft min
+// \/ roughly 5.8 ft of chain for the min \/ (93.5 links)
+const int distTrackLength = 1; //495.3mm is center of sprocket to center of sprocket sprocket distance (7-8inch diameter sprocket)
+const int numberOfBuckets = 4;
 
 void setup()
 {
@@ -40,7 +41,7 @@ void setup()
   pinMode(start, INPUT);
   pinMode(echo, INPUT);
   //for current sensor
-  pinMode(13, OUTPUT); 
+  pinMode(13, OUTPUT);
   digitalWrite(2, HIGH);
 }
 
@@ -53,7 +54,7 @@ void loop()
   if (Serial.available() > 0) {
     // read the incoming byte:
     incomingByte = Serial.read();
-    
+
     //if button pressed, stop
     checkToStopMotor();
     //if switch is on and button is not pressed, accelerate motor
@@ -62,7 +63,7 @@ void loop()
     measureBucketRPMs();
     //measure current flowing through motor
     measureMotorCurrent();
-    
+
     //convert ascii bytes into numbers
     if (incomingByte > 47 && incomingByte < 72)
     {
@@ -90,11 +91,11 @@ void checkToStopMotor()
   stopState = digitalRead(stop);
 
   // check if the pushbutton is pressed. If it is, stop the motor:
-  if (buttonState == HIGH) 
+  if (buttonState == HIGH)
   {
     toggleStop = toggleStop ^ 1;
     pwm_value = 0;
-  } 
+  }
 }
 
 void checkToStartMotor()
@@ -103,12 +104,12 @@ void checkToStartMotor()
   startState = digitalRead(stop);
 
   // check if the switch is on and button is not pressed. If so, accelerate motor to max speed
-  if (toggleStop == 0 && startState == HIGH) 
+  if (toggleStop == 0 && startState == HIGH)
   {
     if (pwm_value < 255) pwm_value += 5;
     //start recording clock for tracking RPM data
-    if (rpmStartTime == NULL) rpmStartTime = millis(); 
-  } 
+    if (rpmStartTime == NULL) rpmStartTime = millis();
+  }
 }
 
 void measureBucketRPMs()
@@ -143,12 +144,12 @@ void measureMotorCurrent()
   maxVal = 0;
   // delay(500);
   // digitalWrite(13, !digitalRead(13));
-  for (int counter = 1; counter < samples; counter++) { 
+  for (int counter = 1; counter < samples; counter++) {
     reading = analogRead(analogPin); // read the input pin
     if (reading > maxVal)
     {
       maxVal = reading;
     }
   }
-  Serial.println(maxVal); // debug value 
+  Serial.println(maxVal); // debug value
 }
