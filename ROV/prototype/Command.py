@@ -9,3 +9,6 @@ class Command(ABC):
     @abstractmethod
     def execute(self, chasis: Chasis):
         pass
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__

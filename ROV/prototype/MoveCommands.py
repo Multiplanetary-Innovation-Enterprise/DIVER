@@ -8,8 +8,6 @@ class MoveX(Command):
 
     #Performs the movement in the x-axis
     def execute(self, chasis: Chasis):
-        print("Move X \n")
-
         #Decides which way to move in the x-axis
         if self.dir == -1:
             chasis.moveX(-chasis.getSpeed());

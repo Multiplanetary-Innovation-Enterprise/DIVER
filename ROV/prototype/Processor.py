@@ -1,4 +1,6 @@
 import queue
+import threading
+import time
 
 from ObserverPattern import Observer, Observable
 from Command import Command
@@ -25,15 +27,14 @@ class Processor(Observer):
     #Run queue in seperate thread TODO
     def processQueue(self):
         self.queueRunning = 1
+
         print("Processing Queue!\n")
+
         while not self.queue.empty():
             command = self.dequeue()
             command.execute(self.chasis)
 
         self.queueRunning = 0
-
-        #command = queue.get()
-        #command.execute(self.chasis)
 
     #Alerts the processor that a new command is available
     def update(self, command: Command):
@@ -44,4 +45,6 @@ class Processor(Observer):
 
         #Processes the queue if it not already being processed
         if not self.queueRunning:
-            self.processQueue()
+            print("thread start\n");
+            self.thread = threading.Thread(target=self.processQueue)
+            self.thread.start()
