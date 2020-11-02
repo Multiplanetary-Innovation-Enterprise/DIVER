@@ -12,6 +12,10 @@ const int ampVin = 3; //analog pin: potentiometer wiper (middle terminal) connec
 int reading = 0; // variable to store the value read
 long maxVal = 0;
 int samples = 1000; // how many samples per reading
+//constants for converting amp sensor reading
+const int zeroAmp = 513;
+const int halfAmp = 7;
+double amps = 0.0;
 
 int pwm_value = 0;
 int incomingByte = 0; // for incoming serial data
@@ -19,14 +23,15 @@ int userInput = 0; //a number from the serial monitor
 int startState = 0; //for checking if motor must hard stop
 int toggleStop = 0; //for using button as a toggle switch
 int stopState = 0; //for checking if motor must start
+
 unsigned long rpmStartTime = NULL;
-unsigned long rpmEndTime;
-int bucketRPMs = 0;
+const int rpmWaitTime = 1000; //will keep the sensor from taking a lot of data all at once (units of milliseconds)
+double bucketRPMs = 0;
 int bucketCount = 0; //keep track of how many go by
 //values ill need from the ME team for tracking RPMs
-const int distBucketToBucket = 1; //1.5ft min
+const double distBucketToBucket = 1; //1.5ft min
 // \/ roughly 5.8 ft of chain for the min \/ (93.5 links)
-const int distTrackLength = 1; //495.3mm is center of sprocket to center of sprocket sprocket distance (7-8inch diameter sprocket)
+const double distTrackLength = 1; //495.3mm is center of sprocket to center of sprocket sprocket distance (7-8inch diameter sprocket)
 const int numberOfBuckets = 4;
 
 int buttonCooldown = 0;
@@ -134,30 +139,31 @@ void measureBucketRPMs()
   //if less than 10cm from dist sensor
   if (distance < 10)
   {
-    rpmEndTime = millis();
-    unsigned long rpmDelta = (rpmEndTime - rpmStartTime) / 1000; //time in seconds
+    unsigned long rpmEndTime = millis();
     bucketCount++;
-    if (bucketCount == numberOfBuckets + 1) //plus 1 means it went full circle
+    if (bucketCount == numberOfBuckets + 1 && (rpmEndTime - rpmStartTime) > rpmWaitTime) //plus 1 means it went full circle
     {
+      unsigned long rpmDelta = (rpmEndTime - rpmStartTime) / 1000; //time in seconds
       bucketCount = 0;
       bucketRPMs = (distTrackLength / rpmDelta) / 60;
       Serial.print(bucketRPMs);
       Serial.println(" RPMs");
       Serial.print(rpmDelta);
       Serial.println(" rpmDelta");
+      rpmStartTime = millis();
     }
-    while (distance < 10)
-    {//polling loop to wait for bucket to pass
-      digitalWrite(trig, LOW);
-      delayMicroseconds(500);
-      digitalWrite(trig, HIGH);
-      delayMicroseconds(500);
-      digitalWrite(trig, LOW);
-      duration = pulseIn (echo, HIGH);
-      distance = (duration/2)/29;
-//      Serial.print(distance);
-//      Serial.println(" cm");
-    }
+//     while (distance < 10)
+//     {//polling loop to wait for bucket to pass
+//       digitalWrite(trig, LOW);
+//       delayMicroseconds(500);
+//       digitalWrite(trig, HIGH);
+//       delayMicroseconds(500);
+//       digitalWrite(trig, LOW);
+//       duration = pulseIn (echo, HIGH);
+//       distance = (duration/2)/29;
+// //      Serial.print(distance);
+// //      Serial.println(" cm");
+//     }
   }
 }
 
@@ -173,6 +179,7 @@ void measureMotorCurrent()
       maxVal = reading;
     }
   }
+  amps = ( ((double) maxVal) - ((double) zeroAmp) ) / ((double) halfAmp);
   Serial.print("Amp Sensor: ");
   Serial.println(maxVal); // debug value
 }
