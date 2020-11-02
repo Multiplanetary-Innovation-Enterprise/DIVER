@@ -4,6 +4,7 @@ from RotDirection import RotDirection
 #Represents the chasis of the ROV
 class Chasis:
     speed = 0 #Universal speed for all thrusters
+    activeThrusters = [];
 
     #Constructor for Chasis
     def __init__(self, pi):
@@ -27,14 +28,17 @@ class Chasis:
     #Sets the speed for the thruster mounted on the x-axis
     def moveX(self, speed):
         self.xThruster.setSpeed(speed)
+        self.updateThrusterState(self.xThruster, speed);
 
         #Sets the speed for the thruster mounted on the y-axis
     def moveY(self, speed):
         self.yThruster.setSpeed(speed)
+        self.updateThrusterState(self.yThruster, speed);
 
     #Sets the speed for the thruster mounted on the z-axis
     def moveZ(self, speed):
         self.zThruster.setSpeed(speed)
+        self.updateThrusterState(self.zThruster, speed);
 
     #Stops all of the thrusters
     def stop(self):
@@ -50,8 +54,27 @@ class Chasis:
 
     #Increases the universal speed of the chasis by the specified amount
     def increaseSpeed(self, speed):
+        print("Active thrusters: " + str(len(self.activeThrusters)) + "\n");
         self.speed += speed
+
+        #Update the speed of any thrusters currently running
+        self.updateActiveThrustersSpeed(speed)
 
     #Decreases the universal speed of the chasis by the specified amount
     def decreaseSpeed(self, speed):
         self.speed -= speed
+
+        #Update the speed of any thrusters currently running
+        self.updateActiveThrustersSpeed(speed)
+
+    def updateThrusterState(self, thruster: Thruster, speed):
+        if (speed > 0 or speed < 0) and thruster not in self.activeThrusters:
+            self.activeThrusters.append(thruster);
+        elif speed <= 0 and thruster in self.activeThrusters:
+            self.activeThrusters.remove(thruster);
+
+    def updateActiveThrustersSpeed(self, speed):
+        print("Updating active thrusters\n");
+        for thruster in self.activeThrusters:
+            print("Updating thruster.....\n");
+            thruster.setSpeed(speed)

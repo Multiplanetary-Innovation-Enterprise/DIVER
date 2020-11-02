@@ -11,7 +11,10 @@ class MoveX(Command):
         #Decides which way to move in the x-axis
         if self.dir == -1:
             chasis.moveX(-chasis.getSpeed());
+            print("backward\n")
         elif self.dir == 1:
             chasis.moveX(chasis.getSpeed());
+            print("forward\n")
         else:
             chasis.moveX(0);
+            print("stop x\n")
