@@ -58,14 +58,14 @@ class Chasis:
         self.speed += speed
 
         #Update the speed of any thrusters currently running
-        self.updateActiveThrustersSpeed(speed)
+        self.updateActiveThrustersSpeed(self.speed)
 
     #Decreases the universal speed of the chasis by the specified amount
     def decreaseSpeed(self, speed):
         self.speed -= speed
 
         #Update the speed of any thrusters currently running
-        self.updateActiveThrustersSpeed(speed)
+        self.updateActiveThrustersSpeed(self.speed)
 
     def updateThrusterState(self, thruster: Thruster, speed):
         if (speed > 0 or speed < 0) and thruster not in self.activeThrusters:
@@ -76,5 +76,5 @@ class Chasis:
     def updateActiveThrustersSpeed(self, speed):
         print("Updating active thrusters\n");
         for thruster in self.activeThrusters:
-            print("Updating thruster.....\n");
+            print("Updating thruster..... speed: " + str(speed) + "\n");
             thruster.setSpeed(speed)

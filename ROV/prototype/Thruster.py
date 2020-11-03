@@ -30,6 +30,8 @@ class Thruster:
         #Converts the range [-1,1] to the actual PWM range
         self.speed = Thruster.stopped + ((Thruster.maxForward - Thruster.maxReverse) / 2) * speed
         #Stops if the speed is outide of the limits
+
+        print("setting the speed: " + str(self.speed) + "\n");
         if self.speed > Thruster.maxForward or self.speed < Thruster.maxReverse:
             return
 
