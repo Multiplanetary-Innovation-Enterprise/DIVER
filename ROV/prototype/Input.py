@@ -33,18 +33,18 @@ class Input(Observable):
         #print("Stop X\n")
 
     #Sends a move right command
-    def right(self, event):pass
-	self.notify(MoveY(1))
+    def right(self, event):
+        self.notify(MoveY(1))
         #print("right\n")
 
     #Sends a move left command
-    def left(self, event):pass
-	self.notify(MoveY(-1))
+    def left(self, event):
+        self.notify(MoveY(-1))
         #print("left\n")
 
     #Sends a stop moving in y-axis command
-    def stopY(self, event):pass
-	self.notify(MoveY(0))
+    def stopY(self, event):
+        self.notify(MoveY(0))
         #print("Stop Y\n")
 
     #Sends a move up command
