@@ -10,7 +10,7 @@ class Chasis:
     def __init__(self, pi):
         #Creates three thrusters. One for each axis.
         self.xThruster = Thruster(pi, 4, RotDirection.Clockwise)
-        self.yThruster = Thruster(pi, 5, RotDirection.Clockwise)
+        self.yThruster = Thruster(pi, 17, RotDirection.Clockwise)
         self.zThruster = Thruster(pi, 12, RotDirection.Clockwise)
 
     #Arms all of the thrusters in the chasis

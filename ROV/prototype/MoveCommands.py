@@ -18,3 +18,20 @@ class MoveX(Command):
         else:
             chasis.moveX(0);
             print("stop x\n")
+
+class MoveY(Command):
+    def __init__(self, dir: int):
+        self.dir = dir
+
+    #Performs the movement in the x-axis
+    def execute(self, chasis: Chasis):
+        #Decides which way to move in the x-axis
+        if self.dir == -1:
+            chasis.moveY(-chasis.getSpeed());
+            print("backward\n")
+        elif self.dir == 1:
+            chasis.moveY(chasis.getSpeed());
+            print("forward\n")
+        else:
+            chasis.moveY(0);
+            print("stop x\n")

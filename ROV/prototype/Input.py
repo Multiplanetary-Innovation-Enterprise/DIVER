@@ -2,7 +2,7 @@ from typing import List
 
 from ObserverPattern import Observer, Observable
 from Command import Command
-from MoveCommands  import MoveX
+from MoveCommands  import MoveX, MoveY
 from SpeedCommands import SpeedCommand, IncreaseSpeed, DecreaseSpeed
 
 #Represents a generic input device
@@ -34,12 +34,18 @@ class Input(Observable):
 
     #Sends a move right command
     def right(self, event):pass
+	self.notify(MoveY(1))
+        #print("right\n")
 
     #Sends a move left command
     def left(self, event):pass
+	self.notify(MoveY(-1))
+        #print("left\n")
 
     #Sends a stop moving in y-axis command
     def stopY(self, event):pass
+	self.notify(MoveY(0))
+        #print("Stop Y\n")
 
     #Sends a move up command
     def up(self, event):pass
