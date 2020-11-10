@@ -1,12 +1,25 @@
+//******************************************************************************
+//* Trencher BLDC Motor controls and sensor output
+//*   Currently, motor is controlled via 3 external periherals:
+//*     Push button: Toggles motor stopping and starting
+//*     Switch: Changes rotation of motor
+//*     Potentiometer: Changes speed of motor
+//* Author: Conor Porter
+//* Last Modified: 11/10/2020
+//******************************************************************************
+
 //Motor outputs
 const int pwm = 3; //PWM pin
 const int dir = 4; //non-PWM pin
+
 //Button/switch inputs
 const int stp = 2; //non-PWM pin
 const int start = 7; //non-PWM pin
+
 //Sonic sensor IO
 const int trig = 9; //non-PWM pin
 const int echo = 10; //non-PWM pin
+
 //Current Sensor input
 const int ampVin = 3; //analog pin: potentiometer wiper (middle terminal) connected to analog pin 3
 const int potPin = 2; //analo pin: potentiometer for controlling speed
@@ -14,39 +27,41 @@ int reading = 0; // variable to store the value read
 int potRead = 0;
 long maxVal = 0;
 int samples = 1000; // how many samples per reading
+
 //constants for converting amp sensor reading
 const int zeroAmp = 513;
 const int halfAmp = 7;
 double amps = 0.0;
 
-int pwm_value = 0;
+//Motor control variables
+const float potToPWM = 4.011764706; //conversion for controlling speed of motor (1k Ohm ~ 255)
+int pwm_value = 0; //relates to speed of motor
 int incomingByte = 0; // for incoming serial data
 int userInput = 0; //a number from the serial monitor
 int startState = 0; //for checking if motor must hard stop
 int toggleStop = 0; //for using button as a toggle switch
 int stopState = 0; //for checking if motor must start
 
-unsigned long rpmStartTime = NULL;
-int rpmSamples = 8;
-float prevDistance = 11;
-float bucketDistance = 10;
-double bucketRPMs = 0;
+//RPM data variables
+unsigned long rpmStartTime = NULL; //keeps track of clock
+int rpmSamples = 8; //how many times to read ultrasonic sensor to get accurate value
+float prevDistance = 11; //for handling noise from ultrasonic sensor
+float bucketDistance = 10; //distance from sensor to buckets
+double bucketRPMs = 0; //placeholder for final converted value
 int bucketCount = 0; //keep track of how many go by
-//values ill need from the ME team for tracking RPMs
+
+//value for buckets and chain for tracking RPMs
 const double distBucketToBucket = 1; //1.5ft min
+//495.3mm is center of sprocket to center of sprocket sprocket distance (7-8inch diameter sprocket)
 // \/ roughly 5.8 ft of chain for the min \/ (93.5 links)
-const double distTrackLength = 1; //495.3mm is center of sprocket to center of sprocket sprocket distance (7-8inch diameter sprocket)
+const double distTrackLength = 1;
 const int numberOfBuckets = 4;
-
-int buttonCooldown = 0;
-
-const float potToPWM = 4.011764706;
 
 void setup()
 {
   Serial.begin(9600);
   //initialize outputs
-  pinMode(pwm,OUTPUT); 
+  pinMode(pwm,OUTPUT);
   pinMode(dir,OUTPUT);
   pinMode(trig, OUTPUT);
   //initialize inputs
@@ -64,7 +79,8 @@ void loop()
   analogWrite(pwm,pwm_value);
 
   // send data only when you receive data:
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0)
+  {
     // read the incoming byte:
     incomingByte = Serial.read();
 
@@ -90,21 +106,19 @@ void loop()
 
     //if button pressed, stop
     checkToStopMotor();
-    //if switch is on and button is not pressed, accelerate motor
+    //if button is not pressed, accelerate motor
     checkToStartMotor();
     //measure rotations per minute of the bucket track
     measureBucketRPMs();
     //measure current flowing through motor
     measureMotorCurrent();
-    
+
 }
 
 void checkToStopMotor()
 {// NOTE: will require modifcation when transistors are set up with EN and BRK to make hard stopping possible
   // read the state of the pushbutton value:
   stopState = digitalRead(stp);
-  //Serial.println("Button: ");
-  //Serial.println(stopState);
   // check if the pushbutton is pressed. If it is, stop the motor:
   if (stopState == HIGH)
   {
@@ -145,10 +159,7 @@ void measureBucketRPMs()
     duration = pulseIn (echo, HIGH);
     if (distance > ( (duration/2)/29 )) distance = (duration/2)/29;
   }
-  
-//  Serial.print(distance);
-//
-//  Serial.println(" cm");
+
   unsigned long rpmEndTime = millis();
   //if less than 10cm from dist sensor
   if (distance < bucketDistance && prevDistance > bucketDistance)
@@ -167,12 +178,6 @@ void measureBucketRPMs()
       Serial.print(bucketRPMs);
       Serial.print(" ");
       Serial.println(millis());
-//      Serial.print(rpmDelta);
-//      Serial.println(" rpmDelta");
-//      Serial.print(rpmStartTime);
-//      Serial.println(" start");
-//      Serial.print(rpmEndTime);
-//      Serial.println(" end");
       rpmStartTime = millis();
     }
   }
