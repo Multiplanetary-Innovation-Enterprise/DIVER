@@ -15,7 +15,7 @@ class KeyboardInput(Input):
         keyboard.on_release_key('s', self.stopX, True)
 
         #Y axis
-	#Move forward controls
+	    #Move forward controls
         keyboard.on_press_key('a', self.left, True)
         keyboard.on_release_key('a', self.stopY, True)
 
