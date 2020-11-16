@@ -11,5 +11,6 @@ class ClientConnection():
         return self.socket
 
     def close(self):
+        print("closing client connection")
         self.socket.close()
         self.socket = None

@@ -19,6 +19,7 @@ class Server():
         self.sel.register(self.socket, selectors.EVENT_READ, data=None)
 
     def start(self):
+        print("listening for client connections")
         self.socket.listen()
         self.run()
 
@@ -37,6 +38,7 @@ class Server():
                     break
 
     def stop(self):
+        print("stopping server")
         self.isRunning = False
 
     def acceptClientConnection(self, client):
@@ -44,4 +46,4 @@ class Server():
         self.clientConnection = ClientConnection(clientSocket)
 
     def getClientConnection(self):
-        return self.ClientConnection
+        return self.clientConnection
