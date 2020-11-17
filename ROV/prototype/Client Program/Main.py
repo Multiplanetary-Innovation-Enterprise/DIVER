@@ -21,8 +21,8 @@ def process():
 
         if message == "close":
             print("closing....")
-            #isRunning = False
-            #close()
+            isRunning = False
+            close()
 
 HOST = '127.0.0.1'
 PORT = 60314

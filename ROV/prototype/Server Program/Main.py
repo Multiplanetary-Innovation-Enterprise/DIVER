@@ -22,9 +22,10 @@ def listen():
             server.getClientConnection().close()
             break
 
+
 server = Server(HOST, PORT)
 
 thread = threading.Thread(target=listen)
 thread.start()
-
+print("server start")
 server.start()

@@ -29,7 +29,7 @@ class Server():
 
         while self.isRunning:
             events = self.sel.select(timeout=None)
-
+            print("server running")
             for key, mask in events:
                 if not clientAccepted:
                     self.acceptClientConnection(key.fileobj)
@@ -40,6 +40,10 @@ class Server():
     def stop(self):
         print("stopping server")
         self.isRunning = False
+        self.socket.close()
+
+        self.sel.unregister(self.socket)
+        self.sel.close()
 
     def acceptClientConnection(self, client):
         clientSocket, addr = client.accept()

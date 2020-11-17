@@ -21,7 +21,7 @@ class SocketListener(Observable):
 
         while self.isRunning:
             events = self.sel.select(timeout=None)
-
+            print("listner running")
             for key, mask in events:
                 message = self.getMessage()
                 print(message)
