@@ -1,6 +1,10 @@
 README.md
 setup.py
-ROVMessagingLib/Cat.py
+ROVMessagingLib/Message.py
+ROVMessagingLib/MessageChannel.py
+ROVMessagingLib/MessageType.py
+ROVMessagingLib/Publisher.py
+ROVMessagingLib/Subscriber.py
 ROVMessagingLib/__init__.py
 ROV_Messaging.egg-info/PKG-INFO
 ROV_Messaging.egg-info/SOURCES.txt
