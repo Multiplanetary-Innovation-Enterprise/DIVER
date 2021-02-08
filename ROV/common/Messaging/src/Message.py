@@ -1,8 +1,10 @@
+from typing import Any
+
 from MessageType import MessageType
 
 #A message that can be published to a message channel
 class Message():
-    __contents = None
+    __contents: Any = None
     __type: MessageType = None
 
     #Creates a message given a type and contents
@@ -11,7 +13,7 @@ class Message():
         self.__type = type
 
     #Gets the contents stored in the message
-    def getContents(self):
+    def getContents(self) -> Any:
         return self.__contents
 
     #Gets the type of the message

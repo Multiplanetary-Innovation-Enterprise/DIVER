@@ -1,0 +1,11 @@
+pluggy/__init__.py,sha256=FlQ2T7ewtZu6euZ0pG_1YANZ_lXzV9LDdLSgKutQmEg,486
+pluggy/_tracing.py,sha256=alc0j9EAgwavq43Tu0D4vuXmwn6ypzyXx9v6ouCwVaQ,1561
+pluggy/_version.py,sha256=lrh9ATLhv5GdYnm4hf-sdGvWTZx3rCLDyCLsaEeDnno,121
+pluggy/callers.py,sha256=bTZrJrML-__w7oX7Ki8PGyDlXSc0vSqgsT816xg8KDE,4026
+pluggy/hooks.py,sha256=L0vFaeqms3YQy6acjDmJFr5XhE2pMcUtNXqZD-LGHVs,12060
+pluggy/manager.py,sha256=ciA6cP9jb7w2iMkWreakLHL6epM-OVdC-OJwd4IYbOs,15582
+pluggy-1.0.0.dev0.dist-info/LICENSE,sha256=1rZebCE6XQtXeRHTTW5ZSbn1nXbCOMUHGi8_wWz7JgY,1110
+pluggy-1.0.0.dev0.dist-info/METADATA,sha256=gvtIMvd3YoW4RyN6HMDo74bLuOo3HmAdQpQlrSsLLOY,15860
+pluggy-1.0.0.dev0.dist-info/WHEEL,sha256=kGT74LWyRUZrL4VgLh6_g12IeVl_9u9ZVhadrgXZUEY,110
+pluggy-1.0.0.dev0.dist-info/top_level.txt,sha256=xKSCRhai-v9MckvMuWqNz16c1tbsmOggoMSwTgcpYHE,7
+pluggy-1.0.0.dev0.dist-info/RECORD,,
