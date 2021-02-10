@@ -3,9 +3,13 @@ from MessageType import MessageType
 from Subscriber import Subscriber
 from HashMap import HashMap
 
+import concurrent.futures
+import threading
+from multiprocessing import Pool
+
 class MessageChannel:
     __messageTypesToSubscribers: HashMap = None
-    __isProcessingInParallel = False
+    __isProcessingInParallel: bool = False
 
     def __init__(self):
         self.__messageTypesToSubscribers = HashMap[MessageType, list]()
@@ -47,12 +51,24 @@ class MessageChannel:
         if subscribers == None:
             return
 
-        for subscriber in subscribers:
-            print(subscriber)
-            subscriber.recieveMessage(message)
+        # for subscriber in subscribers:
+        #     subscriber.recieveMessage(message)
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(subscribers)) as executor:
+            for subscriber in subscribers:
+                executor.submit(subscriber.recieveMessage, message)
+
+        # with Pool(len(subscribers)) as pool:
+        #     pool.map(test, ((sub, message) for sub in subscribers))
 
     def isProcessingInParallel(self) -> bool:
         return self.__isProcessingInParallel
 
     def setProcessInParallel(self, runInParallel:bool) -> None:
         self.__isProcessingInParallel = runInParallel
+
+def test(arg):
+    sub, message = arg
+    print(message.getType())
+    print("Doing")
+    sub.recieveMessage(message)

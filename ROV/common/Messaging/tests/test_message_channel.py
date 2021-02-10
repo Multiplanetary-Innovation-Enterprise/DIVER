@@ -67,7 +67,6 @@ def test_unsubscribing_a_subscriber_only_unsubscribes_them_from_the_specified_me
     assert status2 == True
 
 def test_a_non_subsubscribed_subscriber_does_not_recieve_broadcasted_messages(messageChannel, mockSubscriber):
-
     message = Message(MessageType.ACTION, "Do Something")
     messageChannel.broadcast(message)
 
@@ -83,8 +82,8 @@ def test_a_message_channel_can_broadcast_a_message_to_all_of_its_subscribers(mes
     message = Message(MessageType.ACTION, "Move!")
     messageChannel.broadcast(message)
 
-    subscriber.recieveMessage.assert_called_once()
-    subscriber2.recieveMessage.assert_called_once()
+    subscriber.recieveMessage.assert_called_once_with(message)
+    subscriber2.recieveMessage.assert_called_once_with(message)
 
 def test_a_susbscriber_only_recieves_messages_from_the_channels_that_it_is_subscribed_to(messageChannel):
     subscriber = Mock(spec=Subscriber)
@@ -96,7 +95,7 @@ def test_a_susbscriber_only_recieves_messages_from_the_channels_that_it_is_subsc
     message = Message(MessageType.ACTION, "Move!")
     messageChannel.broadcast(message)
 
-    subscriber.recieveMessage.assert_called_once()
+    subscriber.recieveMessage.assert_called_once_with(message)
     subscriber2.recieveMessage.assert_not_called()
 
 def test_is_processing_in_parallel_is_false_by_default(messageChannel):
@@ -109,9 +108,9 @@ def test_a_message_channel_can_be_set_to_process_messages_in_parallel(messageCha
 
     assert messageChannel.isProcessingInParallel() == True
 
-def test_if_not_is_processing_in_parallel_messages_should_be_sent_sequentially():
-    assert False
-#
+# def test_if_not_is_processing_in_parallel_messages_should_be_sent_sequentially():
+#     assert False
+
 # def test_if_is_processing_in_parallel_messages_should_be_sent_in_seperate_threads():
 #     assert False
 #
