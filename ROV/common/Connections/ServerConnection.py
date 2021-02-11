@@ -1,3 +1,5 @@
+from SocketConnection import SocketConnection
+
 class ServerConnection(SocketConnection):
     __host = None
     __port = None

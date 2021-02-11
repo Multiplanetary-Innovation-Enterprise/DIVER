@@ -6,6 +6,9 @@ class SocketConnection():
     def __init__(self):
         self.__socket = socket(AF_INET, SOCK_STREAM)
 
+    def __init__(self, socket):
+        self.__socket = socket
+
     def get(self):
         return self.__socket
 
