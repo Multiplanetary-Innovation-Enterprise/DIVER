@@ -18,7 +18,7 @@ class SocketReader(Reader):
     def receive(self):
         return self.decode(__recv_timeout(self.__socket, 2))
 
-    def __recv_timeout(the_socket,timeout):
+    def __recv_timeout(the_socket,timeout): #NOTE: may need to modify so it blocks for the first chunk
         #make socket non blocking
         the_socket.setblocking(0)
 
