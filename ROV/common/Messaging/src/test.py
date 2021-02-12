@@ -63,6 +63,7 @@ def run2():
 
 if __name__ == '__main__':
     messageChannel = MessageChannel()
+    messageChannel.setProcessInParallel(True)
     message = Message(MessageType.ACTION, "Move!")
     message2 = Message(MessageType.SYSTEM_STATUS, "Do")
 
