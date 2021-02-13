@@ -1,6 +1,6 @@
 import pytest
 
-from HashMap import HashMap
+from ROVMessaging.HashMap import HashMap
 
 @pytest.fixture()
 def hashMap():

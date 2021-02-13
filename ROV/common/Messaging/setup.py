@@ -1,9 +1,8 @@
 from setuptools import find_packages, setup
 setup(
-    name='ROV-Messaging',
-    package_dir={'': 'src'},
-    packages=find_packages(where='src'),
-    version='0.1.0',
+    name='ROV_Messaging',
+    packages=['ROVMessaging'],
+    version='0.2.0',
     description='The messaging code for the ROV project',
     author='Tyler Newton',
     license='MIT',

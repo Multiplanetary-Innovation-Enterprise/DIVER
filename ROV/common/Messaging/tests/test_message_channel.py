@@ -1,10 +1,10 @@
 import pytest
 from mock import Mock
 
-from MessageChannel import MessageChannel
-from MessageType import MessageType
-from Message import Message
-from Subscriber import Subscriber
+from ROVMessaging.MessageChannel import MessageChannel
+from ROVMessaging.MessageType import MessageType
+from ROVMessaging.Message import Message
+from ROVMessaging.Subscriber import Subscriber
 
 @pytest.fixture
 def mockSubscriber():

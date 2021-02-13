@@ -1,5 +1,5 @@
-from Message import Message
-from MessageType import MessageType
+from ROVMessaging.Message import Message
+from ROVMessaging.MessageType import MessageType
 
 def test_can_create_a_message():
     message = Message(MessageType.ACTION, "Move Forward")
