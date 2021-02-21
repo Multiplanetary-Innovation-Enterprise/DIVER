@@ -13,11 +13,11 @@ class MoveXCommand(Command):
 
     def execute(self):
         speed = 0
-
+        
         if(self.__action == Action.MOVE_X_POS):
-            speed = 0.5
+            speed = self.__propSystem.getSpeed()
         elif(self.__action == Action.MOVE_X_NEG):
-            speed = -0.5
+            speed = -self.__propSystem.getSpeed()
         elif(self.__action == Action.MOVE_X_STOP):
             speed = 0
 
@@ -32,25 +32,34 @@ class MoveYCommand(Command):
         self.__propSystem = propSystem
 
     def execute(self):
+        speed = self.__propSystem.getSpeed()
+
         if(self.__action == Action.MOVE_Y_POS):
-            self.__propSystem.moveY(0.5)
+            speed = self.__propSystem.getSpeed()
         elif(self.__action == Action.MOVE_Y_NEG):
-            self.__propSystem.moveY(-0.5)
+            speed = -self.__propSystem.getSpeed()
         elif(self.__action == Action.MOVE_Y_STOP):
-            self.__propSystem.moveY(0)
+            speed = 0
+
+        self.__propSystem.moveY(speed)
 
 class MoveZCommand(Command):
     __action = None
     __propSystem = None
+    __speedStep = 0.5
 
     def __init__(self, action:Action, propSystem:PropulsionSubsystem):
         self.__action = action
         self.__propSystem = propSystem
 
     def execute(self):
+        speed = self.__propSystem.getSpeed()
+
         if(self.__action == Action.MOVE_Z_POS):
-            self.__propSystem.moveZ(0.5)
+            speed = self.__propSystem.getSpeed()
         elif(self.__action == Action.MOVE_Z_NEG):
-            self.__propSystem.moveZ(-0.5)
+            speed = -self.__propSystem.getSpeed()
         elif(self.__action == Action.MOVE_Z_STOP):
-            self.__propSystem.moveZ(0)
+            speed = 0
+
+        self.__propSystem.moveZ(speed)

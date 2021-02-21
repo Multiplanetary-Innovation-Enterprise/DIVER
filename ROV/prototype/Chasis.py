@@ -30,7 +30,7 @@ class Chasis:
         self.xThruster.setSpeed(speed)
         self.updateThrusterState(self.xThruster, speed);
 
-        #Sets the speed for the thruster mounted on the y-axis
+    #Sets the speed for the thruster mounted on the y-axis
     def moveY(self, speed):
         self.yThruster.setSpeed(speed)
         self.updateThrusterState(self.yThruster, speed);

@@ -12,3 +12,4 @@ class Action(Enum):
     MOVE_Z_STOP = 8
     SPEED_INCREASE = 9
     SPEED_DECREASE = 10
+    ARM = 11
