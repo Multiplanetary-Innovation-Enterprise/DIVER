@@ -98,14 +98,19 @@ class KeyboardInput(Publisher):
         self.sendMessage(message, self.__messageChannel)
 
     def arm(self, event):
+        print("arming....")
         message = Message(MessageType.ACTION, Action.ARM)
         self.sendMessage(message, self.__messageChannel)
 
     def increaseSpeed(self, event):
+        print("speed increase....")
+
         message = Message(MessageType.ACTION, Action.SPEED_INCREASE)
         self.sendMessage(message, self.__messageChannel)
 
     def decreaseSpeed(self, event):
+        print("speed decrease....")
+
         message = Message(MessageType.ACTION, Action.SPEED_DECREASE)
         self.sendMessage(message, self.__messageChannel)
 

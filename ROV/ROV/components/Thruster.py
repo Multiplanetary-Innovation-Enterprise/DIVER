@@ -21,7 +21,7 @@ class Thruster:
         self.pi.set_servo_pulsewidth(self.pinNum, 0)
         time.sleep(1)
 
-        self.pi.set_servo_pulsewidth(self.pinNum, self.stopped)
+        self.pi.set_servo_pulsewidth(self.pinNum, Thruster.STOPPED)
         time.sleep(1)
 
     #Sets the speed of the thruster. Range [-1,1]
