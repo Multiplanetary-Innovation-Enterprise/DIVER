@@ -1,6 +1,0 @@
-README.md
-setup.py
-src/ROV_Messaging.egg-info/PKG-INFO
-src/ROV_Messaging.egg-info/SOURCES.txt
-src/ROV_Messaging.egg-info/dependency_links.txt
-src/ROV_Messaging.egg-info/top_level.txt
