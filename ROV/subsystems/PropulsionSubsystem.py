@@ -68,6 +68,7 @@ class PropulsionSubsystem:
         elif speed <= 0 and thruster in self.__activeThrusters:
             self.__activeThrusters.remove(thruster);
 
+    #Updates the speeds of the thrusters that are currently running
     def updateActiveThrustersSpeed(self, speed:float) -> None:
         for thruster in self.__activeThrusters:
             thruster.setSpeed(speed)
