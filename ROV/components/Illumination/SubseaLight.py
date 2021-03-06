@@ -14,20 +14,16 @@ class SubseaLight(Light):
         brightness = SubseaLight.LIGHT_OFF
 
         if on:
-            brightness = self.getBrightness()
+            brightness = self.getLastBrightness()
 
         self.setBrightness(brightness)
 
     #Sets the brightness of the light. Range [0,1]
     def setBrightness(self, brightness:float) -> None:
-        if brightness < 0:
-            brightness = 0
-        elif brightness > 1:
-            brightness = 1
+        super().setBrightness(brightness)
 
         pulseWidth = self.convertBrightnessToPulseWidth(brightness)
-    
-        self.__brightness = brightness
+
         self.__pwmSignal.setPulseWidth(pulseWidth)
 
     def convertBrightnessToPulseWidth(self, brightness: float) -> int:

@@ -5,6 +5,7 @@ from commands.Command import Command
 from commands.ArmCommand import ArmCommand
 from commands.MoveCommands import *
 from commands.SpeedCommands import *
+from commands.IlluminationCommands import *
 
 from ROV import ROV
 
@@ -31,5 +32,7 @@ class CommandFactory:
             command = IncreaseSpeedCommand(self.__rov.getPropSystem())
         elif(action == Action.SPEED_DECREASE):
             command = DecreaseSpeedCommand(self.__rov.getPropSystem())
-            
+        elif(action == Action.TOGGLE_LIGHTS):
+            command = LightStateToggleCommand(self.__rov.getIlluminationSystem())
+
         return command

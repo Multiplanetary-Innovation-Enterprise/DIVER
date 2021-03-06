@@ -39,7 +39,6 @@ class KeyboardInput(Publisher):
         keyboard.on_press_key('s', self.backward, True)
         keyboard.on_release_key('s', self.stopX, True)
 
-
         keyboard.on_press_key('a', self.left, True)
         keyboard.on_release_key('a', self.stopY, True)
 
@@ -54,6 +53,8 @@ class KeyboardInput(Publisher):
 
         keyboard.on_press_key('right', self.increaseSpeed, True)
         keyboard.on_press_key('left', self.decreaseSpeed, True)
+
+        keyboard.on_release_key('l', self.toggleLight, True)
 
     #Sends move forward action
     def forward(self, event):
@@ -112,6 +113,11 @@ class KeyboardInput(Publisher):
 
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
         messageChannel.broadcast(message)
+
+    def toggleLight(self, event):
+        print("Toggle light")
+        message = Message(MessageType.ACTION, Action.TOGGLE_LIGHTS)
+        self.sendMessage(message, self.__messageChannel)
 
 keyboardInput = KeyboardInput(messageChannel)
 

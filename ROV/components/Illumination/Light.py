@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 
 class Light(ABC):
     __isOn: bool = None
-    __brightness: float = 0
+    __currentBrightness: float = 0
+    __lastBrightness: float = 0
 
     def turnOn(self) -> None:
         self.setOn(True)
@@ -14,12 +15,26 @@ class Light(ABC):
     def setOn(self, on: bool) -> None:
         pass
 
-    @abstractmethod
     def setBrightness(self, brightness:float) -> None:
-        pass
+        currentBrightness = self.getBrightness()
+
+        self.setLastBrightness(currentBrightness)
+
+        if brightness < 0:
+            brightness = 0
+        elif brightness > 1:
+            brightness = 1
+
+        self.__currentBrightness = brightness
 
     def getBrightness(self) -> float:
-        return self.__brightness
+        return self.__currentBrightness
+
+    def setLastBrightness(self, brightness:float) -> None:
+        self.__lastBrightness = brightness
+
+    def getLastBrightness(self) -> float:
+        return self.__lastBrightness
 
     def isOn(self) -> bool:
         return self.__isOn
