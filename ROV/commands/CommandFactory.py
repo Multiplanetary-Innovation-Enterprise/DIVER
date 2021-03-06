@@ -34,5 +34,9 @@ class CommandFactory:
             command = DecreaseSpeedCommand(self.__rov.getPropSystem())
         elif(action == Action.TOGGLE_LIGHTS):
             command = LightStateToggleCommand(self.__rov.getIlluminationSystem())
+        elif(action == Action.BRIGHTNESS_INCREASE):
+            command = LightIncreaseBrightnessCommand(self.__rov.getIlluminationSystem())
+        elif(action == Action.BRIGHTNESS_DECREASE):
+            command = LightDecreaseBrightnessCommand(self.__rov.getIlluminationSystem())
 
         return command

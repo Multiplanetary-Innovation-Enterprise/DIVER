@@ -1,4 +1,5 @@
-from subsystems.* import *
+from subsystems.PropulsionSubsystem import PropulsionSubsystem
+from subsystems.IlluminationSubsystem import IlluminationSubsystem
 
 import pigpio
 import os
@@ -6,7 +7,7 @@ import time
 
 class ROV:
     __propSystem:PropulsionSubsystem = None
-    __illuminationSystem:IlluminationSubSystem = None
+    __illuminationSystem:IlluminationSubsystem = None
     __pi = None
 
     def __init__(self):
@@ -17,10 +18,10 @@ class ROV:
         self.__pi = pigpio.pi();
 
         self.__propSystem = PropulsionSubsystem(self.__pi)
-        self.__illuminationSystem = IlluminationSubSystem(self.__pi)
+        self.__illuminationSystem = IlluminationSubsystem(self.__pi)
 
     def getPropSystem(self) -> PropulsionSubsystem:
         return self.__propSystem
 
-    def getIlluminationSystem(self) -> IlluminationSubSystem:
+    def getIlluminationSystem(self) -> IlluminationSubsystem:
         return self.__illuminationSystem

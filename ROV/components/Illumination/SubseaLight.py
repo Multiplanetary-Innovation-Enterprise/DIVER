@@ -11,7 +11,7 @@ class SubseaLight(Light):
         self.setBrightness(0)
 
     def setOn(self, on: bool) -> None:
-        brightness = SubseaLight.LIGHT_OFF
+        brightness = 0
 
         if on:
             brightness = self.getLastBrightness()

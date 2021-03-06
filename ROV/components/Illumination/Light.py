@@ -1,14 +1,16 @@
 from abc import ABC, abstractmethod
 
 class Light(ABC):
-    __isOn: bool = None
+    __isOn: bool = False
     __currentBrightness: float = 0
-    __lastBrightness: float = 0
+    __lastBrightness: float = 0.1
 
     def turnOn(self) -> None:
+        self.__isOn = True
         self.setOn(True)
 
     def turnOff(self) -> None:
+        self.__isOn = False
         self.setOn(False)
 
     @abstractmethod

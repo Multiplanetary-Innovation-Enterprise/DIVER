@@ -56,6 +56,9 @@ class KeyboardInput(Publisher):
 
         keyboard.on_release_key('l', self.toggleLight, True)
 
+        keyboard.on_press_key(']', self.increaseBrightness, True)
+        keyboard.on_press_key('[', self.decreaseBrightness, True)
+
     #Sends move forward action
     def forward(self, event):
         message = Message(MessageType.ACTION, Action.MOVE_X_POS)
@@ -117,6 +120,14 @@ class KeyboardInput(Publisher):
     def toggleLight(self, event):
         print("Toggle light")
         message = Message(MessageType.ACTION, Action.TOGGLE_LIGHTS)
+        self.sendMessage(message, self.__messageChannel)
+
+    def increaseBrightness(self, event):
+        message = Message(MessageType.ACTION, Action.BRIGHTNESS_INCREASE)
+        self.sendMessage(message, self.__messageChannel)
+
+    def decreaseBrightness(self, event):
+        message = Message(MessageType.ACTION, Action.BRIGHTNESS_DECREASE)
         self.sendMessage(message, self.__messageChannel)
 
 keyboardInput = KeyboardInput(messageChannel)
