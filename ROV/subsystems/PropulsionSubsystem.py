@@ -2,49 +2,49 @@ from components.Thruster import Thruster
 from util.RotDirection import RotDirection
 
 class PropulsionSubsystem:
-    __speed = 0 #Universal speed for all thrusters
+    __currentSpeed = 0.1 #Universal speed for all thrusters
     __activeThrusters = [];
-    __xThruster = None
-    __yThruster = None
-    __zThruster = None
+    __leftThruster = None
+    __rightThruster = None
+    __topThruster = None
 
     #Constructor for the propulsion subsystem
     def __init__(self, pi):
-        #Creates three thrusters. One for each axis.
-        self.__xThruster = Thruster(pi, 4, RotDirection.CLOCKWISE)
-        self.__yThruster = Thruster(pi, 17, RotDirection.CLOCKWISE)
-        self.__zThruster = Thruster(pi, 12, RotDirection.CLOCKWISE)
+        #Creates three thrusters. Two for the x-y movement and one for z movement
+        self.__leftThruster = Thruster(pi, 4, RotDirection.CLOCKWISE)
+        self.__rightThruster = Thruster(pi, 17, RotDirection.CLOCKWISE)
+        self.__topThruster = Thruster(pi, 12, RotDirection.CLOCKWISE)
 
     #Arms all of the thrusters in the chasis
     def arm(self) -> None:
-        self.__xThruster.arm()
-        self.__yThruster.arm()
-        self.__zThruster.arm()
+        self.__leftThruster.arm()
+        self.__rightThruster.arm()
+        self.__topThruster.arm()
 
     #Sets the speed of all three thrusters independently
-    def move(self, xSpeed:float, ySpeed:float, zSpeed:float) -> None:
-        self.moveX(xSpeed)
-        self.moveY(ySpeed)
-        self.moveZ(zSpeed)
+    def move(self, leftSpeed:float, rightSpeed:float, verticalSpeed:float) -> None:
+        self.moveLeft(leftSpeed)
+        self.moveRight(rightSpeed)
+        self.moveVertical(topSpeed)
 
-        self.updateThrusterState(self.__xThruster, speed);
-        self.updateThrusterState(self.__yThruster, speed);
-        self.updateThrusterState(self.__zThruster, speed);
+        self.updateThrusterState(self.__leftThruster, speed);
+        self.updateThrusterState(self.__rightThruster, speed);
+        self.updateThrusterState(self.__topThruster, speed);
 
-    #Sets the speed for the thruster mounted on the x-axis
-    def moveX(self, speed:float) -> None:
-        self.__xThruster.setSpeed(speed)
-        self.updateThrusterState(self.__xThruster, speed);
+    #Sets the speed for the thruster mounted on the left side of the ROV
+    def moveLeft(self, speed:float) -> None:
+        self.__leftThruster.setSpeed(speed)
+        self.updateThrusterState(self.__leftThruster, speed);
 
-    #Sets the speed for the thruster mounted on the y-axis
-    def moveY(self, speed:float)  -> None:
-        self.__yThruster.setSpeed(speed)
-        self.updateThrusterState(self.__yThruster, speed);
+    #Sets the speed for the thruster mounted on the right side of the ROV
+    def moveRight(self, speed:float) -> None:
+        self.__rightThruster.setSpeed(speed)
+        self.updateThrusterState(self.__rightThruster, speed);
 
-    #Sets the speed for the thruster mounted on the z-axis
-    def moveZ(self, speed:float) -> None:
-        self.__zThruster.setSpeed(speed)
-        self.updateThrusterState(self.__zThruster, speed);
+    #Sets the speed for the thruster mounted on the top of the ROV
+    def moveVertical(self, speed:float) -> None:
+        self.__topThruster.setSpeed(speed)
+        self.updateThrusterState(self.__topThruster, speed);
 
     #Stops all of the thrusters
     def stop(self) -> None:
@@ -52,16 +52,16 @@ class PropulsionSubsystem:
 
     #Sets the universal speed of the chasis
     def setSpeed(self, speed:float) -> None:
-        self.__speed = speed
+        self.__currentSpeed = speed
 
         #Update the speed of any thrusters currently running
-        self.updateActiveThrustersSpeed(self.__speed)
+        self.updateActiveThrustersSpeed(self.__currentSpeed)
 
-    #Gets the universal speed of the chasis
+    #Gets the current speed of the propulsion subsystem
     def getSpeed(self) -> float:
-        return self.__speed
+        return self.__currentSpeed
 
-    #Updates the provided thrusters state based on its speed
+    #Updates the provided thruster's state based on its speed
     def updateThrusterState(self, thruster: Thruster, speed:float) -> None:
         if (speed > 0 or speed < 0) and thruster not in self.__activeThrusters:
             self.__activeThrusters.append(thruster);

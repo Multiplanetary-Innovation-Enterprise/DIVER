@@ -34,16 +34,16 @@ class KeyboardInput(Publisher):
         keyboard.on_press_key('space', self.arm, True)
 
         keyboard.on_press_key('w', self.forward, True)
-        keyboard.on_release_key('w', self.stopX, True)
+        keyboard.on_release_key('w', self.stopXY, True)
 
         keyboard.on_press_key('s', self.backward, True)
-        keyboard.on_release_key('s', self.stopX, True)
+        keyboard.on_release_key('s', self.stopXY, True)
 
         keyboard.on_press_key('a', self.left, True)
-        keyboard.on_release_key('a', self.stopY, True)
+        keyboard.on_release_key('a', self.stopXY, True)
 
         keyboard.on_press_key('d', self.right, True)
-        keyboard.on_release_key('d', self.stopY, True)
+        keyboard.on_release_key('d', self.stopXY, True)
 
         keyboard.on_press_key('up', self.up, True)
         keyboard.on_release_key('up', self.stopZ, True)
@@ -61,16 +61,16 @@ class KeyboardInput(Publisher):
 
     #Sends move forward action
     def forward(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_X_POS)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_FORWARD)
         self.sendMessage(message, self.__messageChannel)
 
     #Send move backward action
     def backward(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_X_NEG)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_BACKWARD)
         self.sendMessage(message, self.__messageChannel)
 
-    def stopX(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_X_STOP)
+    def stopXY(self, event):
+        message = Message(MessageType.ACTION, Action.MOVE_XY_STOP)
         self.sendMessage(message, self.__messageChannel)
 
     #Send move up action
@@ -89,17 +89,12 @@ class KeyboardInput(Publisher):
 
     #Sends a move right command
     def right(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_Y_POS)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_LEFT)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends a move left command
     def left(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_Y_NEG)
-        self.sendMessage(message, self.__messageChannel)
-
-    #Sends a stop moving in y-axis command
-    def stopY(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_Y_STOP)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_RIGHT)
         self.sendMessage(message, self.__messageChannel)
 
     def arm(self, event):

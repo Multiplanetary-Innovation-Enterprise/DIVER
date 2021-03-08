@@ -9,8 +9,13 @@ class IncreaseSpeedCommand(Command):
 
     def execute(self):
         speed = self.__propSystem.getSpeed()
-        print("Increase speed " + str(speed + 0.1))
-        self.__propSystem.setSpeed(speed + 0.1)
+
+        if(speed < 1):
+            speed += 0.1
+
+        print("Increase speed " + str(speed ))
+
+        self.__propSystem.setSpeed(speed)
 
     def isRepeatable(self):
         return True
@@ -23,7 +28,12 @@ class DecreaseSpeedCommand(Command):
 
     def execute(self):
         speed = self.__propSystem.getSpeed()
+
+        if(speed > 0):
+            speed -= 0.1
+
         print("Decrease speed " + str(speed - 0.1))
+
         self.__propSystem.setSpeed(speed - 0.1)
 
     def isRepeatable(self):

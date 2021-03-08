@@ -6,6 +6,7 @@ from commands.ArmCommand import ArmCommand
 from commands.MoveCommands import *
 from commands.SpeedCommands import *
 from commands.IlluminationCommands import *
+from util.Direction import Direction
 
 from ROV import ROV
 
@@ -20,10 +21,16 @@ class CommandFactory:
     def createCommand(self, action:Action) -> Command:
         command = None
 
-        if(action == Action.MOVE_X_POS or action == Action.MOVE_X_NEG or action == Action.MOVE_X_STOP):
-            command = MoveXCommand(action, self.__rov.getPropSystem())
-        elif(action == Action.MOVE_Y_POS or action == Action.MOVE_Y_NEG or action == Action.MOVE_Y_STOP):
-            command = MoveYCommand(action, self.__rov.getPropSystem())
+        if(action == Action.MOVE_XY_FORWARD):
+            command = MoveXYCommand(Direction.FORWARD, Direction.FORWARD, self.__rov.getPropSystem())
+        elif(action == Action.MOVE_XY_BACKWARD):
+            command = MoveXYCommand(Direction.BACKWARD, Direction.BACKWARD, self.__rov.getPropSystem())
+        elif(action == Action.MOVE_XY_LEFT):
+            command = MoveXYCommand(Direction.BACKWARD, Direction.FORWARD, self.__rov.getPropSystem())
+        elif(action == Action.MOVE_XY_RIGHT):
+            command = MoveXYCommand(Direction.FORWARD, Direction.BACKWARD, self.__rov.getPropSystem())
+        elif(action == Action.MOVE_XY_STOP):
+            command = MoveXYCommand(Direction.STOP, Direction.STOP, self.__rov.getPropSystem())
         elif(action == Action.MOVE_Z_POS or action == Action.MOVE_Z_NEG or action == Action.MOVE_Z_STOP):
             command = MoveZCommand(action, self.__rov.getPropSystem())
         elif(action == Action.ARM):
