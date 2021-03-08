@@ -1,7 +1,8 @@
 from SocketConnection import SocketConnection
 from ClientConnection import ClientConnection
 from ServerConnection import ServerConnection
-from Message import Message
+from Writer import Writer
+# from Message import Message
 import pickle
 
 class SocketWriter(Writer):
