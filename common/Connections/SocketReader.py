@@ -1,7 +1,8 @@
 from SocketConnection import SocketConnection
 from ClientConnection import ClientConnection
 from ServerConnection import ServerConnection
-from Message import Message
+from Reader import Reader
+# from Message import Message
 import pickle
 import time
 
@@ -16,9 +17,9 @@ class SocketReader(Reader):
         return pickle.loads(message)
 
     def receive(self):
-        return self.decode(__recv_timeout(self.__socket, 2))
+        return self.decode(self.__recv_timeout(self.__socket, 2))
 
-    def __recv_timeout(the_socket,timeout): #NOTE: may need to modify so it blocks for the first chunk
+    def __recv_timeout(self, the_socket, timeout): #NOTE: may need to modify so it blocks for the first chunk
         #make socket non blocking
         the_socket.setblocking(0)
 
@@ -51,4 +52,4 @@ class SocketReader(Reader):
                 pass
 
         #join all parts to make final string
-        return ''.join(total_data)
+        return b''.join(total_data)
