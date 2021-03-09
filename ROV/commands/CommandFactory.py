@@ -21,16 +21,8 @@ class CommandFactory:
     def createCommand(self, action:Action) -> Command:
         command = None
 
-        if(action == Action.MOVE_XY_FORWARD):
-            command = MoveXYCommand(Direction.FORWARD, Direction.FORWARD, self.__rov.getPropSystem())
-        elif(action == Action.MOVE_XY_BACKWARD):
-            command = MoveXYCommand(Direction.BACKWARD, Direction.BACKWARD, self.__rov.getPropSystem())
-        elif(action == Action.MOVE_XY_LEFT):
-            command = MoveXYCommand(Direction.BACKWARD, Direction.FORWARD, self.__rov.getPropSystem())
-        elif(action == Action.MOVE_XY_RIGHT):
-            command = MoveXYCommand(Direction.FORWARD, Direction.BACKWARD, self.__rov.getPropSystem())
-        elif(action == Action.MOVE_XY_STOP):
-            command = MoveXYCommand(Direction.STOP, Direction.STOP, self.__rov.getPropSystem())
+        if(action == Action.MOVE_XY_FORWARD or action == Action.MOVE_XY_BACKWARD or action == Action.MOVE_XY_LEFT or action == Action.MOVE_XY_RIGHT or action == Action.MOVE_XY_STOP):
+            command = MoveXYCommand(action, self.__rov.getPropSystem())
         elif(action == Action.MOVE_Z_POS or action == Action.MOVE_Z_NEG or action == Action.MOVE_Z_STOP):
             command = MoveZCommand(action, self.__rov.getPropSystem())
         elif(action == Action.ARM):

@@ -2,7 +2,7 @@ from components.Thruster import Thruster
 from util.RotDirection import RotDirection
 
 class PropulsionSubsystem:
-    __currentSpeed = 0.1 #Universal speed for all thrusters
+    __speed = 0.1 #Universal speed for all thrusters
     __activeThrusters = [];
     __leftThruster = None
     __rightThruster = None
@@ -52,14 +52,14 @@ class PropulsionSubsystem:
 
     #Sets the universal speed of the chasis
     def setSpeed(self, speed:float) -> None:
-        self.__currentSpeed = speed
+        self.__speed = speed
 
         #Update the speed of any thrusters currently running
-        self.updateActiveThrustersSpeed(self.__currentSpeed)
+        self.updateActiveThrustersSpeed(self.__speed)
 
     #Gets the current speed of the propulsion subsystem
     def getSpeed(self) -> float:
-        return self.__currentSpeed
+        return self.__speed
 
     #Updates the provided thruster's state based on its speed
     def updateThrusterState(self, thruster: Thruster, speed:float) -> None:

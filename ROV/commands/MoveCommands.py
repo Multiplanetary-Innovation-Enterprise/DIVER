@@ -6,22 +6,34 @@ from util.Direction import Direction
 
 class MoveXYCommand(Command):
     __propSystem:PropulsionSubsystem = None
-    __leftDirection:Direction = None
+    __action:Action = None
     __rightDirection:Direction = None
 
-    def __init__(self, leftDirection:Direction, rightDirection:Direction, propSystem:PropulsionSubsystem):
+    def __init__(self, action:Action, propSystem:PropulsionSubsystem):
         self.__propSystem = propSystem
-        self.__leftDirection = leftDirection
-        self.__rightDirection = rightDirection
+        self.__action = action
 
     def execute(self):
         speed = self.__propSystem.getSpeed()
 
-        leftSpeed = speed * self.__leftDirection.value
-        rightSpeed = speed * self.__rightDirection.value
+        leftSpeedModifier = 0
+        rightSpeedModifier = 0
 
-        self.__propSystem.moveLeft(leftSpeed)
-        self.__propSystem.moveRight(rightSpeed)
+        if(self.__action ==Action.MOVE_XY_FORWARD):
+            leftSpeedModifier = 1
+            rightSpeedModifier = 1
+        elif(self.__action ==Action.MOVE_XY_BACKWARD):
+            leftSpeedModifier = -1
+            rightSpeedModifier = -1
+        elif(self.__action ==Action.MOVE_XY_LEFT):
+            leftSpeedModifier = -1
+            rightSpeedModifier = 1
+        elif(self.__action ==Action.MOVE_XY_RIGHT):
+            leftSpeedModifier = 1
+            rightSpeedModifier = -1
+
+        self.__propSystem.moveLeft(speed * rightSpeedModifier)
+        self.__propSystem.moveRight(speed * leftSpeedModifier)
 
     def isRepeatable(self):
         False
@@ -29,7 +41,6 @@ class MoveXYCommand(Command):
 class MoveZCommand(Command):
     __action = None
     __propSystem:PropulsionSubsystem = None
-    __speedStep = 0.5
 
     def __init__(self, action:Action, propSystem:PropulsionSubsystem):
         self.__action = action
