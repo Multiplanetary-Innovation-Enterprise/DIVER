@@ -1,4 +1,5 @@
 from util.RotDirection import RotDirection
+from signals.PWMSignal import PWMSignal
 
 import time
 
@@ -7,21 +8,21 @@ class Thruster:
     MAX_REVERSE = 1100 #Max reverse PWM pulse width
     MAX_FORWARD = 1900 #Max forward PWM pulse width
     STOPPED = 1500    #Stopped PWM pulse width
+    __pwmSignal: PWMSignal = None
     __rotDirection = RotDirection.CLOCKWISE
     __speed = 0
 
     #Creates the thruster
     def __init__(self, pi, pinNum, rotDirection):
-        self.pi = pi
-        self.pinNum = pinNum
+        self.__pwmSignal = PWMSignal(pi, pinNum)
         self.__rotDirection = rotDirection
 
     #Performs the arming sequence for the thruster
     def arm(self):
-        self.pi.set_servo_pulsewidth(self.pinNum, 0)
+        self.__pwmSignal.setPulseWidth(0)
         time.sleep(1)
 
-        self.pi.set_servo_pulsewidth(self.pinNum, Thruster.STOPPED)
+        self.__pwmSignal.setPulseWidth(Thruster.STOPPED)
         time.sleep(1)
 
     #Sets the speed of the thruster. Range [-1,1]
@@ -35,7 +36,7 @@ class Thruster:
         if self.__speed > Thruster.MAX_FORWARD or self.__speed < Thruster.MAX_REVERSE:
             return
 
-        self.pi.set_servo_pulsewidth(self.pinNum, self.__speed)
+        self.__pwmSignal.setPulseWidth(self.__speed)
 
     #Gets the speed of the thruster
     def getSpeed(self):
@@ -43,7 +44,7 @@ class Thruster:
 
     #Stops the thruster
     def stop(self):
-        self.pi.set_servo_pulsewidth(self.pinNum, Thruster.STOPPED)
+        self.__pwmSignal.setPulseWidth(Thruster.STOPPED)
         self.__speed = Thruster.STOPPED
 
     #Sets the rotational speed of the thruster
