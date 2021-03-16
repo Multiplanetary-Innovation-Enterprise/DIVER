@@ -2,7 +2,8 @@ from SocketConnection import SocketConnection
 from ClientConnection import ClientConnection
 from ServerConnection import ServerConnection
 from Reader import Reader
-# from Message import Message
+from ROVMessaging.Message import Message
+from ROVMessaging.MessageType import MessageType
 import pickle
 import time
 
@@ -13,11 +14,17 @@ class SocketReader(Reader):
     def __init__(self, socket):
         self.__socket = socket.get()
 
+    def getSocket(self):
+        return self.__socket
+
     def decode(self, message):
         return pickle.loads(message)
 
     def receive(self):
-        return self.decode(self.__recv_timeout(self.__socket, 2))
+        msg = self.__recv_timeout(self.__socket, 0.5)
+        if (msg != None):
+            return self.decode(msg)
+        return msg
 
     def __recv_timeout(self, the_socket, timeout): #NOTE: may need to modify so it blocks for the first chunk
         #make socket non blocking
@@ -51,5 +58,8 @@ class SocketReader(Reader):
             except:
                 pass
 
-        #join all parts to make final string
-        return b''.join(total_data)
+        if (len(total_data) > 0):
+            #join all parts to make final string
+            return b''.join(total_data)
+        else:
+            return None #NOTE: still errors, needs to be a byte-like object
