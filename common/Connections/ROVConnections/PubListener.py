@@ -1,7 +1,7 @@
 from ROVMessaging.Publisher import *
 from ROVMessaging.Message import *
 from ROVMessaging.MessageChannel import *
-from Reader import Reader
+from ROVConnections.Reader import Reader
 
 class PubListener(Publisher):
     __reader = None

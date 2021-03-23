@@ -1,6 +1,6 @@
 from ROVMessaging.Subscriber import *
 from ROVMessaging.Message import *
-from Writer import Writer
+from ROVConnections.Writer import Writer
 
 class SubWriter(Subscriber):
     __writer = None

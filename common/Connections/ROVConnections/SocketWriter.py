@@ -1,8 +1,7 @@
-from SocketConnection import SocketConnection
-from ClientConnection import ClientConnection
-from ServerConnection import ServerConnection
-from Writer import Writer
-from ROVMessaging import *
+from ROVConnections.SocketConnection import SocketConnection
+from ROVConnections.ClientConnection import ClientConnection
+from ROVConnections.ServerConnection import ServerConnection
+from ROVConnections.Writer import Writer
 import pickle
 
 class SocketWriter(Writer):

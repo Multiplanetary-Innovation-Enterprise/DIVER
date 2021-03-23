@@ -1,7 +1,7 @@
-from SocketConnection import SocketConnection
-from ClientConnection import ClientConnection
-from ServerConnection import ServerConnection
-from Reader import Reader
+from ROVConnections.SocketConnection import SocketConnection
+from ROVConnections.ClientConnection import ClientConnection
+from ROVConnections.ServerConnection import ServerConnection
+from ROVConnections.Reader import Reader
 from ROVMessaging.Message import Message
 from ROVMessaging.MessageType import MessageType
 import pickle

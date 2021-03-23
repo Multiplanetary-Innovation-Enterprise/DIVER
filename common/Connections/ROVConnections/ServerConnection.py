@@ -1,4 +1,4 @@
-from SocketConnection import SocketConnection
+from ROVConnections.SocketConnection import SocketConnection
 
 class ServerConnection(SocketConnection):
     __host = None
