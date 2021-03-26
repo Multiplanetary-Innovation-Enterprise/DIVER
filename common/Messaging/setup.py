@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 setup(
     name='ROV_Messaging',
     packages=['ROVMessaging'],
-    version='0.2.9',
+    version='0.3.0',
     description='The messaging code for the ROV project',
     author='Tyler Newton',
     license='MIT',

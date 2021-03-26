@@ -24,3 +24,6 @@ class ClientConnection(SocketConnection):
         connection, address = self.get().accept()
         self.__clientSocket = SocketConnection(connection)
         self.__clientAddress = address
+
+    def close(self):
+        self.__clientSocket.close()

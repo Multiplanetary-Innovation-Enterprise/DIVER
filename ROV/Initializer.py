@@ -30,42 +30,27 @@ messageChannel.subscribe(MessageType.ACTION, commandProcessor)
 port = 25003
 
 #Server code -----------------------------------
-c = ClientConnection(port)
-c.listenAndAccept(10)
-cs = SocketReader(c.client())
+clientConnection = ClientConnection(port)
+clientConnection.listenAndAccept(10)
+socketReader = SocketReader(clientConnection.client())
 
-pubListener = PubListener(cs, messageChannel)
+pubListener = PubListener(socketReader, messageChannel)
+pubListener.listen()
+clientConnection.close()
 
-noneCount = 0 #timeout counter
-timeout = 6
-while True:
-    if(pubListener.messageReady()):
-        message = pubListener.getMessage()
-        pubListener.sendMessage(message, messageChannel)
+print("Shutdown Done")
 
-    # message = cs.receive()
+# while True:
+#     # message = cs.receive()
+#     if (message != None):
+#         print(message.getContents())
+#
+#         if (message.getContents() == "Shutdown"):
+#             socketReader.close()
+#             print("listening")
+#             c.listenAndAccept(5)
+#             cs = SocketReader(c.client())
 
-    if (message != None):
-        print(message.getContents())
-
-        if (message.getContents() == "Shutdown"):
-            cs.getSocket().close()
-            print("listening")
-            c.listenAndAccept(5)
-            cs = SocketReader(c.client())
-        noneCount = 0
-            # cs = SocketReader(c.client())
-            # noneCount = 0
-        # if (message.getContents() == "Shutdown"):
-        #     c.close()
-        #     exit(0)
-    else:
-        noneCount += 1
-        print("None!")
-
-    if (noneCount >= timeout):
-        c.close()
-        exit(0)
 
 #----------------------------testing purpose only below-----------------------------------
 import keyboard

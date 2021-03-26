@@ -1,5 +1,7 @@
 from ROVMessaging.Publisher import *
 from ROVMessaging.Message import *
+from ROVMessaging.MessageType import MessageType
+from ROVMessaging.SystemStatus import SystemStatus
 from ROVMessaging.MessageChannel import *
 from ROVConnections.Reader import Reader
 
@@ -7,6 +9,7 @@ class PubListener(Publisher):
     __reader = None
     __channel = None
     __message = None
+    __isRunning = False
 
     def __init__(self, reader, messageChannel:MessageChannel):
         self.__reader = reader
@@ -14,16 +17,31 @@ class PubListener(Publisher):
         self.__message = ''
 
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
-        print(f"In Pub: {message.getContents()}")
         messageChannel.broadcast(message)
 
     def messageReady(self):
         self.__message = self.__reader.receive()
-        
+
         if self.__message == None:
             return False
         else:
             return True
 
-    def getMessage(self):
-        return self.__message
+    def listen(self):
+        self.__isRunning = True
+
+        while self.__isRunning:
+            if(self.messageReady()):
+                message = self.__message
+                print("Type " + str(message.getType()))
+                print("Contents " + str(message.getContents()))
+
+                if(message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN):
+                    print("shutdown")
+                    self.stop()
+                    break
+
+                self.sendMessage(self.__message, self.__channel)
+
+    def stop(self):
+        self.__isRunning = False
