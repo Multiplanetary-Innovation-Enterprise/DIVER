@@ -19,10 +19,11 @@ class PubListener(Publisher):
 
     def messageReady(self):
         self.__message = self.__reader.receive()
+        
         if self.__message == None:
             return False
         else:
             return True
 
     def getMessage(self):
-        return message
+        return self.__message

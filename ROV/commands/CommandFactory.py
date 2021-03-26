@@ -6,7 +6,6 @@ from commands.ArmCommand import ArmCommand
 from commands.MoveCommands import *
 from commands.SpeedCommands import *
 from commands.IlluminationCommands import *
-from util.Direction import Direction
 
 from ROV import ROV
 
@@ -37,5 +36,7 @@ class CommandFactory:
             command = LightIncreaseBrightnessCommand(self.__rov.getIlluminationSystem())
         elif(action == Action.BRIGHTNESS_DECREASE):
             command = LightDecreaseBrightnessCommand(self.__rov.getIlluminationSystem())
+
+        print("Action: " + str(action))
 
         return command

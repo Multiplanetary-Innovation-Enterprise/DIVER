@@ -1,12 +1,15 @@
-from SocketWriter import SocketWriter
-from SocketReader import SocketReader
-from ServerConnection import ServerConnection
+from ROVConnections.SocketWriter import SocketWriter
+from ROVConnections.SocketReader import SocketReader
+from ROVConnections.ServerConnection import ServerConnection
+from ROVConnections.PubListener import PubListener
+from ROVConnections.SubWriter import SubWriter
+
 from ROVMessaging.Publisher import *
 from ROVMessaging.Message import *
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
-from SubWriter import SubWriter
-from PubListener import PubListener
+
+
 import time
 import sys
 

@@ -2,12 +2,10 @@ from ROVMessaging.Action import Action
 
 from commands.Command import Command
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
-from util.Direction import Direction
 
 class MoveXYCommand(Command):
     __propSystem:PropulsionSubsystem = None
     __action:Action = None
-    __rightDirection:Direction = None
 
     def __init__(self, action:Action, propSystem:PropulsionSubsystem):
         self.__propSystem = propSystem

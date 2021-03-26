@@ -25,4 +25,4 @@ class PubListener(Publisher):
             return True
 
     def getMessage(self):
-        return message
+        return self.__message

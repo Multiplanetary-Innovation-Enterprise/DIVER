@@ -21,10 +21,15 @@ c = ClientConnection(port)
 c.listenAndAccept(10)
 cs = SocketReader(c.client())
 
+
+
 noneCount = 0 #timeout counter
 timeout = 6
+
 while True:
+
     message = cs.receive()
+    
     if (message != None):
         print(message.getContents())
         if (message.getContents() == "Shutdown"):

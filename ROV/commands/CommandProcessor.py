@@ -43,7 +43,7 @@ class CommandProcessor(Subscriber):
 
         action = message.getContents()
         command = self.__commandFactory.createCommand(action)
-    
+
         #Checks if the current command is the same as the last command
         if (self.lastCommand is None or (self.lastCommand is not None and command != self.lastCommand)) or command.isRepeatable():
             if not self.__isRunning:
