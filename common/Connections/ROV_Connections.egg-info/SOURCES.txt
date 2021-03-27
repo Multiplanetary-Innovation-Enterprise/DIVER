@@ -3,6 +3,7 @@ setup.py
 ROVConnections/ClientConnection.py
 ROVConnections/PubListener.py
 ROVConnections/Reader.py
+ROVConnections/Server.py
 ROVConnections/ServerConnection.py
 ROVConnections/SocketConnection.py
 ROVConnections/SocketReader.py

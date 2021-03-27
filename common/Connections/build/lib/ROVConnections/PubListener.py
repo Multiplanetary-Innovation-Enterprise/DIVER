@@ -33,8 +33,6 @@ class PubListener(Publisher):
         while self.__isRunning:
             if(self.messageReady()):
                 message = self.__message
-                print("Type " + str(message.getType()))
-                print("Contents " + str(message.getContents()))
 
                 if(message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN):
                     print("shutdown")

@@ -15,6 +15,8 @@ from commands.CommandFactory import CommandFactory
 
 from ROV import ROV
 
+import configparser
+
 messageChannel = MessageChannel()
 
 rov = ROV()
@@ -26,8 +28,12 @@ commandProcessor = CommandProcessor(commandFactory)
 
 messageChannel.subscribe(MessageType.ACTION, commandProcessor)
 
+config = configparser.ConfigParser()
+config.read('config.ini')
 
-port = 25003
+port = int(config['Server']['Port'])
+
+#server = Server()
 
 #Server code -----------------------------------
 clientConnection = ClientConnection(port)
@@ -36,8 +42,10 @@ socketReader = SocketReader(clientConnection.client())
 
 pubListener = PubListener(socketReader, messageChannel)
 pubListener.listen()
+
 clientConnection.close()
 
+#End server code
 print("Shutdown Done")
 
 # while True:
