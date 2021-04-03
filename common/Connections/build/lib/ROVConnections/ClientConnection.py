@@ -1,4 +1,5 @@
 from ROVConnections.SocketConnection import SocketConnection
+from socket import *
 
 class ClientConnection(SocketConnection):
     __port = None
@@ -8,7 +9,7 @@ class ClientConnection(SocketConnection):
     def __init__(self, port):
         super().__init__()
         self.__port = port
-        self.get().setsockopt(socket.SOL_SOCKET, socket. SO_REUSEADDR, 1)
+        self.get().setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.get().bind(('', port))
 
     def getPort(self):
