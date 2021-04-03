@@ -43,7 +43,7 @@ config.read('config.ini')
 
 port = int(config['Server']['Port'])
 
-clientConnection = ClientConnection(port)
+clientConnection = ClientConnection(25010)
 
 print("Waiting for client connection")
 clientConnection.listenAndAccept(10)

@@ -1,4 +1,4 @@
-from components.illumination.Light import Light
+from components.Illumination.Light import Light
 from signals.PWMSignal import PWMSignal
 
 class SubseaLight(Light):
