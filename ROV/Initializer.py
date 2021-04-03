@@ -9,7 +9,6 @@ from ROVConnections.SocketReader import *
 from ROVConnections.ClientConnection import *
 from ROVConnections.SubWriter import *
 from ROVConnections.PubListener import *
-from ROVConnections.Server import *
 
 from commands.CommandProcessor import CommandProcessor
 from commands.CommandFactory import CommandFactory
@@ -39,21 +38,25 @@ commandFactory = CommandFactory(rov, messageChannel)
 
 commandProcessor = CommandProcessor(commandFactory)
 
-messageChannel.subscribe(MessageType.ACTION, commandProcessor)
-messageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
-
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 port = int(config['Server']['Port'])
 
-server = Server("127.0.0.1", 25003)
+clientConnection = ClientConnection(port)
 
 print("Waiting for client connection")
-clientConnection = server.getClientConnection()
+clientConnection.listenAndAccept(10)
 
-socketReader = SocketReader(clientConnection.getSocket())
+socketReader = SocketReader(clientConnection.client())
 pubListener = PubListener(socketReader, messageChannel)
+
+socketWriter = SocketWriter(clientConnection.client())
+subWriter = SubWriter(socketWriter)
+
+messageChannel.subscribe(MessageType.ACTION, commandProcessor)
+messageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
+messageChannel.subscribe(MessageType.ACTION, subWriter)
 
 pubListener.listen()
 
