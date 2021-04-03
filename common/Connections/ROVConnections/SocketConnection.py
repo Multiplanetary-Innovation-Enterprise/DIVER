@@ -9,7 +9,7 @@ class SocketConnection():
         else:
             self.__socket = args[0]
 
-    def getSocket(self):
+    def get(self):
         return self.__socket
 
     def close(self):
