@@ -1,12 +1,26 @@
 from ROVConnections.SocketConnection import SocketConnection
 
 class ClientConnection(SocketConnection):
-    __address = None
+    __port = None
+    __clientSocket = None
+    __clientAddress = None
 
-    def __init__(self, socket, address):
-        super().__init__(socket)
+    def __init__(self, port):
+        super().__init__()
+        self.__port = port
+        self.get().bind(('', port))
 
-        self.__address = address
-        
-    def getAddress(self):
-        return self.__address
+    def getPort(self):
+        return self.__port
+
+    def client(self):
+        return self.__clientSocket
+
+    def claddr(self):
+        return self.__clientAddress
+
+    def listenAndAccept(self, seconds):
+        self.get().listen(seconds)
+        connection, address = self.get().accept()
+        self.__clientSocket = SocketConnection(connection)
+        self.__clientAddress = address

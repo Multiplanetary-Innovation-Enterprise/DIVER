@@ -8,7 +8,7 @@ class SocketWriter(Writer):
     __socket = None
 
     def __init__(self, socket):
-        self.__socket = socket
+        self.__socket = socket.get()
 
     def encode(self, message):
         return pickle.dumps(message)
