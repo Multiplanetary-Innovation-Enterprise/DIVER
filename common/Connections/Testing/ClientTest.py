@@ -15,11 +15,11 @@ from KeyboardInput import KeyboardInput
 import time
 import sys
 
-port = 25003
+port = 25010
 host = sys.argv[1]
 
 serverConnection = ServerConnection(host, port)
-socketWriter = SocketWriter(serverConnection.getSocket())
+socketWriter = SocketWriter(serverConnection)
 subWriter = SubWriter(socketWriter)
 
 mc = MessageChannel()

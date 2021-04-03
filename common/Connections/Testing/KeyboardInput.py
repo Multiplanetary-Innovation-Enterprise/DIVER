@@ -1,17 +1,25 @@
-import keyboard
+from pynput import keyboard
 from ROVMessaging.Publisher import *
 from ROVMessaging.Message import *
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
+from ROVMessaging.Action import *
+import time
+import queue
+import threading
 
 class KeyboardInput(Publisher):
     __messageChannel = None
     __stop = None
+    __queue = None
+    __isRunning = False
+    __keyReleased = True
+    # lastMessage = None
     def __init__(self, messageChannel:MessageChannel):
         self.__messageChannel = messageChannel
 
         #start keyboard listener
-        listener = keyboard.Listener(on_press=on_press)
+        listener = keyboard.Listener(on_press=self.on_press, on_release=self.on_release)
         listener.start()  # start to listen on a separate thread
         self.__stop = False
 
@@ -19,54 +27,62 @@ class KeyboardInput(Publisher):
         #
         # keyboard.on_press_key(']', self.increaseBrightness, True)
         # keyboard.on_press_key('[', self.decreaseBrightness, True)
+        self.__queue = queue.Queue()
+        thread = threading.Thread(target=self.processMessages)
+        thread.start()
 
-    def on_press(key):
+    def on_press(self, key):
         # if key == keyboard.Key.esc:
         #     return False  # stop listener
         try:
             k = key.char  # single-char keys
         except:
             k = key.name  # other keys
-        if (key == 'space'):
-            self.arm()
-        elif (key == 'w'):
-            self.forward()
-        elif (key == 'a'):
-            self.backward()
-        elif (key == 's'):
-            self.left()
-        elif (key == 'd'):
-            self.right()
-        elif (key == 'up'):
-            self.up()
-        elif (key == 'down'):
-            self.down()
-        elif (key == 'left'):
-            self.increaseSpeed()
-        elif (key == 'right'):
-            self.decreaseSpeed()
+        print(f"press: {k}")
+        if (self.__keyReleased):
+            if (k == 'space'):
+                self.arm()
+            elif (k == 'w'):
+                self.forward()
+            elif (k == 'a'):
+                self.backward()
+            elif (k == 's'):
+                self.left()
+            elif (k == 'd'):
+                self.right()
+            elif (k == 'up'):
+                self.up()
+            elif (k == 'down'):
+                self.down()
+            elif (k == 'left'):
+                self.increaseSpeed()
+            elif (k == 'right'):
+                self.decreaseSpeed()
+            self.__keyReleased = False
 
-    def on_release(key):
+    def on_release(self, key):
         # if key == keyboard.Key.esc:
         #     return False  # stop listener
         try:
             k = key.char  # single-char keys
         except:
             k = key.name  # other keys
-        if (key == 'w'):
+        print(f"release: {k}")
+        if (k == 'w'):
             self.stopXY()
-        elif (key == 'a'):
+        elif (k == 'a'):
             self.stopXY()
-        elif (key == 's'):
+        elif (k == 's'):
             self.stopXY()
-        elif (key == 'd'):
+        elif (k == 'd'):
             self.stopXY()
-        elif (key == 'up'):
+        elif (k == 'up'):
             self.stopZ()
-        elif (key == 'down'):
+        elif (k == 'down'):
             self.stopZ()
-        elif (key == 'esc'):
+        elif (k == 'esc'):
             self.__stop = True
+        self.__keyReleased = True
 
     def acceptingInput(self):
         if (self.__stop):
@@ -124,8 +140,31 @@ class KeyboardInput(Publisher):
         message = Message(MessageType.ACTION, Action.SPEED_DECREASE)
         self.sendMessage(message, self.__messageChannel)
 
+    def isRunning(self) -> bool:
+        return self.__isRunning
+
+    def enqueue(self, message) -> None:
+        self.__queue.put(message)
+
+    def dequeue(self):
+        return self.__queue.get()
+
+    def processMessages(self) -> None:
+        # self.__isRunning = True
+        # lastMessage = None
+        while True:
+            if not self.__queue.empty():
+                message = self.dequeue()
+                print(f"sending message: {message.getContents()}")
+                self.__messageChannel.broadcast(message)
+                time.sleep(0.5)
+
+        # self.__isRunning = False
+
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
-        messageChannel.broadcast(message)
+        #Checks if the current command is the same as the last command
+        # if not self.__isRunning:
+        self.enqueue(message)
     #
     # def toggleLight(self, event):
     #     print("Toggle light")
