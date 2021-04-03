@@ -31,15 +31,12 @@ class PubListener(Publisher):
         self.__isRunning = True
 
         while self.__isRunning:
+            print("Waiting message")
             if(self.messageReady()):
                 message = self.__message
-
-                if(message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN):
-                    print("shutdown")
-                    self.stop()
-                    break
-
+                print("Sending message")
                 self.sendMessage(self.__message, self.__channel)
 
     def stop(self):
+        print("Stopping pub listener")
         self.__isRunning = False

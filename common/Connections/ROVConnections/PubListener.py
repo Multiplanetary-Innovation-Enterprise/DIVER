@@ -34,12 +34,8 @@ class PubListener(Publisher):
             if(self.messageReady()):
                 message = self.__message
 
-                if(message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN):
-                    print("shutdown")
-                    self.stop()
-                    break
-
                 self.sendMessage(self.__message, self.__channel)
 
     def stop(self):
+        print("Stopping pub listener")
         self.__isRunning = False

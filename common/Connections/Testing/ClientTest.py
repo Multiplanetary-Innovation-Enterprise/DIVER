@@ -23,15 +23,16 @@ host = sys.argv[1]
 #     except:
 #         port += 1
 
-s = ServerConnection(host, port)
-w = SocketWriter(s)
-sub = SubWriter(w)
+serverConnection = ServerConnection(host, port)
+socketWriter = SocketWriter(serverConnection.getSocket())
+subWriter = SubWriter(socketWriter)
+
 mc = MessageChannel()
 pub = PubListener(None, mc)
-bool = mc.subscribe(MessageType.ACTION, sub)
-mc.subscribe(MessageType.SYSTEM_STATUS, sub)
 
-print(f"bool: {bool}")
+mc.subscribe(MessageType.ACTION, subWriter)
+mc.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+
 
 for i in range(10):
     message = Message(MessageType.ACTION, "this is an action message")
@@ -43,4 +44,4 @@ for i in range(10):
 print("Send close message")
 message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
 pub.sendMessage(message, mc)
-s.close()
+serverConnection.getSocket().close()

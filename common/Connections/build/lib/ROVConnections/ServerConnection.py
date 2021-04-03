@@ -1,3 +1,5 @@
+import socket
+
 from ROVConnections.SocketConnection import SocketConnection
 
 class ServerConnection(SocketConnection):
@@ -5,10 +7,13 @@ class ServerConnection(SocketConnection):
     __port = None
 
     def __init__(self, host, port):
-        super().__init__()
         self.__host = host
         self.__port = port
-        self.get().connect((host, port))
+
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((host, port))
+
+        super().__init__(sock)
 
     def getHost(self):
         return self.__host

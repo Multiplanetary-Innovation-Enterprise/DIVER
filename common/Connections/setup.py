@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 setup(
     name='ROV_Connections',
     packages=['ROVConnections'],
-    version='0.1.5',
+    version='0.1.6',
     description='The socketing code for the ROV project',
     author='Conor Porter',
     license='MIT',

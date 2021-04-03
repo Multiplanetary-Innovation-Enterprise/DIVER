@@ -12,7 +12,7 @@ class SocketReader(Reader):
     MAX_MSG = 8192
 
     def __init__(self, socket):
-        self.__socket = socket.get()
+        self.__socket = socket
 
     def getSocket(self):
         return self.__socket

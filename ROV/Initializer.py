@@ -9,6 +9,7 @@ from ROVConnections.SocketReader import *
 from ROVConnections.ClientConnection import *
 from ROVConnections.SubWriter import *
 from ROVConnections.PubListener import *
+from ROVConnections.Server import *
 
 from commands.CommandProcessor import CommandProcessor
 from commands.CommandFactory import CommandFactory
@@ -16,6 +17,18 @@ from commands.CommandFactory import CommandFactory
 from ROV import ROV
 
 import configparser
+
+class ShutdownHandler(Subscriber):
+    def recieveMessage(self, message:Message) -> None:
+
+        if message.getContents() != SystemStatus.SHUT_DOWN:
+            return
+
+        print("Shuting down...")
+
+        pubListener.stop()
+        clientConnection.close()
+        server.stop()
 
 messageChannel = MessageChannel()
 
@@ -27,38 +40,22 @@ commandFactory = CommandFactory(rov, messageChannel)
 commandProcessor = CommandProcessor(commandFactory)
 
 messageChannel.subscribe(MessageType.ACTION, commandProcessor)
+messageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 port = int(config['Server']['Port'])
 
-#server = Server()
+server = Server("127.0.0.1", 25003)
 
-#Server code -----------------------------------
-clientConnection = ClientConnection(port)
-clientConnection.listenAndAccept(10)
-socketReader = SocketReader(clientConnection.client())
+print("Waiting for client connection")
+clientConnection = server.getClientConnection()
 
+socketReader = SocketReader(clientConnection.getSocket())
 pubListener = PubListener(socketReader, messageChannel)
+
 pubListener.listen()
-
-clientConnection.close()
-
-#End server code
-print("Shutdown Done")
-
-# while True:
-#     # message = cs.receive()
-#     if (message != None):
-#         print(message.getContents())
-#
-#         if (message.getContents() == "Shutdown"):
-#             socketReader.close()
-#             print("listening")
-#             c.listenAndAccept(5)
-#             cs = SocketReader(c.client())
-
 
 #----------------------------testing purpose only below-----------------------------------
 import keyboard
