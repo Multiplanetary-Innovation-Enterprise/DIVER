@@ -8,6 +8,5 @@ class SubWriter(Subscriber):
     def __init__(self, writer:Writer):
         self.__writer = writer
 
-
     def recieveMessage(self, message:Message) -> None:
         self.__writer.send(message)

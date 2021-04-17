@@ -1,4 +1,4 @@
-from components.Illumination.Light import Light
+from components.illumination.Light import Light
 from signals.PWMSignal import PWMSignal
 
 class SubseaLight(Light):
@@ -22,11 +22,11 @@ class SubseaLight(Light):
     def setBrightness(self, brightness:float) -> None:
         super().setBrightness(brightness)
 
-        pulseWidth = self.convertBrightnessToPulseWidth(brightness)
+        pulseWidth = self.__convertBrightnessToPulseWidth(self.getBrightness())
 
         self.__pwmSignal.setPulseWidth(pulseWidth)
 
-    def convertBrightnessToPulseWidth(self, brightness: float) -> int:
+    def __convertBrightnessToPulseWidth(self, brightness: float) -> int:
         pulseWidth = round(SubseaLight.LIGHT_OFF + ((SubseaLight.LIGHT_MAX - SubseaLight.LIGHT_OFF)) * brightness)
 
         return pulseWidth

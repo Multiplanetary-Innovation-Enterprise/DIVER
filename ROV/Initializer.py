@@ -27,7 +27,6 @@ class ShutdownHandler(Subscriber):
 
         pubListener.stop()
         clientConnection.close()
-        server.stop()
 
 messageChannel = MessageChannel()
 
