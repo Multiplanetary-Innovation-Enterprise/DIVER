@@ -4,6 +4,7 @@ from ROVMessaging.MessageChannel import MessageChannel
 from commands.Command import Command
 from commands.ArmCommand import ArmCommand
 from commands.MoveCommands import *
+from commands.ClawCommands import *
 from commands.SpeedCommands import *
 from commands.IlluminationCommands import *
 
@@ -36,6 +37,10 @@ class CommandFactory:
             command = LightIncreaseBrightnessCommand(self.__rov.getIlluminationSystem())
         elif(action == Action.BRIGHTNESS_DECREASE):
             command = LightDecreaseBrightnessCommand(self.__rov.getIlluminationSystem())
+        elif(action == Action.CLAW_ANGLE_INCREASE):
+            command = IncreaseClawAngle(self.__rov.getClawSystem())
+        elif(action == Action.CLAW_ANGLE_DECREASE):
+            command = DecreaseClawAngle(self.__rov.getClawSystem())
 
         print("Action: " + str(action))
 

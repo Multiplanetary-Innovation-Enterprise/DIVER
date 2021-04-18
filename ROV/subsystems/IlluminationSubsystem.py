@@ -1,5 +1,5 @@
-from components.Illumination.Light import Light
-from components.Illumination.SubseaLight import SubseaLight
+from components.illumination.Light import Light
+from components.illumination.SubseaLight import SubseaLight
 
 class IlluminationSubsystem():
     __light: Light = None

@@ -37,27 +37,27 @@ commandFactory = CommandFactory(rov, messageChannel)
 
 commandProcessor = CommandProcessor(commandFactory)
 
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-port = int(config['Server']['Port'])
-
-clientConnection = ClientConnection(25010)
-
-print("Waiting for client connection")
-clientConnection.listenAndAccept(10)
-
-socketReader = SocketReader(clientConnection.client())
-pubListener = PubListener(socketReader, messageChannel)
-
-socketWriter = SocketWriter(clientConnection.client())
-subWriter = SubWriter(socketWriter)
-
+# config = configparser.ConfigParser()
+# config.read('config.ini')
+#
+# port = int(config['Server']['Port'])
+#
+# clientConnection = ClientConnection(25010)
+#
+# print("Waiting for client connection")
+# clientConnection.listenAndAccept(10)
+#
+# socketReader = SocketReader(clientConnection.client())
+# pubListener = PubListener(socketReader, messageChannel)
+#
+# socketWriter = SocketWriter(clientConnection.client())
+# subWriter = SubWriter(socketWriter)
+#
 messageChannel.subscribe(MessageType.ACTION, commandProcessor)
-messageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
-messageChannel.subscribe(MessageType.ACTION, subWriter)
-
-pubListener.listen()
+# messageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
+# messageChannel.subscribe(MessageType.ACTION, subWriter)
+#
+# pubListener.listen()
 
 #----------------------------testing purpose only below-----------------------------------
 import keyboard
@@ -95,6 +95,9 @@ class KeyboardInput(Publisher):
 
         keyboard.on_press_key(']', self.increaseBrightness, True)
         keyboard.on_press_key('[', self.decreaseBrightness, True)
+
+        keyboard.on_press_key('o', self.increaseClawAngle, True)
+        keyboard.on_press_key('p', self.decreaseClawAngle, True)
 
     #Sends move forward action
     def forward(self, event):
@@ -160,6 +163,14 @@ class KeyboardInput(Publisher):
 
     def decreaseBrightness(self, event):
         message = Message(MessageType.ACTION, Action.BRIGHTNESS_DECREASE)
+        self.sendMessage(message, self.__messageChannel)
+
+    def increaseClawAngle(self, event):
+        message = Message(MessageType.ACTION, Action.CLAW_ANGLE_INCREASE)
+        self.sendMessage(message, self.__messageChannel)
+
+    def decreaseClawAngle(self, event):
+        message = Message(MessageType.ACTION, Action.CLAW_ANGLE_DECREASE)
         self.sendMessage(message, self.__messageChannel)
 
 keyboardInput = KeyboardInput(messageChannel)
