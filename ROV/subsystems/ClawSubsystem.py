@@ -1,12 +1,21 @@
 from components.Stepper import Stepper
 from util.RotDirection import RotDirection
 
+import configparser
+
 class ClawSubsystem:
     __stepper: Stepper = None
     __angle: float = 0
 
     def __init__(self, pi):
-        self.__stepper = Stepper(pi, 20, 21, 22, RotDirection.CLOCKWISE)
+        config = configparser.ConfigParser()
+
+        config.read('config.ini')
+        stepPin = int(config['Claw']['StepperStepPin'])
+        dirPin = int(config['Claw']['StepperDirPin'])
+        sleepPin = int(config['Claw']['StepperSleepPin'])
+
+        self.__stepper = Stepper(pi, stepPin, dirPin, sleepPin, RotDirection.CLOCKWISE)
         self.__stepper.wake()
 
     def setAngle(self, angle:float):
@@ -20,7 +29,7 @@ class ClawSubsystem:
             self.__stepper.setRotDirection(RotDirection.CLOCKWISE)
 
         steps = abs(round(diff / Stepper.DEGREES_PER_STEP))
-    
+
         self.__stepper.stepN(steps)
 
     def getAngle(self):

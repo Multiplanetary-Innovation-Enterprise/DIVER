@@ -37,10 +37,10 @@ commandFactory = CommandFactory(rov, messageChannel)
 
 commandProcessor = CommandProcessor(commandFactory)
 
-# config = configparser.ConfigParser()
-# config.read('config.ini')
-#
-# port = int(config['Server']['Port'])
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+port = int(config['Server']['Port'])
 #
 # clientConnection = ClientConnection(25010)
 #

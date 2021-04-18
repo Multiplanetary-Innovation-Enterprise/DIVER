@@ -1,6 +1,8 @@
 from components.Thruster import Thruster
 from util.RotDirection import RotDirection
 
+import configparser
+
 class PropulsionSubsystem:
     __speed = 0.1 #Universal speed for all thrusters
     __activeThrusters = [];
@@ -10,10 +12,17 @@ class PropulsionSubsystem:
 
     #Constructor for the propulsion subsystem
     def __init__(self, pi):
+        config = configparser.ConfigParser()
+
+        config.read('config.ini')
+        leftPin = int(config['Propulsion']['LeftThrusterPin'])
+        rightPin = int(config['Propulsion']['RightThrusterPin'])
+        topPin = int(config['Propulsion']['TopThrusterPin'])
+
         #Creates three thrusters. Two for the x-y movement and one for z movement
-        self.__leftThruster = Thruster(pi, 4, RotDirection.CLOCKWISE)
-        self.__rightThruster = Thruster(pi, 17, RotDirection.CLOCKWISE)
-        self.__topThruster = Thruster(pi, 12, RotDirection.CLOCKWISE)
+        self.__leftThruster = Thruster(pi, leftPin, RotDirection.CLOCKWISE)
+        self.__rightThruster = Thruster(pi, rightPin, RotDirection.CLOCKWISE)
+        self.__topThruster = Thruster(pi, topPin, RotDirection.CLOCKWISE)
 
     #Arms all of the thrusters in the chasis
     def arm(self) -> None:
