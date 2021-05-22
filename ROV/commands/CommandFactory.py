@@ -41,6 +41,8 @@ class CommandFactory:
             command = IncreaseClawAngle(self.__rov.getClawSystem())
         elif(action == Action.CLAW_ANGLE_DECREASE):
             command = DecreaseClawAngle(self.__rov.getClawSystem())
+        elif(action == Action.CLAW_DEACTIVATE):
+            command = DeactivateClaw(self.__rov.getClawSystem())
 
         print("Action: " + str(action))
 

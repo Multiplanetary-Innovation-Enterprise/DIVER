@@ -97,7 +97,9 @@ class KeyboardInput(Publisher):
         keyboard.on_press_key('[', self.decreaseBrightness, True)
 
         keyboard.on_press_key('o', self.increaseClawAngle, True)
+        keyboard.on_release_key('o', self.deactivateClaw, True)
         keyboard.on_press_key('p', self.decreaseClawAngle, True)
+        keyboard.on_release_key('p', self.deactivateClaw, True)
 
     #Sends move forward action
     def forward(self, event):
@@ -171,6 +173,10 @@ class KeyboardInput(Publisher):
 
     def decreaseClawAngle(self, event):
         message = Message(MessageType.ACTION, Action.CLAW_ANGLE_DECREASE)
+        self.sendMessage(message, self.__messageChannel)
+
+    def deactivateClaw(self, event):
+        message = Message(MessageType.ACTION, Action.CLAW_DEACTIVATE)
         self.sendMessage(message, self.__messageChannel)
 
 keyboardInput = KeyboardInput(messageChannel)
