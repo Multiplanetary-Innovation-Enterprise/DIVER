@@ -32,8 +32,8 @@ pub = PubListener(None, mc)
 
 
 
-# mc.subscribe(MessageType.ACTION, subWriter)
-# mc.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+mc.subscribe(MessageType.ACTION, subWriter)
+mc.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
 while (True):
     pass

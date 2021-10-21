@@ -1,51 +1,44 @@
-from ROVConnections.SocketWriter import *
-from ROVConnections.SocketReader import *
-from ROVConnections.ClientConnection import *
-from ROVConnections.SubWriter import *
-from ROVConnections.PubListener import *
-from ROVMessaging.Publisher import *
-from ROVMessaging.Message import *
-from ROVMessaging.MessageChannel import *
+import threading
 
+from SocketWriter import *
+from SocketReader import *
+from ClientConnection import *
+
+isRunning = True
+
+def proccessInput():
+    global isRunning
+
+    while isRunning:
+        text = input("Enter a message: ")
+        print(text)
+
+        socketWriter.send(text)
+
+    print("Write stop")
 
 port = 25003
-# foundPort = False
-# while not foundPort:
-#     try:
-#         c = ClientConnection(port)
-#         foundPort = True
-#     except:
-#         port += 1
 
-c = ClientConnection(port)
-c.listenAndAccept(10)
-cs = SocketReader(c.client())
+clientConnection = ClientConnection(port)
 
+clientConnection.listenAndAccept(10)
 
+socketReader = SocketReader(clientConnection.client())
+socketWriter = SocketWriter(clientConnection.client())
 
-noneCount = 0 #timeout counter
-timeout = 6
+#Create a seperate thread for writing to the client
+writeThread = threading.Thread(target=proccessInput)
+writeThread.start()
 
-while True:
+print("Running...")
 
-    message = cs.receive()
-    
-    if (message != None):
-        print(message.getContents())
-        if (message.getContents() == "Shutdown"):
-            cs.getSocket().close()
-            print("listening")
-            c.listenAndAccept(5)
-            cs = SocketReader(c.client())
-        noneCount = 0
-            # cs = SocketReader(c.client())
-            # noneCount = 0
-        # if (message.getContents() == "Shutdown"):
-        #     c.close()
-        #     exit(0)
-    else:
-        noneCount += 1
-        print("None!")
-    if (noneCount >= timeout):
-        c.close()
-        exit(0)
+while isRunning:
+    message = socketReader.receive()
+    print("Client Message: " + str(message))
+
+    if message == "exit":
+        socketWriter.send("exit")
+        isRunning = False
+
+clientConnection.client().close()
+print("Exiting...")
