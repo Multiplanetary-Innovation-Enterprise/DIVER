@@ -13,6 +13,7 @@ from PubListener import PubListener
 
 class MessageReaderTest(Subscriber):
     def recieveMessage(self, message:Message) -> None:
+        global isRunning
         print("Message Type: " + str(message.getType()))
         print("Message Contents: " + str(message.getContents()))
 
@@ -20,6 +21,8 @@ class MessageReaderTest(Subscriber):
             print("Shuting down")
             isRunning = False
             pubListener.stop()
+
+            print("Still runin? : " + str(isRunning))
 
 port = 25003
 
@@ -49,6 +52,8 @@ print("Running...")
 
 while isRunning:
     text = input("Enter a status: ")
+
+    print("Still runin? : " + str(isRunning))
 
     if text == "a":
         action = SystemStatus.ARMED

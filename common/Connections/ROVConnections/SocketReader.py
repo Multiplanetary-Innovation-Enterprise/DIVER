@@ -18,10 +18,10 @@ class SocketReader(Reader):
 
     def __init__(self, socket):
         self.__socket = socket.get()
-        self.__socket.setblocking(True);
+        self.__socket.setblocking(False);
 
-        # self.__select = selectors.DefaultSelector()
-        # self.__select = select.register(self.__socket, selectors)
+        self.__select = selectors.DefaultSelector()
+        self.__select.register(self.__socket, selectors.EVENT_READ)
 
 
     def getSocket(self):
@@ -31,6 +31,23 @@ class SocketReader(Reader):
         return pickle.loads(message)
 
     def receive(self):
+        print("Waiting.....")
+        events = self.__select.select(timeout=None)
+        print("Data!")
+
+        for key, mask in events:
+            #Check if the socket was closed
+            if key.fileobj.fileno() < 0:
+                return None
+
+            print(key)
+            print(type(key))
+            print(key.fileobj)
+            print(key.fileobj.fileno())
+
+            print(mask)
+            print(type(mask))
+
         #Reads in the header of the message first
         header = self.__socket.recv(4)
 

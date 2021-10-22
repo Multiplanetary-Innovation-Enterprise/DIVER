@@ -68,5 +68,5 @@ while isRunning:
     message = Message(type, contents)
     outgoingMessageChannel.broadcast(message)
 
-serverConnection.get().shutdown(socket.SHUT_RDWR)
+serverConnection.close()
 print("Exiting...")
