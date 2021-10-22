@@ -9,4 +9,5 @@ class SubWriter(Subscriber):
         self.__writer = writer
 
     def recieveMessage(self, message:Message) -> None:
+        print("Sending")
         self.__writer.send(message)

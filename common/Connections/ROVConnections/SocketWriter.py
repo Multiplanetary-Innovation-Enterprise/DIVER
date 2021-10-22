@@ -14,14 +14,14 @@ class SocketWriter(Writer):
         self.__socket = socket.get()
 
     def encode(self, message):
-        messageSize = sys.getsizeof(message)
-
-        #Create the message size header
-        messageHeader = struct.pack(">I", messageSize)
-
         #Converts the message to a byte stream
         serializedMessage = pickle.dumps(message);
 
+        #Gets the size of the serialized message
+        messageSize = sys.getsizeof(serializedMessage)
+
+        #Create the message size header
+        messageHeader = struct.pack(">I", messageSize)
         #Prepend the message header and return the encoded result
         return messageHeader + serializedMessage
 

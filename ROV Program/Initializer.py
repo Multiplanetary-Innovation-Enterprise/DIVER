@@ -19,7 +19,6 @@ import configparser
 
 class ShutdownHandler(Subscriber):
     def recieveMessage(self, message:Message) -> None:
-
         if message.getContents() != SystemStatus.SHUT_DOWN:
             return
 

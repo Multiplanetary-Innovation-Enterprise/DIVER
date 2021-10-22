@@ -4,4 +4,5 @@ from enum import Enum
 class SystemStatus(Enum):
     INITIALIZING = 0
     ARMED = 1
-    SHUT_DOWN = 2
+    RUNNING = 2
+    SHUT_DOWN = 3

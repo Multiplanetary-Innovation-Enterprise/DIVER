@@ -28,10 +28,6 @@ kb = KeyboardInput(mc)
 pub = PubListener(None, mc)
 #pub.listen()
 
-
-
-
-
 mc.subscribe(MessageType.ACTION, subWriter)
 mc.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 

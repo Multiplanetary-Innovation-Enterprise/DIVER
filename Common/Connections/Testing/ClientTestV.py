@@ -2,9 +2,9 @@ import sys
 import threading
 
 
-from SocketWriter import SocketWriter
-from SocketReader import SocketReader
-from ServerConnection import ServerConnection
+from ROVConnections.SocketWriter import SocketWriter
+from ROVConnections.SocketReader import SocketReader
+from ROVConnections.ServerConnection import ServerConnection
 
 isRunning = False
 port = 25003

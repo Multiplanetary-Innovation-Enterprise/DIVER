@@ -1,8 +1,8 @@
 import threading
 
-from SocketWriter import *
-from SocketReader import *
-from ClientConnection import *
+from ROVConnections.SocketWriter import *
+from ROVConnections.SocketReader import *
+from ROVConnections.ClientConnection import *
 
 isRunning = True
 
