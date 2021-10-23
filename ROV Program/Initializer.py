@@ -27,12 +27,13 @@ class ShutdownHandler(Subscriber):
         pubListener.stop()
         clientConnection.close()
 
-messageChannel = MessageChannel()
+incomingMessageChannel = MessageChannel()
+outgoingMessageChannel = MessageChannel()
 
 rov = ROV()
 prop = rov.getPropSystem();
 
-commandFactory = CommandFactory(rov, messageChannel)
+commandFactory = CommandFactory(rov, outgoingMessageChannel)
 
 commandProcessor = CommandProcessor(commandFactory)
 
@@ -40,22 +41,24 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 port = int(config['Server']['Port'])
-#
+
 clientConnection = ClientConnection(port)
 
 print("Waiting for client connection")
+#Wait for the client program to connect
 clientConnection.listenAndAccept(10)
 
 socketReader = SocketReader(clientConnection.client())
-pubListener = PubListener(socketReader, messageChannel)
+pubListener = PubListener(socketReader, incomingMessageChannel)
 
 socketWriter = SocketWriter(clientConnection.client())
 subWriter = SubWriter(socketWriter)
-#
-messageChannel.subscribe(MessageType.ACTION, commandProcessor)
-messageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
-messageChannel.subscribe(MessageType.ACTION, subWriter)
 
+incomingMessageChannel.subscribe(MessageType.ACTION, commandProcessor)
+incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
+outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
+
+#Start listening for messages from the client program
 pubListener.listen()
 
 # #----------------------------testing purpose only below-----------------------------------

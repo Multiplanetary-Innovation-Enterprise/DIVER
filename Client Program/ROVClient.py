@@ -4,44 +4,38 @@ from ROVConnections.ServerConnection import ServerConnection
 from ROVConnections.PubListener import PubListener
 from ROVConnections.SubWriter import SubWriter
 
-from ROVMessaging.Publisher import *
-from ROVMessaging.Message import *
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
-from ROVMessaging.SystemStatus import *
 
 from input.KeyboardInput import KeyboardInput
 
-
-import time
-import sys
-
+#Connection info for connecting to the ROV
 port = 25003
-# host = sys.argv[1]
+host = "127.0.0.1"
 
-# serverConnection = ServerConnection(host, port)
-# socketWriter = SocketWriter(serverConnection)
-# subWriter = SubWriter(socketWriter)
+#Attempts to connect to the ROV
+serverConnection = ServerConnection(host, port)
 
-mc = MessageChannel()
-kb = KeyboardInput(mc)
-pub = PubListener(None, mc)
-#pub.listen()
+incomingMessageChannel = MessageChannel()
+outgoingMessageChannel = MessageChannel()
 
-mc.subscribe(MessageType.ACTION, subWriter)
-mc.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+#Sets up ability to send messages to the ROV
+socketWriter = SocketWriter(serverConnection)
+subWriter = SubWriter(socketWriter)
 
-while (True):
-    pass
+#Sets up the abilty to recieve messages from the ROV
+socketReader = SocketReader(serverConnection)
+pubListener = PubListener(socketReader, incomingMessageChannel)
 
-# for i in range(10):
-#     message = Message(MessageType.ACTION, "this is an action message")
-#     print(f"Message: {message.getContents()}")
-#     pub.sendMessage(message, mc)
-#     time.sleep(1)
-# # message = Message("this is a message")
+keyboardInput = KeyboardInput(outgoingMessageChannel)
 
-# print("Send close message")
-# message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
-# pub.sendMessage(message, mc)
-# serverConnection.getSocket().close()
+
+#Start listening for messages from the ROV
+pubListener.listen()
+
+#Allows the client to send action and system status messages to the ROV
+outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
+outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+
+serverConnection.close()
+print("Exiting...")
