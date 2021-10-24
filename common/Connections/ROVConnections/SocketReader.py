@@ -16,8 +16,8 @@ class SocketReader(Reader):
     __socket = None
     __select = None
 
-    def __init__(self, socket):
-        self.__socket = socket.get()
+    def __init__(self, socketConnection):
+        self.__socket = socketConnection.getSocket()
         self.__socket.setblocking(False);
 
         self.__select = selectors.DefaultSelector()

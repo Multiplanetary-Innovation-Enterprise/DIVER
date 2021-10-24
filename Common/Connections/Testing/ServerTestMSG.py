@@ -5,11 +5,11 @@ from ROVMessaging.MessageType import *
 from ROVMessaging.Action import *
 from ROVMessaging.SystemStatus import *
 
-from SocketWriter import SocketWriter
-from SubWriter import SubWriter
-from SocketReader import SocketReader
-from ClientConnection import ClientConnection
-from PubListener import PubListener
+from ROVConnections.SocketWriter import SocketWriter
+from ROVConnections.SubWriter import SubWriter
+from ROVConnections.SocketReader import SocketReader
+from ROVConnections.ClientConnection import ClientConnection
+from ROVConnections.PubListener import PubListener
 
 class MessageReaderTest(Subscriber):
     def recieveMessage(self, message:Message) -> None:
@@ -26,7 +26,7 @@ class MessageReaderTest(Subscriber):
 
 port = 25003
 
-clientConnection = ClientConnection(port)
+clientConnection = ClientConnection('', port)
 
 clientConnection.listenAndAccept(10)
 
@@ -35,8 +35,8 @@ outgoingMessageChannel = MessageChannel()
 
 messageReaderTest = MessageReaderTest()
 
-socketReader = SocketReader(clientConnection.client())
-socketWriter = SocketWriter(clientConnection.client())
+socketReader = SocketReader(clientConnection.getClient())
+socketWriter = SocketWriter(clientConnection.getClient())
 subWriter = SubWriter(socketWriter)
 
 pubListener = PubListener(socketReader, incomingMessageChannel)
@@ -65,5 +65,5 @@ while isRunning:
     message = Message(MessageType.SYSTEM_STATUS, action)
     outgoingMessageChannel.broadcast(message)
 
-clientConnection.client().close()
+clientConnection.getClient().close()
 print("Exiting...")

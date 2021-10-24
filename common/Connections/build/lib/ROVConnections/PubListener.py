@@ -1,3 +1,5 @@
+import threading
+
 from ROVMessaging.Publisher import *
 from ROVMessaging.Message import *
 from ROVMessaging.MessageType import MessageType
@@ -10,6 +12,7 @@ class PubListener(Publisher):
     __channel = None
     __message = None
     __isRunning = False
+    __listenThread = None
 
     def __init__(self, reader, messageChannel:MessageChannel):
         self.__reader = reader
@@ -27,15 +30,24 @@ class PubListener(Publisher):
         else:
             return True
 
+    #Starts up the thread for listening to incoming messages
     def listen(self):
-        self.__isRunning = True
+        if not self.__isRunning:
+            self.__listenThread = threading.Thread(target=self.__listen)
+            self.__listenThread.start()
+
+            self.__isRunning = True
+
+    #The underlying listen function used by the listen thread
+    def __listen(self):
+        print("Pub listening")
 
         while self.__isRunning:
-            print("Waiting message")
             if(self.messageReady()):
                 message = self.__message
-                print("Sending message")
+
                 self.sendMessage(self.__message, self.__channel)
+        print("Pub listener stopped")
 
     def stop(self):
         print("Stopping pub listener")

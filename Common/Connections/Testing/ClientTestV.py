@@ -24,6 +24,7 @@ def proccessRead():
 
 #Connect to the server
 serverConnection = ServerConnection(host, port)
+serverConnection.connect()
 
 socketWriter = SocketWriter(serverConnection)
 socketReader = SocketReader(serverConnection)

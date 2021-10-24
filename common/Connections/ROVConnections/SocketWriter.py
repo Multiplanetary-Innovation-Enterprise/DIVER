@@ -11,7 +11,7 @@ class SocketWriter(Writer):
     __socket = None
 
     def __init__(self, socket):
-        self.__socket = socket.get()
+        self.__socket = socket.getSocket()
 
     def encode(self, message):
         #Converts the message to a byte stream

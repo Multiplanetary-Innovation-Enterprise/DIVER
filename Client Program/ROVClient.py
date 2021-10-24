@@ -15,7 +15,9 @@ host = "127.0.0.1"
 
 #Attempts to connect to the ROV
 serverConnection = ServerConnection(host, port)
+serverConnection.connect()
 
+#The sending and receiving message channels
 incomingMessageChannel = MessageChannel()
 outgoingMessageChannel = MessageChannel()
 

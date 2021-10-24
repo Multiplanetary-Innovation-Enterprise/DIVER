@@ -2,27 +2,20 @@ from ROVConnections.SocketConnection import SocketConnection
 from socket import *
 
 class ClientConnection(SocketConnection):
-    __port = None
-    __clientSocket = None
-    __clientAddress = None
+    __clientSocketConnection = None
 
-    def __init__(self, port):
-        super().__init__()
-        self.__port = port
-        self.get().setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
-        self.get().bind(('', port))
+    def __init__(self, host, port):
+        super().__init__(host=host, port=port)
 
-    def getPort(self):
-        return self.__port
+        self.getSocket().setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
+        self.getSocket().bind((self.getHost(), self.getPort()))
 
-    def client(self):
-        return self.__clientSocket
+    def getClient(self):
+        return self.__clientSocketConnection
 
-    def claddr(self):
-        return self.__clientAddress
+    def listenAndAccept(self, backlogSize):
+        self.getSocket().listen(backlogSize)
 
-    def listenAndAccept(self, seconds):
-        self.get().listen(seconds)
-        connection, address = self.get().accept()
-        self.__clientSocket = SocketConnection(connection)
-        self.__clientAddress = address
+        clientSocket, clientAddress = self.getSocket().accept()
+
+        self.__clientSocketConnection = SocketConnection(clientSocket, clientAddress[0], clientAddress[1])

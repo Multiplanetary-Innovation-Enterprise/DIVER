@@ -17,14 +17,12 @@ def proccessInput():
 
     print("Write stop")
 
-port = 25003
-
-clientConnection = ClientConnection(port)
+clientConnection = ClientConnection('', 25003)
 
 clientConnection.listenAndAccept(10)
 
-socketReader = SocketReader(clientConnection.client())
-socketWriter = SocketWriter(clientConnection.client())
+socketReader = SocketReader(clientConnection.getClient())
+socketWriter = SocketWriter(clientConnection.getClient())
 
 #Create a seperate thread for writing to the client
 writeThread = threading.Thread(target=proccessInput)
@@ -40,5 +38,5 @@ while isRunning:
         socketWriter.send("exit")
         isRunning = False
 
-clientConnection.client().close()
+clientConnection.getClient().close()
 print("Exiting...")

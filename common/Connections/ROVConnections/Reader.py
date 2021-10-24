@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-# from Message import Message
+
+from ROVMessaging.Message import Message
 
 class Reader(ABC):
     @abstractmethod
-    def receive(self, message) -> None:
+    def receive(self, message:Message) -> None:
         pass

@@ -42,16 +42,16 @@ config.read('config.ini')
 
 port = int(config['Server']['Port'])
 
-clientConnection = ClientConnection(port)
+clientConnection = ClientConnection('', port)
 
 print("Waiting for client connection")
 #Wait for the client program to connect
 clientConnection.listenAndAccept(10)
 
-socketReader = SocketReader(clientConnection.client())
+socketReader = SocketReader(clientConnection.getClient())
 pubListener = PubListener(socketReader, incomingMessageChannel)
 
-socketWriter = SocketWriter(clientConnection.client())
+socketWriter = SocketWriter(clientConnection.getClient())
 subWriter = SubWriter(socketWriter)
 
 incomingMessageChannel.subscribe(MessageType.ACTION, commandProcessor)
