@@ -41,11 +41,6 @@ class KeyboardInput(Input):
         keyboard.on_press_key(']', self.increaseBrightness, True)
         keyboard.on_press_key('[', self.decreaseBrightness, True)
 
-        keyboard.on_press_key('o', self.increaseClawAngle, True)
-        keyboard.on_release_key('o', self.deactivateClaw, True)
-        keyboard.on_press_key('p', self.decreaseClawAngle, True)
-        keyboard.on_release_key('p', self.deactivateClaw, True)
-
 # class KeyboardInput(Publisher):
 #     __messageChannel = None
 #     __stop = None

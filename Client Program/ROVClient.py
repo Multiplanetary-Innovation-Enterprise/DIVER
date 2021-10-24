@@ -9,6 +9,8 @@ from ROVMessaging.MessageType import *
 
 from input.KeyboardInput import KeyboardInput
 
+import tkinter as tk
+
 #Connection info for connecting to the ROV
 port = 25003
 host = "127.0.0.1"
@@ -31,13 +33,15 @@ pubListener = PubListener(socketReader, incomingMessageChannel)
 
 keyboardInput = KeyboardInput(outgoingMessageChannel)
 
-
 #Start listening for messages from the ROV
 pubListener.listen()
 
 #Allows the client to send action and system status messages to the ROV
 outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
 outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+
+window = tk.Tk()
+window.mainloop()
 
 serverConnection.close()
 print("Exiting...")
