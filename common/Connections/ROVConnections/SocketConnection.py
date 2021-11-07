@@ -1,28 +1,37 @@
 import socket as sock
 
+#Represents a connection made using a socket
 class SocketConnection():
-    __socket = None
-    __host = None
-    __port = None
+    __socket = None    #The socket corresponding to this connection
+    __host:str = None  #The host or host name for the socket to connect to
+    __port:int = None  #The port for the socket to connect to
 
-    def __init__(self, socket=None, host=None, port=None):
+    def __init__(self, socket=None, host:str=None, port:int=None):
+        #Checks if a socket was provided
         if socket is None:
+            #Creates a network socket, since one was not provided
             self.__socket = sock.socket(sock.AF_INET, sock.SOCK_STREAM)
             self.__host = host
             self.__port = port
         else:
+            #Uses the provided socket and gets its host and port
             self.__socket = socket
             self.__host = socket.getsockname()[0]
             self.__port = socket.getsockname()[1]
 
+    #Gets the socket corresponding to this connection
     def getSocket(self):
         return self.__socket
 
-    def getHost(self):
+    #Gets the host that the socket is connected to
+    def getHost(self) -> str:
         return self.__host
 
-    def getPort(self):
+    #Gets the port that the socket is connected to
+    def getPort(self) -> int:
         return self.__port
 
-    def close(self):
+    #Closes the connection
+    def close(self) -> None:
+        #Closes the socket
         self.__socket.close();
