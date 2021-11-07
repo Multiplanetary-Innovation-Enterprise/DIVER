@@ -13,7 +13,7 @@ import tkinter as tk
 
 #Connection info for connecting to the ROV
 port = 25003
-host = "raspberrypi"
+host = "127.0.0.1" #raspberrypi
 
 #Attempts to connect to the ROV
 serverConnection = ServerConnection(host, port)

@@ -28,7 +28,7 @@ class SocketReader(Reader):
 
     #Recives a message from the socket
     def receive(self) -> Message:
-        print("Waiting.....")
+        print("Waiting for message.....")
         #Waits for a new message or socket disconnect
         events = self.__select.select(timeout=None)
         print("Data!")
@@ -39,22 +39,34 @@ class SocketReader(Reader):
             if key.fileobj.fileno() < 0:
                 return None
 
-            print(key)
-            print(type(key))
-            print(key.fileobj)
-            print(key.fileobj.fileno())
-
-            print(mask)
-            print(type(mask))
+        #The message header
+        header = bytearray()
+        headerSize = 0
 
         #Reads in the header of the message first
-        header = self.__socket.recv(4)
+        while headerSize < 4:
+            #Reads in the necessary bytes (up to 4 to finish reading in the header)
+            data = self.__socket.recv(4 - headerSize)
+
+            #Updates the header
+            header += data
+            headerSize += len(data)
 
         #Gets the size of the message
-        messageSize = struct.unpack(">I", header)[0]
+        messageTotalSize = struct.unpack(">I", header)[0]
+
+        #The byte string message read in
+        message = bytearray()
+        messageSize = 0
 
         #Reads in the actual message based on the read in size and decodes it
-        message = self.__socket.recv(messageSize)
+        while messageSize < messageTotalSize:
+            #Reads in the necessary bytes to finish reading in the message
+            data = self.__socket.recv(messageTotalSize - messageSize)
+
+            #Updates the message
+            message += data
+            messageSize += len(data)
 
         #Converts the encoded message back to the orginal message
         message = self.decode(message)

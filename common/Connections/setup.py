@@ -2,8 +2,8 @@ from setuptools import find_packages, setup
 setup(
     name='ROV_Connections',
     packages=['ROVConnections'],
-    version='0.2.0',
-    description='The socketing code for the ROV project',
+    version='0.2.5',
+    description='The networking code for the ROV project',
     author='Conor Porter',
     license='MIT',
     install_requires=[],

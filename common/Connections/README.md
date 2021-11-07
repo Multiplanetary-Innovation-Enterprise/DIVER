@@ -1,1 +1,1 @@
-The socketing code for the ROV project
+The networking code for the ROV project

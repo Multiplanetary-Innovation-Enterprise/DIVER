@@ -1,4 +1,3 @@
-import sys
 import struct
 import pickle
 
@@ -21,10 +20,11 @@ class SocketWriter(Writer):
         serializedMessage = pickle.dumps(message);
 
         #Gets the size of the serialized message
-        messageSize = sys.getsizeof(serializedMessage)
+        messageSize = len(serializedMessage)
 
         #Create the message size header
         messageHeader = struct.pack(">I", messageSize)
+
         #Prepend the message header and return the encoded result
         return messageHeader + serializedMessage
 
@@ -33,5 +33,4 @@ class SocketWriter(Writer):
         #Encode the message so that it can be sent
         message = self.encode(message)
 
-        #Send the actual message
         self.__socket.sendall(message)
