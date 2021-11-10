@@ -1,10 +1,9 @@
 import sys
 import threading
 
-
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
-from ROVConnections.ServerConnection import ServerConnection
+from ROVConnections.SocketConnection import SocketConnection
 
 isRunning = False
 port = 25003
@@ -23,7 +22,7 @@ def proccessRead():
     print("Read stop")
 
 #Connect to the server
-serverConnection = ServerConnection(host, port)
+serverConnection = SocketConnection(host=host, port=port)
 serverConnection.connect()
 
 socketWriter = SocketWriter(serverConnection)

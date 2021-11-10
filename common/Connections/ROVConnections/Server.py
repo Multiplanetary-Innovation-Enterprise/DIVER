@@ -1,33 +1,19 @@
-import socket
+from abc import ABC, abstractmethod
 
-from ROVConnections.ClientConnection import *
+from ROVConnections.Connection import Connection
 
-class Server():
-    __socket = None
-    __host = None
-    __port = None
+#This class represents the core operations that all servers must support
+#regardless of how they are implemented
+class Server(ABC):
 
-    def __init__(self, host, port):
-        self.__host = host
-        self.__port = port
+    @abstractmethod
+    def listen(self) -> None:
+        pass
 
-        self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__socket.setsockopt(socket.SOL_SOCKET, socket. SO_REUSEADDR, 1)
-        self.__socket.bind((host, port))
+    @abstractmethod
+    def stop(self) -> None:
+        pass
 
-    def getHost(self):
-        return self.__host
-
-    def getPort(self):
-        return self.__port
-
-    def getClientConnection(self) -> ClientConnection:
-        self.__socket.listen()
-        clientSocket, clientAddr = self.__socket.accept()
-        clientConnection = ClientConnection(clientSocket, clientAddr)
-
-        return clientConnection
-
-    def stop(self):
-        self.__socket.close()
-        self.__socket = None
+    @abstractmethod
+    def getClientConnection(self) -> Connection:
+        pass
