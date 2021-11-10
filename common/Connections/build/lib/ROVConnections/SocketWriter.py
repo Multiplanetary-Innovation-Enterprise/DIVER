@@ -1,33 +1,36 @@
-import sys
 import struct
 import pickle
 
+from ROVMessaging.Message import Message
+
 from ROVConnections.SocketConnection import SocketConnection
-from ROVConnections.ClientConnection import ClientConnection
-from ROVConnections.ServerConnection import ServerConnection
 from ROVConnections.Writer import Writer
 
+#Represents a write that utilizes a socket to send messages
 class SocketWriter(Writer):
-    __socket = None
+    __socket = None #The socket from the provided connection used to send messages
 
-    def __init__(self, socket):
-        self.__socket = socket.getSocket()
+    def __init__(self, socketConnection:SocketConnection):
+        self.__socket = socketConnection.getSocket()
 
-    def encode(self, message):
+    #Encodes the provided message into a byte stream that can be sent over a socket
+    #connection
+    def encode(self, message:Message) -> str:
         #Converts the message to a byte stream
         serializedMessage = pickle.dumps(message);
 
         #Gets the size of the serialized message
-        messageSize = sys.getsizeof(serializedMessage)
+        messageSize = len(serializedMessage)
 
         #Create the message size header
         messageHeader = struct.pack(">I", messageSize)
+
         #Prepend the message header and return the encoded result
         return messageHeader + serializedMessage
 
-    def send(self, message):
+    #Sends the provided message over the socket connection
+    def send(self, message:Message) -> None:
         #Encode the message so that it can be sent
         message = self.encode(message)
 
-        #Send the actual message
         self.__socket.sendall(message)

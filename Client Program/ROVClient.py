@@ -1,3 +1,5 @@
+import csv
+
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
 from ROVConnections.ServerConnection import ServerConnection
@@ -6,14 +8,37 @@ from ROVConnections.SubWriter import SubWriter
 
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
+from ROVMessaging.Subscriber import Subscriber
 
 from input.KeyboardInput import KeyboardInput
 
 import tkinter as tk
 
+#Temporary for testing
+class TempLogger(Subscriber):
+    __file = None
+    __writer = None
+
+    def __init__(self):
+        header = ["time", "temperature"];
+        self.__file = open("ROV_Temp_Data.csv", "w+");
+
+        self.__writer = csv.writer(self.__file)
+        self.__writer.writerow(header)
+
+
+    def recieveMessage(self, message:Message) -> None:
+        print("Sensor data recieved")
+        temp = message.getContents()['internalTemp']
+        time = message.getContents()['time']
+
+        print("Temp: " + str(temp) + " F @ Time: " + str(time) + "sec")
+        #write entry to csv file
+        self.__writer.writerow([time, temp])
+
 #Connection info for connecting to the ROV
 port = 25003
-host = "127.0.0.1" #raspberrypi
+host = "raspberrypi" #127.0.0.1
 
 #Attempts to connect to the ROV
 serverConnection = ServerConnection(host, port)
@@ -36,9 +61,13 @@ keyboardInput = KeyboardInput(outgoingMessageChannel)
 #Start listening for messages from the ROV
 pubListener.listen()
 
+tempLogger = TempLogger()
+
 #Allows the client to send action and system status messages to the ROV
 outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
 outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+
+incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, tempLogger)
 
 window = tk.Tk()
 window.mainloop()

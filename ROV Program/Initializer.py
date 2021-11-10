@@ -1,3 +1,7 @@
+
+import configparser
+import time
+
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 from ROVMessaging.Message import Message
@@ -15,8 +19,6 @@ from commands.CommandFactory import CommandFactory
 
 from ROV import ROV
 
-import configparser
-
 class ShutdownHandler(Subscriber):
     def recieveMessage(self, message:Message) -> None:
         if message.getContents() != SystemStatus.SHUT_DOWN:
@@ -26,6 +28,58 @@ class ShutdownHandler(Subscriber):
 
         pubListener.stop()
         clientConnection.close()
+
+#Temporary until integrated into command system
+class DataSender(Publisher):
+    __messageChannel:MessageChannel = None
+    __isRunning = False
+    __thread = None
+
+    def __init__(self, messageChannel:MessageChannel):
+        self.__messageChannel = messageChannel
+
+    def start(self):
+        print("Sending data start")
+        if not self.__isRunning:
+            self.__thread = threading.Thread(target=self.__run)
+            self.__thread.start()
+
+            self.__isRunning = True
+
+    def __run(self):
+        print("Doesn't run without this print statement because python")
+        while self.__isRunning:
+            print("data sending")
+
+            #Get temperature
+            sensorSystem = rov.getSensorSystem()
+            tempSensor = sensorSystem.getInternalTempSensor()
+
+            #Convert time to seconds
+            elapsedTime = round((time.time_ns() - startTime) / 1000000000, 2)
+
+            #Only sensor data is temp data so far
+            sensorData = {
+                'internalTemp': tempSensor.getTemperature(),
+                'time': elapsedTime
+            }
+
+            message = Message(MessageType.SENSOR_DATA, sensorData)
+
+            self.sendMessage(message, self.__messageChannel)
+
+            time.sleep(1)
+
+    def stop(self):
+        __isRunning = False
+
+
+    #Creates the action message and sends it over the message channel
+    def sendMessage(self, message:Message, messageChannel:MessageChannel):
+        print(message)
+        messageChannel.broadcast(message)
+
+startTime = time.time_ns()
 
 incomingMessageChannel = MessageChannel()
 outgoingMessageChannel = MessageChannel()
@@ -54,12 +108,17 @@ pubListener = PubListener(socketReader, incomingMessageChannel)
 socketWriter = SocketWriter(clientConnection.getClient())
 subWriter = SubWriter(socketWriter)
 
+dataSender = DataSender(outgoingMessageChannel)
+dataSender.start()
+
 incomingMessageChannel.subscribe(MessageType.ACTION, commandProcessor)
 incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, ShutdownHandler())
-outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
+
+outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, subWriter)
 
 #Start listening for messages from the client program
 pubListener.listen()
+dataSender.stop()
 
 # #----------------------------testing purpose only below-----------------------------------
 # import keyboard
