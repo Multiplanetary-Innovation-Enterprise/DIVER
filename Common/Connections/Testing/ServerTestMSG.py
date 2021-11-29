@@ -5,11 +5,11 @@ from ROVMessaging.MessageType import *
 from ROVMessaging.Action import *
 from ROVMessaging.SystemStatus import *
 
-from ROVConnections.SocketWriter import SocketWriter
-from ROVConnections.SubWriter import SubWriter
-from ROVConnections.SocketReader import SocketReader
-from ROVConnections.ClientConnection import ClientConnection
-from ROVConnections.PubListener import PubListener
+from ROVConnections.SocketWriter import *
+from ROVConnections.SubWriter import *
+from ROVConnections.SocketReader import *
+from ROVConnections.SocketServer import *
+from ROVConnections.PubListener import *
 
 class MessageReaderTest(Subscriber):
     def recieveMessage(self, message:Message) -> None:
@@ -26,17 +26,17 @@ class MessageReaderTest(Subscriber):
 
 port = 25003
 
-clientConnection = ClientConnection('', port)
+server = SocketServer('', port)
 
-clientConnection.listenAndAccept(10)
+clientConnection = server.getClientConnection()
 
 incomingMessageChannel = MessageChannel()
 outgoingMessageChannel = MessageChannel()
 
 messageReaderTest = MessageReaderTest()
 
-socketReader = SocketReader(clientConnection.getClient())
-socketWriter = SocketWriter(clientConnection.getClient())
+socketReader = SocketReader(clientConnection)
+socketWriter = SocketWriter(clientConnection)
 subWriter = SubWriter(socketWriter)
 
 pubListener = PubListener(socketReader, incomingMessageChannel)

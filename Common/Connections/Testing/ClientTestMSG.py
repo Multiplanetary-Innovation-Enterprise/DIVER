@@ -7,11 +7,11 @@ from ROVMessaging.Subscriber import *
 from ROVMessaging.Message import *
 from ROVMessaging.SystemStatus import *
 
-from ROVConnections.SocketWriter import SocketWriter
-from ROVConnections.SubWriter import SubWriter
-from ROVConnections.SocketReader import SocketReader
-from ROVConnections.ServerConnection import ServerConnection
-from ROVConnections.PubListener import PubListener
+from ROVConnections.SocketWriter import *
+from ROVConnections.SubWriter import *
+from ROVConnections.SocketReader import *
+from ROVConnections.SocketConnection import *
+from ROVConnections.PubListener import *
 
 class MessageReaderTest(Subscriber):
     def recieveMessage(self, message:Message) -> None:
@@ -22,7 +22,7 @@ port = 25003
 host = "127.0.0.1"
 
 #Connect to the server
-serverConnection = ServerConnection(host, port)
+serverConnection = SocketConnection(host=host, port=port)
 serverConnection.connect()
 
 socketWriter = SocketWriter(serverConnection)

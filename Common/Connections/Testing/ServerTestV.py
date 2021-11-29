@@ -2,7 +2,7 @@ import threading
 
 from ROVConnections.SocketWriter import *
 from ROVConnections.SocketReader import *
-from ROVConnections.ClientConnection import *
+from ROVConnections.SocketServer import *
 
 isRunning = True
 
@@ -17,12 +17,12 @@ def proccessInput():
 
     print("Write stop")
 
-clientConnection = ClientConnection('', 25003)
+server = SocketServer('', 25003);
 
-clientConnection.listenAndAccept(10)
+clientConnection = server.getClientConnection()
 
-socketReader = SocketReader(clientConnection.getClient())
-socketWriter = SocketWriter(clientConnection.getClient())
+socketReader = SocketReader(clientConnection)
+socketWriter = SocketWriter(clientConnection)
 
 #Create a seperate thread for writing to the client
 writeThread = threading.Thread(target=proccessInput)
@@ -38,5 +38,5 @@ while isRunning:
         socketWriter.send("exit")
         isRunning = False
 
-clientConnection.getClient().close()
+clientConnection.close()
 print("Exiting...")

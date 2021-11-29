@@ -28,10 +28,8 @@ class SocketReader(Reader):
 
     #Recives a message from the socket
     def receive(self) -> Message:
-        print("Waiting for message.....")
         #Waits for a new message or socket disconnect
         events = self.__select.select(timeout=None)
-        print("Data!")
 
         #Iterates through any events that just occured
         for key, mask in events:

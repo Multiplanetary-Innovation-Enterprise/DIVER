@@ -33,8 +33,6 @@ class PubListener(Publisher):
 
     #The underlying listen function used by the listen thread
     def __listen(self) -> None:
-        print("Pub listening")
-
         #Keeps listening for new messages until shutdown
         while self.__isRunning:
             #Performs the blocking reads for a new message
@@ -42,9 +40,6 @@ class PubListener(Publisher):
             #Sends the recieved message over the message channel
             self.sendMessage(message, self.__channel)
 
-        print("Pub listener stopped")
-
     #Tells the message listening thread to stop
     def stop(self) -> None:
-        print("Stopping pub listener")
         self.__isRunning = False
