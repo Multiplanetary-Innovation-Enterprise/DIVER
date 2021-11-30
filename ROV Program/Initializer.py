@@ -10,9 +10,9 @@ from ROVMessaging.Publisher import Publisher
 
 from ROVConnections.SocketWriter import *
 from ROVConnections.SocketReader import *
-from ROVConnections.ClientConnection import *
 from ROVConnections.SubWriter import *
 from ROVConnections.PubListener import *
+from ROVConnections.SocketServer import *
 
 from commands.CommandProcessor import CommandProcessor
 from commands.CommandFactory import CommandFactory
@@ -96,16 +96,17 @@ config.read('config.ini')
 
 port = int(config['Server']['Port'])
 
-clientConnection = ClientConnection('', port)
+server = SocketServer('', port)
 
 print("Waiting for client connection")
-#Wait for the client program to connect
-clientConnection.listenAndAccept(10)
 
-socketReader = SocketReader(clientConnection.getClient())
+#Wait for the client program to connect
+clientConnection = server.getClientConnection()
+
+socketReader = SocketReader(clientConnection)
 pubListener = PubListener(socketReader, incomingMessageChannel)
 
-socketWriter = SocketWriter(clientConnection.getClient())
+socketWriter = SocketWriter(clientConnection)
 subWriter = SubWriter(socketWriter)
 
 dataSender = DataSender(outgoingMessageChannel)

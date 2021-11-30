@@ -2,7 +2,7 @@ import csv
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
-from ROVConnections.ServerConnection import ServerConnection
+from ROVConnections.SocketConnection import SocketConnection
 from ROVConnections.PubListener import PubListener
 from ROVConnections.SubWriter import SubWriter
 
@@ -41,7 +41,7 @@ port = 25003
 host = "raspberrypi" #127.0.0.1
 
 #Attempts to connect to the ROV
-serverConnection = ServerConnection(host, port)
+serverConnection = SocketConnection(host=host, port=port)
 serverConnection.connect()
 
 #The sending and receiving message channels

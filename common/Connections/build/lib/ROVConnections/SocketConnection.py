@@ -9,7 +9,6 @@ class SocketConnection(Connection):
     __port:int = None  #The port for the socket to connect to
 
     def __init__(self, socket=None, host:str=None, port:int=None):
-        print("TEst using new code");
         #Checks if a socket was provided
         if socket is None:
             #Creates a network socket, since one was not provided

@@ -1,6 +1,5 @@
 README.md
 setup.py
-ROVConnections/ClientConnection.py
 ROVConnections/Connection.py
 ROVConnections/PubListener.py
 ROVConnections/Reader.py
