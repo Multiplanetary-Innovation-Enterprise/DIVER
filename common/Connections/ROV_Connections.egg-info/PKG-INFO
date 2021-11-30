@@ -1,7 +1,7 @@
 Metadata-Version: 1.0
 Name: ROV-Connections
-Version: 0.1.8
-Summary: The socketing code for the ROV project
+Version: 0.3.1
+Summary: The networking code for the ROV project
 Home-page: UNKNOWN
 Author: Conor Porter
 Author-email: UNKNOWN
