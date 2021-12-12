@@ -14,3 +14,8 @@ class Command(ABC):
     @abstractmethod
     def isRepeatable(self) -> bool:
         pass
+
+    #Gets the code of the corresponding action
+    @abstractmethod
+    def getActionCode(self) -> int:
+        pass

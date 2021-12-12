@@ -18,7 +18,7 @@ class MessageChannel:
         self.__messageTypesToSubscribers = HashMap[MessageType, list]()
 
     #Allows a subscriber to listen for certain message types by subscribing to them
-    def subscribe(self, messageType: MessageType, subscriber:Subscriber) -> bool:
+    def subscribe(self, messageType:MessageType, subscriber:Subscriber) -> bool:
         #Retrieves all of the subscribers listening to the provided message type
         subscribers = self.__messageTypesToSubscribers.get(messageType)
         #Whether or not the subscriber was added to the subscribers list
@@ -39,7 +39,7 @@ class MessageChannel:
         return wasAdded
 
     #Allows a subscriber to stop listening to certain message types by unsubscribing from them
-    def unsubscribe(self, messageType: MessageType, subscriber:Subscriber) -> bool:
+    def unsubscribe(self, messageType:MessageType, subscriber:Subscriber) -> bool:
         #Whether or not the subscriber was removed to the subscribers list
         wasRemoved = False
 
@@ -67,19 +67,19 @@ class MessageChannel:
 
         #Checks whether to send the message to all of the subscribers in parallel or sequentially
         if self.__isProcessingInParallel:
-            self.proccessInParallel(subscribers, message)
+            self.__proccessInParallel(subscribers, message)
         else:
-            self.processSequentially(subscribers, message)
+            self.__processSequentially(subscribers, message)
 
     #Sends the provided message to all of the subscribers in parallel using multithreading
-    def proccessInParallel(self, subscribers:list, message:Message) -> None:
+    def __proccessInParallel(self, subscribers:list, message:Message) -> None:
         #Creates a thread pool which created one thread per subscriber and starts each thread
         with concurrent.futures.ThreadPoolExecutor(max_workers=len(subscribers)) as executor:
             for subscriber in subscribers:
                 executor.submit(subscriber.recieveMessage, message)
 
     #Sends the provided message to all of the subscribers sequentially
-    def processSequentially(self, subscribers:list, message:Message) -> None:
+    def __processSequentially(self, subscribers:list, message:Message) -> None:
         for subscriber in subscribers:
             subscriber.recieveMessage(message)
 

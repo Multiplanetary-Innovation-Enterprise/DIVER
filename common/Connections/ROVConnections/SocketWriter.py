@@ -15,7 +15,7 @@ class SocketWriter(Writer):
 
     #Encodes the provided message into a byte stream that can be sent over a socket
     #connection
-    def encode(self, message:Message) -> str:
+    def __encode(self, message:Message) -> str:
         #Converts the message to a byte stream
         serializedMessage = pickle.dumps(message);
 
@@ -31,6 +31,6 @@ class SocketWriter(Writer):
     #Sends the provided message over the socket connection
     def send(self, message:Message) -> None:
         #Encode the message so that it can be sent
-        message = self.encode(message)
+        message = self.__encode(message)
 
         self.__socket.sendall(message)

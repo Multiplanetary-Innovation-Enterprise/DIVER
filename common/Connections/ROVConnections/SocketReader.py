@@ -23,7 +23,7 @@ class SocketReader(Reader):
         self.__select.register(self.__socket, selectors.EVENT_READ)
 
     #Converts the byte stram encode message back to the orignal message
-    def decode(self, encodedMsg:str) -> Message:
+    def __decode(self, encodedMsg:str) -> Message:
         return pickle.loads(encodedMsg)
 
     #Recives a message from the socket
@@ -67,6 +67,6 @@ class SocketReader(Reader):
             messageSize += len(data)
 
         #Converts the encoded message back to the orginal message
-        message = self.decode(message)
+        message = self.__decode(message)
 
         return message
