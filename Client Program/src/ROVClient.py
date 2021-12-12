@@ -1,4 +1,4 @@
-import csv
+import tkinter as tk
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -8,37 +8,13 @@ from ROVConnections.SubWriter import SubWriter
 
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
-from ROVMessaging.Subscriber import Subscriber
 
 from input.KeyboardInput import KeyboardInput
-
-import tkinter as tk
-
-#Temporary for testing
-class TempLogger(Subscriber):
-    __file = None
-    __writer = None
-
-    def __init__(self):
-        header = ["time", "temperature"];
-        self.__file = open("ROV_Temp_Data.csv", "w+");
-
-        self.__writer = csv.writer(self.__file)
-        self.__writer.writerow(header)
-
-
-    def recieveMessage(self, message:Message) -> None:
-        print("Sensor data recieved")
-        temp = message.getContents()['internalTemp']
-        time = message.getContents()['time']
-
-        print("Temp: " + str(temp) + " F @ Time: " + str(time) + "sec")
-        #write entry to csv file
-        self.__writer.writerow([time, temp])
+from loggers.DataLogger import DataLogger
 
 #Connection info for connecting to the ROV
 port = 25003
-host = "raspberrypi" #127.0.0.1
+host = "127.0.0.1" #127.0.0.1 raspberrypi
 
 #Attempts to connect to the ROV
 serverConnection = SocketConnection(host=host, port=port)
@@ -61,16 +37,20 @@ keyboardInput = KeyboardInput(outgoingMessageChannel)
 #Start listening for messages from the ROV
 pubListener.listen()
 
-tempLogger = TempLogger()
+dataLogger = DataLogger()
+dataLogger.openFile("..\logs\data\data_log");
 
 #Allows the client to send action and system status messages to the ROV
 outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
 outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
-incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, tempLogger)
+incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, dataLogger)
 
+#GUI stuff to move to seperate class later
 window = tk.Tk()
 window.mainloop()
 
 serverConnection.close()
+dataLogger.close()
+
 print("Exiting...")
