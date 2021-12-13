@@ -1,6 +1,6 @@
 from enum import Enum
 
-#The different message types
+#The different states that the system can be in
 class SystemStatus(Enum):
     INITIALIZING = 0
     ARMED = 1

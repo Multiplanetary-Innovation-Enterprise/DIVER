@@ -1,16 +1,11 @@
-import time
-import queue
-import threading
 import keyboard
 
 from ROVMessaging.MessageChannel import MessageChannel
 
-from input.Input import Input
+from inputs.Input import Input
 
 #Represents an implmentation of an input using a keyboard
 class KeyboardInput(Input):
-    __messageChannel:MessageChannel = None
-
     #Registers all of the key bindings and provides the message channel to
     #send the input change messages in
     def __init__(self, messageChannel:MessageChannel):
