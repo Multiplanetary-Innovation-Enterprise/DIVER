@@ -15,6 +15,7 @@ class Command(ABC):
     def isRepeatable(self) -> bool:
         pass
 
+    #TODO implement
     #Gets the code of the corresponding action
     @abstractmethod
     def getActionCode(self) -> int:
