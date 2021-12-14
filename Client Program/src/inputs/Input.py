@@ -4,7 +4,8 @@ from ROVMessaging.Publisher import Publisher
 from ROVMessaging.Message import Message
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
-from ROVMessaging.Action import Action
+
+from util.Action import Action
 
 #Represents the base for all input devices
 class Input(Publisher, ABC):
