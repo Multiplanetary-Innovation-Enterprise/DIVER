@@ -1,10 +1,10 @@
-#from Initializer import *
+from ROVApp import *
 
 #Python equivalent of main function
 def main():
     #Starts the ROV program
-    # initializer = Initializer()
-    # initializer.start()
+    rovApp = ROVApp()
+    rovApp.start()
     pass
 
 #Checks that the code is being executed and not imported

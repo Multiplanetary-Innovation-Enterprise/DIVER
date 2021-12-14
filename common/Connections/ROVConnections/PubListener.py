@@ -16,7 +16,6 @@ class PubListener(Publisher):
     def __init__(self, reader:Reader, messageChannel:MessageChannel):
         self.__reader = reader
         self.__channel = messageChannel
-        self.__message = ''
 
     #Sends the recieved message over the message channel
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:

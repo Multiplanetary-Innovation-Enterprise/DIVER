@@ -1,4 +1,4 @@
-from w1thermsensor import W1ThermSensor, Unit
+#from w1thermsensor import W1ThermSensor, Unit
 
 from util.TempUnit import TempUnit
 from sensors.TempSensor import TempSensor
@@ -9,7 +9,7 @@ class DS18B20TempSensor(TempSensor):
     def __init__(self, tempUnit:TempUnit = TempUnit.F):
         super().__init__(tempUnit)
 
-        self.__sensor = W1ThermSensor()
+        #self.__sensor = W1ThermSensor()
 
     def getTemperature(self) -> float:
         if self._tempUnit == TempUnit.F:

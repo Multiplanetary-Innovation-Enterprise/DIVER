@@ -1,10 +1,10 @@
-from subsystems.PropulsionSubsystem import PropulsionSubsystem
-from subsystems.IlluminationSubsystem import IlluminationSubsystem
-from subsystems.SensorSubsystem import SensorSubsystem
-
 import pigpio
 import os
 import time
+
+from subsystems.PropulsionSubsystem import PropulsionSubsystem
+from subsystems.IlluminationSubsystem import IlluminationSubsystem
+from subsystems.SensorSubsystem import SensorSubsystem
 
 class ROV:
     __propSystem:PropulsionSubsystem = None
@@ -16,14 +16,14 @@ class ROV:
         #For testing
         # pi=None
         #Pi connection setup
-        os.system ("sudo pigpiod")
-        time.sleep(1)
-
-        self.__pi = pigpio.pi();
-
-        self.__propSystem = PropulsionSubsystem(self.__pi)
-        self.__illuminationSystem = IlluminationSubsystem(self.__pi)
-        self.__sensorSystem = SensorSubsystem(self.__pi)
+        # os.system ("sudo pigpiod")
+        # time.sleep(1)
+        #
+        # self.__pi = pigpio.pi();
+        #
+        # self.__propSystem = PropulsionSubsystem(self.__pi)
+        # self.__illuminationSystem = IlluminationSubsystem(self.__pi)
+        # self.__sensorSystem = SensorSubsystem(self.__pi)
         pass
 
     def getPropSystem(self) -> PropulsionSubsystem:

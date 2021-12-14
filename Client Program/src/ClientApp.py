@@ -16,7 +16,7 @@ from loggers.DataLogger import DataLogger
 from gui.Window import Window
 
 #Represents the ROV Client program
-class ROVClient(Subscriber):
+class ClientApp(Subscriber):
     __config = None                            #The config data
     __serverConnection:SocketConnection = None #The connection to the ROV
     __dataLogger:DataLogger = None             #The sensor data logger
@@ -63,12 +63,15 @@ class ROVClient(Subscriber):
         outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
         outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
-        #Allows the client to recieve sensor data from the ROV and system status updates
+        #Allows the client to recieve sensor data from the ROV
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__dataLogger)
+
+        #Listens for any system status changes from either this program or the ROV
+        outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
         #Setups the GUI window
-        self.__window = Window(incomingMessageChannel)
+        self.__window = Window(outgoingMessageChannel)
         self.__window.create()
 
     #Starts the ROV client if it is not already running
