@@ -28,14 +28,19 @@ class PubListener(Publisher):
             self.__listenThread = threading.Thread(target=self.__listen)
             self.__listenThread.start()
 
-            self.__isRunning = True
-
     #The underlying listen function used by the listen thread
     def __listen(self) -> None:
+        self.__isRunning = True
+
         #Keeps listening for new messages until shutdown
         while self.__isRunning:
             #Performs the blocking reads for a new message
             message = self.__reader.receive()
+
+            #Checks if a message was recieved. Used to check if the connection was closed.
+            if message == None:
+                continue
+
             #Sends the recieved message over the message channel
             self.sendMessage(message, self.__channel)
 

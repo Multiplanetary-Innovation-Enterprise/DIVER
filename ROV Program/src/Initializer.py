@@ -1,4 +1,4 @@
-
+#--------------------------DEPRECATED --------------------------
 import configparser
 import time
 
@@ -71,7 +71,7 @@ class DataSender(Publisher):
             time.sleep(1)
 
     def stop(self):
-        __isRunning = False
+        self.__isRunning = False
 
 
     #Creates the action message and sends it over the message channel
@@ -92,7 +92,7 @@ commandFactory = CommandFactory(rov, outgoingMessageChannel)
 commandProcessor = CommandProcessor(commandFactory)
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('..\config.ini')
 
 port = int(config['Server']['Port'])
 
@@ -119,4 +119,6 @@ outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, subWriter)
 
 #Start listening for messages from the client program
 pubListener.listen()
-dataSender.stop()
+
+
+#dataSender.stop()

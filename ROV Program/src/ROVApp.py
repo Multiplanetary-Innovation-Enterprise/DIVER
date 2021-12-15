@@ -1,9 +1,11 @@
 import configparser
-
+import time
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 from ROVMessaging.Subscriber import Subscriber
 from ROVMessaging.SystemStatus import *
+
+from ROVMessaging.Message import Message
 
 from ROVConnections.SocketWriter import *
 from ROVConnections.SocketReader import *
@@ -87,6 +89,7 @@ class ROVApp(Subscriber):
         self.__setup()
 
         while self.__isRunning:
+            # print("run")
             pass
 
         self.__cleanup()
@@ -97,9 +100,9 @@ class ROVApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
+        self.__dataSender.stop()
         self.__pubListener.stop()
         self.__clientConnection.close()
-        self.__dataSender.stop()
 
     #TODO
     def recieveMessage(self, message:Message) -> None:
@@ -108,6 +111,6 @@ class ROVApp(Subscriber):
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
 
-            print("Shutodnw")
+            print("shuting down")
 
             self.stop()

@@ -1,4 +1,5 @@
 import configparser
+import sys
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -21,6 +22,7 @@ class ClientApp(Subscriber):
     __serverConnection:SocketConnection = None #The connection to the ROV
     __dataLogger:DataLogger = None             #The sensor data logger
     __window:Window = None                     #The GUI window
+    __pubListener: PubListener = None          #Listens for messages from the ROV program
     __isRunning:bool = False                   #Whether or not the program is running
 
     #The setup used for initializing all of the resources that will be needed
@@ -33,9 +35,15 @@ class ClientApp(Subscriber):
         host = str(self.__config['ROV_CONNECTION']['Host'])
         port = int(self.__config['ROV_CONNECTION']['Port'])
 
-        #Attempts to connect to the ROV
+        #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
-        self.__serverConnection.connect()
+
+        #Attempts to connect to the ROV
+        try:
+            self.__serverConnection.connect()
+        except:
+            print("Failed to connect to ROV")
+            sys.exit()
 
         #The sending and receiving message channels
         incomingMessageChannel = MessageChannel()
@@ -47,13 +55,13 @@ class ClientApp(Subscriber):
 
         #Sets up the abilty to recieve messages from the ROV
         socketReader = SocketReader(self.__serverConnection)
-        pubListener = PubListener(socketReader, incomingMessageChannel)
+        self.__pubListener = PubListener(socketReader, incomingMessageChannel)
 
         #The input method that utilizes a keyboard
         keyboardInput = KeyboardInput(outgoingMessageChannel)
 
         #Start listening for messages from the ROV
-        pubListener.listen()
+        self.__pubListener.listen()
 
         #Sets up the data logger and creates a new log file
         self.__dataLogger = DataLogger()
@@ -78,6 +86,7 @@ class ClientApp(Subscriber):
     def start(self) -> None:
         if not self.__isRunning:
             self.__isRunning = True
+
             self.__run()
 
     #The main loop for the program
@@ -86,7 +95,6 @@ class ClientApp(Subscriber):
 
         while self.__isRunning:
             self.__window.mainloop()
-            pass
 
         self.__cleanup()
 
@@ -96,8 +104,12 @@ class ClientApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        self.__serverConnection.close()
         self.__dataLogger.close()
+        self.__serverConnection.close()
+        self.__pubListener.stop()
+
+        #This is causing the socket errors on close, need to wait until PubListener is done
+        #before calling this line
 
         print("Exiting...")
 

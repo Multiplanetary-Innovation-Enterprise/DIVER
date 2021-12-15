@@ -22,9 +22,10 @@ class DataSender(Publisher):
             self.__thread = threading.Thread(target=self.__run)
             self.__thread.start()
 
-            self.__isRunning = True
+
 
     def __run(self):
+        self.__isRunning = True
         #print("Doesn't run without this print statement because python")
         # while self.__isRunning:
         #     print("data sending")
@@ -51,7 +52,7 @@ class DataSender(Publisher):
 
 
     def stop(self):
-        __isRunning = False
+        self.__isRunning = False
 
 
     #Creates the action message and sends it over the message channel
