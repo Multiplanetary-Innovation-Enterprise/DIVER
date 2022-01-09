@@ -18,6 +18,25 @@ class MessageReaderTest(Subscriber):
         print("Message Type: " + str(message.getType()))
         print("Message Contents: " + str(message.getContents()))
 
+        if message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN:
+            shutdown()
+
+def shutdown():
+    global status
+    status = SystemStatus.SHUT_DOWN
+
+    print("Shuting down")
+    pubListener.stop()
+
+    #Sends the shutdown message to the client
+    message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
+    outgoingMessageChannel.broadcast(message)
+
+    serverConnection.shutdown(socket.SHUT_WR)
+    serverConnection.close()
+    print("Press enter to exit")
+
+
 port = 25003
 host = "127.0.0.1"
 
@@ -44,6 +63,8 @@ pubListener = PubListener(socketReader, incomingMessageChannel)
 pubListener.listen()
 
 isRunning = True
+status = SystemStatus.RUNNING
+
 contents = None
 type = None
 
@@ -57,17 +78,18 @@ while isRunning:
         type = MessageType.ACTION
         contents = Action.MOVE_XY_BACKWARD
     elif text == "sd":
+        isRunning = False
+
         type = MessageType.SYSTEM_STATUS
         contents = SystemStatus.SHUT_DOWN
-
-        pubListener.stop()
-        isRunning = False
     else:
         type = MessageType.ACTION
         contents = Action.MOVE_XY_STOP
 
-    message = Message(type, contents)
-    outgoingMessageChannel.broadcast(message)
-
-serverConnection.close()
-print("Exiting...")
+    #Checks if the shutdown command was sent locally or
+    #from the server
+    if not status == SystemStatus.SHUT_DOWN and isRunning:
+        message = Message(type, contents)
+        outgoingMessageChannel.broadcast(message)
+    else:
+        break

@@ -51,5 +51,8 @@ while isRunning:
         isRunning = False
 
         server.stop()
+        clientConnection.shutdown(socket.SHUT_WR);
         clientConnection.close()
+
+        print("Press enter to exit")
         break

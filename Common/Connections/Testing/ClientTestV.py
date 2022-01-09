@@ -21,8 +21,10 @@ def proccessRead():
         if message == None:
             print("Exiting...")
             isRunning = False
-
+            serverConnection.shutdown(socket.SHUT_WR);
             serverConnection.close()
+
+            print("Press enter to exit")
 
     print("Read stop")
 

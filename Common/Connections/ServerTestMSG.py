@@ -13,16 +13,27 @@ from ROVConnections.PubListener import *
 
 class MessageReaderTest(Subscriber):
     def recieveMessage(self, message:Message) -> None:
-        global isRunning
         print("Message Type: " + str(message.getType()))
         print("Message Contents: " + str(message.getContents()))
 
         if message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN:
-            print("Shuting down")
-            isRunning = False
-            pubListener.stop()
+            shutdown()
 
-            print("Still runin? : " + str(isRunning))
+def shutdown():
+    global status
+    status = SystemStatus.SHUT_DOWN
+
+    print("Shuting down...")
+    pubListener.stop()
+    server.stop()
+
+    #Sends the shutdown message to the client
+    message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
+    outgoingMessageChannel.broadcast(message)
+
+    clientConnection.shutdown(socket.SHUT_WR)
+    clientConnection.close()
+    print("Press enter to exit")
 
 port = 25003
 
@@ -48,22 +59,25 @@ outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
 outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
 isRunning = True
+status = SystemStatus.RUNNING
+
 print("Running...")
 
 while isRunning:
     text = input("Enter a status: ")
 
-    print("Still runin? : " + str(isRunning))
-
     if text == "a":
         action = SystemStatus.ARMED
-    elif text == "s":
+    elif text == "sd":
+        isRunning = False
         action = SystemStatus.SHUT_DOWN
     else:
         action = SystemStatus.INITIALIZING
 
-    message = Message(MessageType.SYSTEM_STATUS, action)
-    outgoingMessageChannel.broadcast(message)
-
-clientConnection.getClient().close()
-print("Exiting...")
+    #Checks if the shutdown command was sent locally or
+    #from the server
+    if not status == SystemStatus.SHUT_DOWN and isRunning:
+        message = Message(type, contents)
+        outgoingMessageChannel.broadcast(message)
+    else:
+        break
