@@ -39,14 +39,15 @@ class SocketReader(Reader):
         while headerSize < 4:
             #Reads in the necessary bytes (up to 4 to finish reading in the header)
             data = self.__socket.recv(4 - headerSize)
+            dataSize = len(data)
 
-            #Checks if anything was read in. If not, the socket was closed
-            if not data:
+            #If nothing was read in then the connection was closed, so exit
+            if dataSize == 0:
                 return None
 
             #Updates the header
             header += data
-            headerSize += len(data)
+            headerSize += dataSize
 
         #Gets the size of the message
         messageTotalSize = struct.unpack(">I", header)[0]

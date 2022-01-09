@@ -1,4 +1,5 @@
 import threading
+import socket as sock
 
 from ROVConnections.SocketWriter import *
 from ROVConnections.SocketReader import *
@@ -12,6 +13,16 @@ def proccessInput():
     while isRunning:
         text = input("Enter a message: ")
         print(text)
+
+         #Checks if the shutdown message was send
+        if text == "exit":
+            clientConnection.shutdown(sock.SHUT_WR)
+            break
+
+        #Checks if the connections was closed while waiting
+        #for user input
+        if not isRunning:
+            break
 
         socketWriter.send(text)
 
@@ -34,9 +45,11 @@ while isRunning:
     message = socketReader.receive()
     print("Client Message: " + str(message))
 
-    if message == "exit":
-        socketWriter.send("exit")
+    #Checks if the connection was closed
+    if message == None:
+        print("Exiting...")
         isRunning = False
 
-clientConnection.close()
-print("Exiting...")
+        server.stop()
+        clientConnection.close()
+        break
