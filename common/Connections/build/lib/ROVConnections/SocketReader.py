@@ -23,19 +23,13 @@ class SocketReader(Reader):
         self.__select.register(self.__socket, selectors.EVENT_READ)
 
     #Converts the byte stram encode message back to the orignal message
-    def decode(self, encodedMsg:str) -> Message:
+    def __decode(self, encodedMsg:str) -> Message:
         return pickle.loads(encodedMsg)
 
     #Recives a message from the socket
     def receive(self) -> Message:
         #Waits for a new message or socket disconnect
         events = self.__select.select(timeout=None)
-
-        #Iterates through any events that just occured
-        for key, mask in events:
-            #Check if the socket was closed
-            if key.fileobj.fileno() < 0:
-                return None
 
         #The message header
         header = bytearray()
@@ -45,10 +39,15 @@ class SocketReader(Reader):
         while headerSize < 4:
             #Reads in the necessary bytes (up to 4 to finish reading in the header)
             data = self.__socket.recv(4 - headerSize)
+            dataSize = len(data)
+
+            #If nothing was read in then the connection was closed, so exit
+            if dataSize == 0:
+                return None
 
             #Updates the header
             header += data
-            headerSize += len(data)
+            headerSize += dataSize
 
         #Gets the size of the message
         messageTotalSize = struct.unpack(">I", header)[0]
@@ -67,6 +66,6 @@ class SocketReader(Reader):
             messageSize += len(data)
 
         #Converts the encoded message back to the orginal message
-        message = self.decode(message)
+        message = self.__decode(message)
 
         return message

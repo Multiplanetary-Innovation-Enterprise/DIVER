@@ -16,7 +16,6 @@ class PubListener(Publisher):
     def __init__(self, reader:Reader, messageChannel:MessageChannel):
         self.__reader = reader
         self.__channel = messageChannel
-        self.__message = ''
 
     #Sends the recieved message over the message channel
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
@@ -29,17 +28,25 @@ class PubListener(Publisher):
             self.__listenThread = threading.Thread(target=self.__listen)
             self.__listenThread.start()
 
-            self.__isRunning = True
-
     #The underlying listen function used by the listen thread
     def __listen(self) -> None:
+        self.__isRunning = True
+
         #Keeps listening for new messages until shutdown
         while self.__isRunning:
             #Performs the blocking reads for a new message
             message = self.__reader.receive()
+
+            #Checks if a message was recieved. Used to check if the connection was closed.
+            if message == None:
+                continue
+
             #Sends the recieved message over the message channel
             self.sendMessage(message, self.__channel)
 
     #Tells the message listening thread to stop
     def stop(self) -> None:
         self.__isRunning = False
+
+        #Wait for the reader to stop listening for new messages
+        self.__listenThread.join()

@@ -1,5 +1,6 @@
 from enum import Enum
 
+#Actions that correspond to the commands that the ROV can perform
 class Action(Enum):
     MOVE_XY_STOP = 0
     MOVE_XY_FORWARD = 1
