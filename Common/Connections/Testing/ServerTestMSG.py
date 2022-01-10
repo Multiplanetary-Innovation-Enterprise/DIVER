@@ -24,6 +24,29 @@ class MessageReaderTest(Subscriber):
         if message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN:
             shutdown()
 
+#Listens for input from the user
+def processInput():
+    while True:
+        #Listens for user text input
+        text = input("Enter a status: ")
+
+        #Checks the user text for the message to send
+        if text == "a":
+            action = SystemStatus.ARMED
+        elif text == "sd":
+            action = SystemStatus.SHUT_DOWN
+        else:
+            action = SystemStatus.INITIALIZING
+
+        #Checks if the system is not shutting down
+        if not status == SystemStatus.SHUT_DOWN:
+            message = Message(MessageType.SYSTEM_STATUS, action)
+            outgoingMessageChannel.broadcast(message)
+
+        #Checks if the system is shutting down or is sending the shutdown message
+        if status == SystemStatus.SHUT_DOWN or action == SystemStatus.SHUT_DOWN:
+            break
+
 #Handles the shutdown process
 def shutdown():
     global status
@@ -31,9 +54,7 @@ def shutdown():
 
     print("Shuting down...")
 
-    #Stops listening for messages from the client and stops accept new client
-    #connection requests
-    pubListener.stop()
+    #Stops accept new client connection requests
     server.stop()
 
     #Sends the shutdown message to the client
@@ -83,25 +104,7 @@ outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 #The status the system is currently in
 status = SystemStatus.RUNNING
 print("Running...")
+processInput()
 
-#Listens for text input from the user
-while True:
-    #Listens for user text input
-    text = input("Enter a status: ")
-
-    #Checks the user text for the message to send
-    if text == "a":
-        action = SystemStatus.ARMED
-    elif text == "sd":
-        action = SystemStatus.SHUT_DOWN
-    else:
-        action = SystemStatus.INITIALIZING
-
-    #Checks if the system is not shutting down
-    if not status == SystemStatus.SHUT_DOWN:
-        message = Message(MessageType.SYSTEM_STATUS, action)
-        outgoingMessageChannel.broadcast(message)
-
-    #Checks if the system is shutting down or is sending the shutdown message
-    if status == SystemStatus.SHUT_DOWN or action == SystemStatus.SHUT_DOWN:
-        break
+#Stops listening for messages from the client
+pubListener.stop()

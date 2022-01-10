@@ -22,8 +22,6 @@ class DataSender(Publisher):
             self.__thread = threading.Thread(target=self.__run)
             self.__thread.start()
 
-
-
     def __run(self):
         self.__isRunning = True
         #print("Doesn't run without this print statement because python")

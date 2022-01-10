@@ -31,12 +31,6 @@ class SocketReader(Reader):
         #Waits for a new message or socket disconnect
         events = self.__select.select(timeout=None)
 
-        #Iterates through any events that just occured
-        for key, mask in events:
-            #Check if the socket was closed
-            if key.fileobj.fileno() < 0:
-                return None
-
         #The message header
         header = bytearray()
         headerSize = 0
@@ -45,10 +39,15 @@ class SocketReader(Reader):
         while headerSize < 4:
             #Reads in the necessary bytes (up to 4 to finish reading in the header)
             data = self.__socket.recv(4 - headerSize)
+            dataSize = len(data)
+
+            #If nothing was read in then the connection was closed, so exit
+            if dataSize == 0:
+                return None
 
             #Updates the header
             header += data
-            headerSize += len(data)
+            headerSize += dataSize
 
         #Gets the size of the message
         messageTotalSize = struct.unpack(">I", header)[0]

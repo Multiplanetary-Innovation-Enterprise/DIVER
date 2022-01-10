@@ -1,10 +1,11 @@
+import socket
 import configparser
 import time
+
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 from ROVMessaging.Subscriber import Subscriber
 from ROVMessaging.SystemStatus import *
-
 from ROVMessaging.Message import Message
 
 from ROVConnections.SocketWriter import *
@@ -26,6 +27,8 @@ class ROVApp(Subscriber):
     __clientConnection: SocketConnection = None #The connection to the client program
     __pubListener: PubListener = None           #Listens for messages from the client program
     __dataSender: DataSender = None             #Sends the sensor data to the client
+    __outgoingMessageChannel: MessageChannel    #The message channel to the client program
+    __server: SocketServer                      #The server that listens for client connection requests
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -36,23 +39,23 @@ class ROVApp(Subscriber):
         #The message channels for sending and recieving messages. Incoming can also
         #be used for sending internal messages
         incomingMessageChannel = MessageChannel()
-        outgoingMessageChannel = MessageChannel()
+        self.__outgoingMessageChannel = MessageChannel()
 
         #The representation of the ROV and its sub systems
         rov = ROV()
 
         #Used to decode and process commands
-        commandFactory = CommandFactory(rov, outgoingMessageChannel) #message channel temp for testing
+        commandFactory = CommandFactory(rov, self.__outgoingMessageChannel) #message channel temp for testing
         commandProcessor = CommandProcessor(commandFactory)
 
         #Sets up the sever to listen at the provided port
         port = int(config['Server']['Port'])
-        server = SocketServer('', port)
+        self.__server = SocketServer('', port)
 
         print("Waiting for client connection")
 
         #Wait for the client program to connect
-        self.__clientConnection = server.getClientConnection()
+        self.__clientConnection = self.__server.getClientConnection()
 
         #Reads messages from the client and rebroadcasts them internally using the
         #incoming message channel
@@ -64,7 +67,7 @@ class ROVApp(Subscriber):
         socketWriter = SocketWriter(self.__clientConnection)
         subWriter = SubWriter(socketWriter)
 
-        self.__dataSender = DataSender(outgoingMessageChannel)
+        self.__dataSender = DataSender(self.__outgoingMessageChannel)
         self.__dataSender.start()
 
         #Registers the command processor to listen for actions (correspond to comands)
@@ -72,8 +75,9 @@ class ROVApp(Subscriber):
         incomingMessageChannel.subscribe(MessageType.ACTION, commandProcessor)
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
-        #Listens for sensor data updates and sends it to the client program
-        outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, subWriter)
+        #Listens for sensor data and system status updates and sends it to the client program
+        self.__outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
         #Start listening for messages from the client program
         self.__pubListener.listen()
@@ -88,8 +92,8 @@ class ROVApp(Subscriber):
     def __run(self) -> None:
         self.__setup()
 
+        #Put something here instead of infinite loop (wastes cpu time)
         while self.__isRunning:
-            # print("run")
             pass
 
         self.__cleanup()
@@ -100,17 +104,27 @@ class ROVApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
+        print("shuting down...")
         self.__dataSender.stop()
+        self.__server.stop()
+
+        #Tells the client that it is shutting down
+        message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
+        self.__outgoingMessageChannel.broadcast(message)
+
+        #Sends EOF to the client, so that its socket reader stops blocking
+        self.__clientConnection.shutdown(socket.SHUT_WR)
+
+        #Waits for pub listener to stop blocking (occurs once the client sends EOF
+        #by shutting down its side of the socekt)
         self.__pubListener.stop()
+
+        #Finally closes the socket, since the client is disconnected
         self.__clientConnection.close()
 
-    #TODO
     def recieveMessage(self, message:Message) -> None:
-        print("message")
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
-
-            print("shuting down")
 
             self.stop()

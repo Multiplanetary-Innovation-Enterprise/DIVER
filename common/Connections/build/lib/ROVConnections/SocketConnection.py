@@ -41,3 +41,7 @@ class SocketConnection(Connection):
     def close(self) -> None:
         #Closes the socket
         self.__socket.close();
+
+    #Indicates to the other end of the socket that it is being closed
+    def shutdown(self, how) ->None:
+        self.__socket.shutdown(how)

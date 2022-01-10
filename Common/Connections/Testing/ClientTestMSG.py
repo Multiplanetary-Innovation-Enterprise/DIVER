@@ -26,15 +26,41 @@ class MessageReaderTest(Subscriber):
         if message.getType() == MessageType.SYSTEM_STATUS and message.getContents() == SystemStatus.SHUT_DOWN:
             shutdown()
 
+#Listens for input from the user
+def processInput():
+    while True:
+        #Listens for user text input
+        text = input("Enter a message: ")
+
+        #Checks the user text for the message to send
+        if text == "w":
+            type = MessageType.ACTION
+            contents = Action.MOVE_XY_FORWARD
+        elif text == "s":
+            type = MessageType.ACTION
+            contents = Action.MOVE_XY_BACKWARD
+        elif text == "sd":
+            type = MessageType.SYSTEM_STATUS
+            contents = SystemStatus.SHUT_DOWN
+        else:
+            type = MessageType.ACTION
+            contents = Action.MOVE_XY_STOP
+
+        #Checks if the system is not shutting down
+        if not status == SystemStatus.SHUT_DOWN:
+            message = Message(type, contents)
+            outgoingMessageChannel.broadcast(message)
+
+        #Checks if the system is shutting down or is sending the shutdown message
+        if status == SystemStatus.SHUT_DOWN or (type == MessageType.SYSTEM_STATUS and contents == SystemStatus.SHUT_DOWN):
+            break
+
 #Handles the shutdown process
 def shutdown():
     global status
     status = SystemStatus.SHUT_DOWN
 
     print("Shuting down...")
-
-    #Stops listening for messages from the server
-    pubListener.stop()
 
     #Sends the shutdown message to the server
     message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
@@ -86,32 +112,8 @@ status = SystemStatus.RUNNING
 contents = None
 type = None
 
-print("Running...")
+print("Running")
+processInput()
 
-#Listens for text input from the user
-while True:
-    #Listens for user text input
-    text = input("Enter a message: ")
-
-    #Checks the user text for the message to send
-    if text == "w":
-        type = MessageType.ACTION
-        contents = Action.MOVE_XY_FORWARD
-    elif text == "s":
-        type = MessageType.ACTION
-        contents = Action.MOVE_XY_BACKWARD
-    elif text == "sd":
-        type = MessageType.SYSTEM_STATUS
-        contents = SystemStatus.SHUT_DOWN
-    else:
-        type = MessageType.ACTION
-        contents = Action.MOVE_XY_STOP
-
-    #Checks if the system is not shutting down
-    if not status == SystemStatus.SHUT_DOWN:
-        message = Message(type, contents)
-        outgoingMessageChannel.broadcast(message)
-
-    #Checks if the system is shutting down or is sending the shutdown message
-    if status == SystemStatus.SHUT_DOWN or (type == MessageType.SYSTEM_STATUS and contents == SystemStatus.SHUT_DOWN):
-        break
+#Stops listening for messages from the server
+pubListener.stop()

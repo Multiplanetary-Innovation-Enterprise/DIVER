@@ -47,3 +47,6 @@ class PubListener(Publisher):
     #Tells the message listening thread to stop
     def stop(self) -> None:
         self.__isRunning = False
+
+        #Wait for the reader to stop listening for new messages
+        self.__listenThread.join()

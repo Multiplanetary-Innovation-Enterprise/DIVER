@@ -1,5 +1,6 @@
-import configparser
 import sys
+import socket
+import configparser
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -75,7 +76,6 @@ class ClientApp(Subscriber):
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__dataLogger)
 
         #Listens for any system status changes from either this program or the ROV
-        outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
         #Setups the GUI window
@@ -104,18 +104,23 @@ class ClientApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
+        print("shutting down...")
+        #Stops the data logger
         self.__dataLogger.close()
-        self.__serverConnection.close()
+
+        #Sends EOF to the server, so that its socket reader stops blocking
+        self.__serverConnection.shutdown(socket.SHUT_WR)
+
+        #Waits for pub listener to stop blocking (occurs once the server sends EOF
+        #by shutting down its side of the socekt)
         self.__pubListener.stop()
 
-        #This is causing the socket errors on close, need to wait until PubListener is done
-        #before calling this line
-
-        print("Exiting...")
+        #Finally closes the socket, since the server is disconnected
+        self.__serverConnection.close()
 
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
-
+            
             self.stop()
