@@ -1,22 +1,18 @@
-from signals.RaspberryPiIOSignal import RaspberryPiIOSignal
+from signals.PinMode import PinMode
+from signals.devices.SignalDevice import SignalDevice
+from signals.SinglePinSignal import SinglePinSignal
 
-class PWMSignal(RaspberryPiIOSignal):
-    __pinNum:int = None
-    __pulseWidth:int = None
+class PWMSignal(SinglePinSignal):
+    __pulseWidth:int = 0 #The pulse width of the PWM signal
 
-    def __init__(self, raspberryPi, pinNum:int):
-        super().__init__(raspberryPi)
-        self.__pinNum = pinNum
+    def __init__(self, device:SignalDevice, pinNum:int, mode:PinMode):
+        super().__init__(device, pinNum, mode)
 
-    def setPinNum(self, pinNum:int) -> None:
-        self.__pinNum = pinNum
-
-    def getPinNum(self) -> int:
-        return self.__pinNum
-
+    #Updates the pulsewidth of the signal
     def setPulseWidth(self, pulseWidth:int) -> None:
         self.__pulseWidth = pulseWidth
-        self.getRaspberryPi().set_servo_pulsewidth(self.__pinNum, self.__pulseWidth)
+        self.__device.setPulseWidth(self.__pinNum, self.__pulseWidth)
 
-    def getPulseWidth(self):
+    #Gets the pulse width of the signal
+    def getPulseWidth(self) ->int:
         return self.__pulseWidth

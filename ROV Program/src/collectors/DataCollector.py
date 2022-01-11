@@ -87,7 +87,7 @@ class DataCollector(Publisher, ABC):
 
     #Updates the sample period based on the provided new sample period
     def setSamplePeriod(self, period:float):
-        self.__samplePeriod = 1 period
+        self.__samplePeriod = period
 
     #Gets the data collection sample period
     def getSamplePeriod(self) -> float:

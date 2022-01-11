@@ -15,7 +15,7 @@ class CSVLogger(Subscriber, ABC):
         super(Subscriber, self).__init__()
 
     #Opens the file with the provided name as the prefix
-    def openFile(self, fileName:str):
+    def openFile(self, fileName:str) -> None:
         #Gets the date to append to the file
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
@@ -25,5 +25,5 @@ class CSVLogger(Subscriber, ABC):
         self._writer = csv.writer(self._file)
 
     #Closes the cvs file
-    def close(self):
+    def close(self) -> None:
         self._file.close()

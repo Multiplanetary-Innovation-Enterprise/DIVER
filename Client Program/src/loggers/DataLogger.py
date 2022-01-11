@@ -5,7 +5,7 @@ from loggers.CSVLogger import CSVLogger
 #Stores all of the recieved sensor data into a data csv log file
 class DataLogger(CSVLogger):
     #Opens the file with the provided name as the prefix. Inserts columns header.
-    def openFile(self, fileName:str):
+    def openFile(self, fileName:str) -> None:
         super().openFile(fileName);
 
         #Adds the header to the csv file
