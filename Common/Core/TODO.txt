@@ -1,0 +1,4 @@
+Create a core library some day:
+    App base
+    system status?
+    other shared code

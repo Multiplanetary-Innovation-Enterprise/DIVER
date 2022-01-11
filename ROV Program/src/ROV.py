@@ -9,12 +9,12 @@ from subsystems.SensorSubsystem import SensorSubsystem
 class ROV:
     __propSystem:PropulsionSubsystem = None
     __illuminationSystem:IlluminationSubsystem = None
-    __sensorSystem: SensorSubsystem = None
+    __sensorSystem:SensorSubsystem = None
     __pi = None
 
     def __init__(self):
         #For testing
-        # pi=None
+        pi = None
         #Pi connection setup
         # os.system ("sudo pigpiod")
         # time.sleep(1)
@@ -23,7 +23,7 @@ class ROV:
         #
         # self.__propSystem = PropulsionSubsystem(self.__pi)
         # self.__illuminationSystem = IlluminationSubsystem(self.__pi)
-        # self.__sensorSystem = SensorSubsystem(self.__pi)
+        self.__sensorSystem = SensorSubsystem(self.__pi)
         pass
 
     def getPropSystem(self) -> PropulsionSubsystem:

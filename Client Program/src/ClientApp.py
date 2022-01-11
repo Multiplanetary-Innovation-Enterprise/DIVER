@@ -122,5 +122,5 @@ class ClientApp(Subscriber):
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
-            
+
             self.stop()

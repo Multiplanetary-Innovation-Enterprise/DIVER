@@ -12,11 +12,13 @@ class DS18B20TempSensor(TempSensor):
         #self.__sensor = W1ThermSensor()
 
     def getTemperature(self) -> float:
-        if self._tempUnit == TempUnit.F:
-            temp = self.__sensor.get_temperature(Unit.DEGREES_F)
-        elif self._tempUnit == TempUnit.C:
-            temp = self.__sensor.get_temperature()
+        # if self._tempUnit == TempUnit.F:
+        #     temp = self.__sensor.get_temperature(Unit.DEGREES_F)
+        # elif self._tempUnit == TempUnit.C:
+        #     temp = self.__sensor.get_temperature()
+        #
+        # temp = round(temp, 2)
 
-        temp = round(temp, 2)
+        temp = 100
 
         return temp
