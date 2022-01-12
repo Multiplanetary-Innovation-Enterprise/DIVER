@@ -1,21 +1,24 @@
-from signals.PWMSignal import PWMSignal
-from components.Motor import Motor
-
 import time
+
+from signals.PinMode import PinMode
+from signals.PWMSignal import PWMSignal
+from signals.devices.SignalDevice import SignalDevice
+from components.rotation.Motor import Motor
+from components.rotation.RotDirection import RotDirection
 
 #Represents a thruster
 class Thruster(Motor):
-    MAX_REVERSE = 1100 #Max reverse PWM pulse width
-    MAX_FORWARD = 1900 #Max forward PWM pulse width
-    STOPPED = 1500    #Stopped PWM pulse width
-    __pwmSignal: PWMSignal = None
-    __speed = 0
+    MAX_REVERSE:int = 1100 #Max reverse PWM pulse width
+    MAX_FORWARD:int = 1900 #Max forward PWM pulse width
+    STOPPED:int = 1500    #Stopped PWM pulse width
+    __pwmSignal:PWMSignal = None
+    __speed:float = 0
 
     #Creates the thruster
-    def __init__(self, pi, pinNum, rotDirection):
+    def __init__(self, device:SignalDevice, pinNum:int, rotDirection:RotDirection):
         super().__init__(rotDirection)
 
-        self.__pwmSignal = PWMSignal(pi, pinNum)
+        self.__pwmSignal = PWMSignal(device, pinNum, PinMode.PIN_OUT)
 
     #Performs the arming sequence for the thruster
     def arm(self) -> None:

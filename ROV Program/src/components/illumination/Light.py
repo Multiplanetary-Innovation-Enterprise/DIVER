@@ -1,42 +1,45 @@
 from abc import ABC, abstractmethod
 
+#Represents a generic light
 class Light(ABC):
-    __isOn: bool = False
-    __currentBrightness: float = 0
-    __lastBrightness: float = 0.1
+    __isOn:bool = False      #Whether or not the light is currently turned on
+    __brightness:float = 0.1 #The brightness of the light when turned on
 
+    #Turns the light on to its current brightness
     def turnOn(self) -> None:
         self.__isOn = True
-        self.setOn(True)
+        self.setState(True)
 
+    #Turns the light off
     def turnOff(self) -> None:
         self.__isOn = False
-        self.setOn(False)
+        self.setState(False)
 
+    #Updates the state(on/off) of the light
     @abstractmethod
-    def setOn(self, on: bool) -> None:
+    def setState(self, isOn:bool) -> None:
         pass
 
+    #Sets the brightness of the light
     def setBrightness(self, brightness:float) -> None:
-        currentBrightness = self.getBrightness()
-
-        self.setLastBrightness(currentBrightness)
-
+        #Keeps the brightness in the range [0,1]
         if brightness < 0:
             brightness = 0
         elif brightness > 1:
             brightness = 1
 
-        self.__currentBrightness = brightness
+        self.__brightness = brightness
 
+        #Updates the state of the light based on the new brightness
+        if brightness == 0:
+            self.turnOff()
+        else:
+            self.turnOn()
+
+    #Gets the brightness of the light when turned on
     def getBrightness(self) -> float:
-        return self.__currentBrightness
+        return self.__brightness
 
-    def setLastBrightness(self, brightness:float) -> None:
-        self.__lastBrightness = brightness
-
-    def getLastBrightness(self) -> float:
-        return self.__lastBrightness
-
+    #Gets the state(on/off) of the light
     def isOn(self) -> bool:
         return self.__isOn

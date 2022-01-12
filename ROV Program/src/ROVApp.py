@@ -103,6 +103,8 @@ class ROVApp(Subscriber):
             #used for anything
             self.__shutdownEvent.wait()
 
+            #Maybe send the watchdog keep alive messages here? (TODO)
+
         self.__cleanup()
 
     #Tells the ROV to stop running

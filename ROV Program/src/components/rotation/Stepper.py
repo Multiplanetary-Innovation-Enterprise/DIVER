@@ -1,9 +1,9 @@
 import pigpio
 import time
 
-from components.Motor import Motor
+from components.rotation.Motor import Motor
 from signals.DigitalSignal import DigitalSignal
-from util.RotDirection import RotDirection
+from components.rotation.RotDirection import RotDirection
 
 class Stepper(Motor):
     __stepSignal:DigitalSignal = None

@@ -1,6 +1,6 @@
 #from w1thermsensor import W1ThermSensor, Unit
 
-from util.TempUnit import TempUnit
+from sensors.TempUnit import TempUnit
 from sensors.TempSensor import TempSensor
 
 class DS18B20TempSensor(TempSensor):

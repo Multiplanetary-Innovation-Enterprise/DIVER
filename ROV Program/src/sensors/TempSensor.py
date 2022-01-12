@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from util.TempUnit import TempUnit
+from sensors.TempUnit import TempUnit
 
 class TempSensor(ABC):
     _tempUnit:TempUnit = TempUnit.F

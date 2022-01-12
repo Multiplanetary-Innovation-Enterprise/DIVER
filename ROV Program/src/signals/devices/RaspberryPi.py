@@ -1,12 +1,20 @@
-from signals.devices.ResitorType import ResitorType
+import pigpio
+import os
+import time
+
+from signals.PinMode import PinMode
+from signals.ResistorType import ResistorType
 from signals.devices.SignalDevice import SignalDevice
 
 #Represents the Raspberry Pi itself (a wrapper for the pigpio library)
 class RaspberryPi(SignalDevice):
     __pi = None #The raspberry pi
 
-    def __init__(self, pi):
-        self.__pi = pi
+    def __init__(self):
+        os.system ("sudo pigpiod")
+        time.sleep(1)
+
+        self.__pi = pigpio.pi()
 
     #Updates the mode of the provided pin
     def setPinMode(self, pinNum:int, mode:PinMode) -> None:
@@ -37,5 +45,5 @@ class RaspberryPi(SignalDevice):
         return self.__pi
 
     #Updates the interal resistor type connected to the pin (none, pull-up, pull-down)
-    def setInternalResistorType(self, pinNum:int, type:ResitorType) -> None:
+    def setInternalResistorType(self, pinNum:int, type:ResistorType) -> None:
         self.__pi.set_pull_up_down(pinNum, type)

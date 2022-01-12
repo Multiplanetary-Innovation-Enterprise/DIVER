@@ -1,5 +1,5 @@
-from components.Thruster import Thruster
-from util.RotDirection import RotDirection
+from components.rotation.Thruster import Thruster
+from components.rotation.RotDirection import RotDirection
 
 import configparser
 
