@@ -10,12 +10,12 @@ class DigitalSignal(SinglePinSignal):
 
     #Sets the resistor to the logic high state
     def setHigh(self) -> None:
-        self.__device.pinWrite(self.__pinNum, DigitalState.HIGH)
+        self._device.pinWrite(self.__pinNum, DigitalState.HIGH)
 
     #Sets the resistor to the logic low state
     def setLow(self) -> None:
-        self.__device.pinWrite(self.__pinNum, DigitalState.LOW)
+        self._device.pinWrite(self.__pinNum, DigitalState.LOW)
 
     #Gets the voltage value of the pin
     def getValue(self) -> int:
-        return self.__device.pinRead(self.pinNum)
+        return self._device.pinRead(self.pinNum)

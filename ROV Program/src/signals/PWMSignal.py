@@ -11,7 +11,7 @@ class PWMSignal(SinglePinSignal):
     #Updates the pulsewidth of the signal
     def setPulseWidth(self, pulseWidth:int) -> None:
         self.__pulseWidth = pulseWidth
-        self.__device.setPulseWidth(self.__pinNum, self.__pulseWidth)
+        self._device.setPulseWidth(self.__pinNum, self.__pulseWidth)
 
     #Gets the pulse width of the signal
     def getPulseWidth(self) ->int:

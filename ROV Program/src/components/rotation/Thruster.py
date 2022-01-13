@@ -6,13 +6,13 @@ from signals.devices.SignalDevice import SignalDevice
 from components.rotation.Motor import Motor
 from components.rotation.RotDirection import RotDirection
 
-#Represents a thruster
+#Represents the T200 thruster used on the ROV from bluerobotics
+#url: https://www.bluerobotics.com/store/thrusters/t100-t200-thrusters/t200-thruster-r2-rp/
 class Thruster(Motor):
-    MAX_REVERSE:int = 1100 #Max reverse PWM pulse width
-    MAX_FORWARD:int = 1900 #Max forward PWM pulse width
-    STOPPED:int = 1500    #Stopped PWM pulse width
-    __pwmSignal:PWMSignal = None
-    __speed:float = 0
+    __MAX_REVERSE:int = 1100     #The PWM pulse width of the maximum reverse speed
+    __MAX_FORWARD:int = 1900     #The PWM pulse width of the maximum forward speed
+    __STOPPED:int = 1500         #The PWM pulse width when the motor is not running
+    __pwmSignal:PWMSignal = None #The PWM signal used to control the thruster
 
     #Creates the thruster
     def __init__(self, device:SignalDevice, pinNum:int, rotDirection:RotDirection):
@@ -25,35 +25,28 @@ class Thruster(Motor):
         self.__pwmSignal.setPulseWidth(0)
         time.sleep(1)
 
-        self.__pwmSignal.setPulseWidth(Thruster.STOPPED)
+        self.__pwmSignal.setPulseWidth(self.__STOPPED)
         time.sleep(1)
 
-    #Sets the speed of the thruster. Range [-1,1]
-    def setSpeed(self, speed:float) -> None:
-        if speed > 1:
-            speed = 1
-        elif speed < -1:
-            speed = -1
-
-        self.__speed = speed
-
-        pulseWidth = self.__convertSpeedToPulsewidth(speed)
-
+    #Performs the speed update using the PWM interface
+    def _updateSpeed(self) -> None:
+        pulseWidth = self.__convertSpeedToPulsewidth(self.__speed)
         self.__pwmSignal.setPulseWidth(pulseWidth)
 
+    #Performs the speed conversion from the range [-1,1] to [MAX_REVERSE,MAX_FORWARD]
+    #STOPPED is the reference point with the total range being the difference between the max
+    #reverse speed(MAX_REVERSE) and the max forward speed(MAX_FORWARD). The provided speed is then used
+    #as a scalar for that range
     def __convertSpeedToPulsewidth(self, speed:float) -> int:
-        #Set the direction of the thruster
+        #Determines the direction the thruster should rotate based on its current
+        #rotational direction and the sign of the provided speed value
         speed = self.getRotDirection().value * speed
+
         #Converts the range [-1,1] to the actual PWM range
-        pulseWidth = round(Thruster.STOPPED + ((Thruster.MAX_FORWARD - Thruster.MAX_REVERSE) / 2) * speed)
+        pulseWidth = round(self__.STOPPED + ((self.__MAX_FORWARD - self.__.MAX_REVERSE) / 2) * speed)
 
         return pulseWidth
 
-    #Gets the speed of the thruster
-    def getSpeed(self) -> float:
-        return self.__speed
-
     #Stops the thruster
     def stop(self) -> None:
-        self.__pwmSignal.setPulseWidth(Thruster.STOPPED)
-        self.__speed = Thruster.STOPPED
+        self.setSpeed(self.__STOPPED)

@@ -1,98 +1,111 @@
-import pigpio
-import time
-
 from components.rotation.Motor import Motor
-from signals.DigitalSignal import DigitalSignal
 from components.rotation.RotDirection import RotDirection
 
+#Represents a generic steeper motor
 class Stepper(Motor):
-    __stepSignal:DigitalSignal = None
-    __dirSignal:DigitalSignal = None
-    __sleepSignal:DigitalSignal = None
+    __stepCount:int = 0       #The number of steps that were taken relative to the start position
+    __maxSteps:int = 200      #The maximum steps that can be taken away from the motor
+    _isSleeping:bool = False #Whether or not the motor is sleeping
+    _stepDelay:float = 0.001 #The delay between each step (correlates to speed)
 
-    __stepCount:int = 0
-    __maxSteps:int = 200
-
-    __isSleeping = True
-    __stepDelay = 0.001
-
-    DEGREES_PER_STEP = 1.8
-
-    def __init__(self, pi, stepPinNum:int, dirPinNum:int, sleepPinNum:int, rotDirection:RotDirection):
+    def __init__(self, rotDirection:RotDirection):
         super().__init__(rotDirection)
 
-        self.__stepSignal = DigitalSignal(pi, stepPinNum, pigpio.OUTPUT)
-        self.__dirSignal = DigitalSignal(pi, dirPinNum, pigpio.OUTPUT)
-        self.__sleepSignal = DigitalSignal(pi, sleepPinNum, pigpio.OUTPUT)
+        #Updates the stepper motor's config
+        self._updateDirectionState()
+        self._updateSleepState()
 
-        self.__updateDirectionState(rotDirection)
+    #Performs the actual step, which is dependent on the stepper motor's
+    #hardware interface
+    @abstractmethod
+    def _step(self):
+        pass
 
-        self.__updateSleepState(False)
+    #Steps the motor once
+    def step(self) -> None:
+        steps = self.__boundSteps(1)
 
-    #Sets the rotational speed of the thruster
+        #Checks if the next step was in bounds
+        if steps > 0:
+            self.__steps += self.getRotDirection().value
+            self._step()
+
+    #Steps the motor N times
+    def stepN(self, steps:int) -> None:
+        steps = self.__boundSteps(steps)
+        self.__steps += steps * self.getRotDirection().value
+
+        for step in range(steps):
+            self._step()
+
+    #Keeps the stepper motor within its constrained assembly
+    #TODO Figure out correct math
+    def __boundSteps(self, steps:int) -> int:
+        stepsSign = 1 #The sign of the steps (pos/neg)
+
+        #Invert the sign for a negative steps value
+        if steps < 0:
+            stepsSign = -1
+
+        #Calculates the minimum and maxium steps based on the sign of the steps value
+        minSteps = self.__stepCount - (stepsSign *steps)
+        maxSteps = self.__stepCount + (stepsSign * steps)
+
+        #Checks the rotational direction first
+        if self._rotDirection == RotDirection.CLOCKWISE:
+            if minSteps < 0:
+                steps = 0
+            elif maxSteps > self.__maxSteps:
+                steps = self.__maxSteps
+        elif self._rotDirection == RotDirection.COUNTER_CLOCKWISE:
+            steps = self.__maxSteps
+
+        return steps
+
+    #Sets the rotational direction of the stepper
     def setRotDirection(self, rotDirection:RotDirection) -> None:
         super().setRotDirection(rotDirection)
 
-        self.__updateDirectionState(rotDirection)
+        self._updateDirectionState()
 
-    def __updateDirectionState(self, rotDirection:RotDirection) -> None:
-        if rotDirection == RotDirection.CLOCKWISE:
-            self.__dirSignal.setHigh()
-        else:
-            self.__dirSignal.setLow()
+    #Performs the actual direction update, which is dependent on the stepper motor's
+    #hardware interface
+    @abstractmethod
+    def _updateDirectionState(self, rotDirection:RotDirection) -> None:
+        pass
 
-    def __updateSleepState(self, sleepState:bool) -> None:
-        if sleepState:
-            self.__sleepSignal.setHigh()
-        else:
-            self.__sleepSignal.setLow()
-
-        self.__isSleeping = sleepState
-
-    def step(self) -> None:
-        if self.__stepCount >= self.__maxSteps and self.getRotDirection() == RotDirection.CLOCKWISE or self.__stepCount <= 0 and self.getRotDirection() == RotDirection.COUNTER_CLOCKWISE:
-            return
-
-        self.__stepCount += 1 * self.getRotDirection().value
-
-        self.__stepSignal.setHigh()
-        #0.002 s does notwork for some reason
-        time.sleep(self.__stepDelay)
-
-        self.__stepSignal.setLow()
-
-        time.sleep(self.__stepDelay)
-
-    def stepN(self, steps:int) -> None:
-        if steps > self.__maxSteps:
-            steps = self.__maxSteps
-
-        for step in range(steps):
-            self.step()
-
+    #Gets the number of steps that the stepper motor has taken from its starting position
     def getStepCount(self) -> int:
         return self.__stepCount
 
+    #Resets the step count
     def clearStepCount(self) -> None:
         self.__stepCount = 0
 
+    #Updates the max step limit of the stepper motor
     def setMaxSteps(self, maxSteps:int) -> None:
         self.__maxSteps = maxSteps
 
+    #Gets the maximum steps that the stepper motor can take away from it
     def getMaxSteps(self) -> int:
         return self.__maxSteps
 
+    #Puts the steeper motor to sleep
     def sleep(self) -> None:
-        self.__updateSleepState(False)
+        self._isSleeping = True
+        self._updateSleepState()
 
+    #Wakes the steeper motor up
     def wake(self) -> None:
-        self.__updateSleepState(True)
+        self._isSleeping = False
+        self._updateSleepState()
 
+    #Checks whether or not the motor is sleeping
     def isSleeping(self) -> bool:
-        return self.__isSleeping
+        return self._isSleeping
 
-    def setStepDelay(self, delay:float) -> None:
-        self.__stepDelay = delay
-
-    def getStepDelay(self) -> float:
-        return self.__stepDelay
+    #Performs the actual sleep update, which is dependent on the stepper motor's
+    #hardware interface
+    @abstractmethod
+    def _updateSleepState(self) -> None:
+        pass
