@@ -42,7 +42,7 @@ class ROVApp(Subscriber):
         self.__outgoingMessageChannel = MessageChannel()
 
         #The representation of the ROV and its sub systems
-        rov = ROV()
+        rov = ROV(config)
 
         #Used to decode and process commands
         commandFactory = CommandFactory(rov, self.__outgoingMessageChannel) #message channel temp for testing

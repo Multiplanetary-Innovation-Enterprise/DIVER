@@ -8,7 +8,8 @@ class PropulsionSubsystem:
     __activeThrusters = [];
     __leftThruster = None
     __rightThruster = None
-    __topThruster = None
+    __topFrontThruster = None
+    __topBackThruster = None
 
     #Constructor for the propulsion subsystem
     def __init__(self, pi):
@@ -36,9 +37,9 @@ class PropulsionSubsystem:
         self.moveRight(rightSpeed)
         self.moveVertical(topSpeed)
 
-        self.updateThrusterState(self.__leftThruster, speed);
-        self.updateThrusterState(self.__rightThruster, speed);
-        self.updateThrusterState(self.__topThruster, speed);
+        # self.updateThrusterState(self.__leftThruster, speed);
+        # self.updateThrusterState(self.__rightThruster, speed);
+        # self.updateThrusterState(self.__topThruster, speed);
 
     #Sets the speed for the thruster mounted on the left side of the ROV
     def moveLeft(self, speed:float) -> None:
@@ -66,18 +67,19 @@ class PropulsionSubsystem:
         #Update the speed of any thrusters currently running
         self.updateActiveThrustersSpeed(self.__speed)
 
+    #Doesn't make much sense
     #Gets the current speed of the propulsion subsystem
     def getSpeed(self) -> float:
         return self.__speed
 
     #Updates the provided thruster's state based on its speed
-    def updateThrusterState(self, thruster: Thruster, speed:float) -> None:
-        if (speed > 0 or speed < 0) and thruster not in self.__activeThrusters:
-            self.__activeThrusters.append(thruster);
-        elif speed <= 0 and thruster in self.__activeThrusters:
-            self.__activeThrusters.remove(thruster);
-
-    #Updates the speeds of the thrusters that are currently running
-    def updateActiveThrustersSpeed(self, speed:float) -> None:
-        for thruster in self.__activeThrusters:
-            thruster.setSpeed(speed)
+    # def updateThrusterState(self, thruster: Thruster, speed:float) -> None:
+    #     if (speed > 0 or speed < 0) and thruster not in self.__activeThrusters:
+    #         self.__activeThrusters.append(thruster);
+    #     elif speed <= 0 and thruster in self.__activeThrusters:
+    #         self.__activeThrusters.remove(thruster);
+    #
+    # #Updates the speeds of the thrusters that are currently running
+    # def updateActiveThrustersSpeed(self, speed:float) -> None:
+    #     for thruster in self.__activeThrusters:
+    #         thruster.setSpeed(speed)

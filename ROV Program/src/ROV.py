@@ -11,14 +11,16 @@ class ROV:
     __illuminationSystem:IlluminationSubsystem = None #The lightings subsystem
     __sensorSystem:SensorSubsystem = None             #The sensor subsystem
     __visionSystem:VisionSubsystem = None             #The vision subsytem
+    __config = None                                   #The configuration file
 
-    def __init__(self):
+    def __init__(self, config):
         self.__pi = RaspberryPi()
+        self.__config = config
 
-        self.__propSystem = PropulsionSubsystem(self.__pi)
-        self.__illuminationSystem = IlluminationSubsystem(self.__pi)
-        self.__sensorSystem = SensorSubsystem(self.__pi)
-        self.__visionSystem = VisionSubsystem(self.__pi)
+        self.__propSystem = PropulsionSubsystem(self.__pi, self.__config)
+        self.__illuminationSystem = IlluminationSubsystem(self.__pi, self.__config)
+        self.__sensorSystem = SensorSubsystem(self.__pi, self.__config)
+        self.__visionSystem = VisionSubsystem(self.__pi, self.__config)
 
     #Gets the propulsion subsystem
     def getPropSystem(self) -> PropulsionSubsystem:
