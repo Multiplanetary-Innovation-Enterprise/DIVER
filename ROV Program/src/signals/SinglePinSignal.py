@@ -9,7 +9,7 @@ class SinglePinSignal(Signal, ABC):
     __pinNum:int = None #The pin number that the signal is on
 
     def __init__(self, device:SignalDevice, pinNum:int, mode:PinMode):
-        super(Signal, self).__init(device)
+        #super(Signal, self).__init__(device)
 
         self.__pinNum = pinNum
         self.__device.setMode(pinNum, mode)

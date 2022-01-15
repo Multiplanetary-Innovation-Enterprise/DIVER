@@ -1,18 +1,30 @@
-import configparser
-
+from subsystems.Subsystem import Subsystem
+from signals.devices.SignalDevice import SignalDevice
+from sensors.IMU import IMU
+from sensors.BNO055IMU import BNO055IMU
 from sensors.TempSensor import TempSensor
 from sensors.DS18B20TempSensor import DS18B20TempSensor
 
-class SensorSubsystem():
-    __internalTempSensor: TempSensor = None
-    __pi = None
+#Represents the subsystem for collecting data
+class SensorSubsystem(Subsystem):
+    __internalTempSensor:TempSensor = None #The sensor for monitoring the elctronics capsule temp
+    __imu:IMU = None                       #The IMU sensor
 
-    def __init__(self, pi):
-        self.__pi = pi
+    def __init__(self, device:SignalDevice, config):
+        super().__init__(device, config)
 
-        config = configparser.ConfigParser()
-
+        #Sets up the sensors that will be used
         self.__internalTempSensor = DS18B20TempSensor()
+        self.__imu = BNO055IMU()
 
+    #Gets the temperature sensor that is inside the electronics capsule
     def getInternalTempSensor(self) -> TempSensor:
         return self.__internalTempSensor
+
+    #Gets the IMU sensor on the ROV
+    def getIMU(self) -> IMU:
+        return self.__imu
+
+    #Performs any clean up on system shutdown
+    def shutdown(self) -> None:
+        pass

@@ -1,13 +1,14 @@
-import board
-import adafruit_bno055
+#import board
+#import adafruit_bno055
 
 class IMU:
-    __sensor:BNO055 = None
-    __accelerometerData:tuple = None
+#    __sensor:BNO055 = None
+#    __accelerometerData:tuple = None
 
     def __init__(self):
-        i2c = board.I2C()
-        self.__sensor = adafruit_bno055.BNO055(i2c)
+        #i2c = board.I2C()
+        #self.__sensor = adafruit_bno055.BNO055(i2c)
+        pass
 
     def getAccelerationData(self):
         return self.__accelerometerData

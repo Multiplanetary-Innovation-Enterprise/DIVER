@@ -1,15 +1,17 @@
+from abc import ABC, abstractmethod
+
 from components.rotation.Motor import Motor
 from components.rotation.RotDirection import RotDirection
 
 #Represents a generic steeper motor
-class Stepper(Motor):
+class Stepper(Motor, ABC):
     __stepCount:int = 0       #The number of steps that were taken relative to the start position
     __maxSteps:int = 200      #The maximum steps that can be taken away from the motor
     _isSleeping:bool = False #Whether or not the motor is sleeping
     _stepDelay:float = 0.001 #The delay between each step (correlates to speed)
 
     def __init__(self, rotDirection:RotDirection):
-        super().__init__(rotDirection)
+        super(Motor, self).__init__(rotDirection)
 
         #Updates the stepper motor's config
         self._updateDirectionState()
