@@ -68,7 +68,7 @@ class ROVApp(Subscriber):
         subWriter = SubWriter(socketWriter)
 
         #Retrieves and sends the sensor data to the client
-        self.__sensorDataCollector = SensorDataCollector(rov, self.__outgoingMessageChannel)
+        self.__sensorDataCollector = SensorDataCollector(rov.getSensorSystem(), self.__outgoingMessageChannel)
         self.__sensorDataCollector.setSampleFrequency(1)
         self.__sensorDataCollector.start()
 

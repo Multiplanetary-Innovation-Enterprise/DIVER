@@ -1,45 +1,15 @@
-#import board
-#import adafruit_bno055
+from abc import ABC, abstractmethod
 
-class IMU:
-#    __sensor:BNO055 = None
-#    __accelerometerData:tuple = None
+from sensors import IMUData
 
-    def __init__(self):
-        #i2c = board.I2C()
-        #self.__sensor = adafruit_bno055.BNO055(i2c)
+#Represents a generic IMU sensor
+class IMU(ABC):
+    #Gets all of the data from the IMU sensor
+    @abstractmethod
+    def getSensorData(self) -> IMUData:
         pass
 
-    def getAccelerationData(self):
-        return self.__accelerometerData
-
-    def getMagnetometerData(self):
+    #Gets the temperature of the IMU sensor
+    @abstractmethod
+    def getTemperature(self) -> float:
         pass
-
-    def getAngularVelocityData(self):
-        pass
-
-    def getEulerOrientation(self):
-        pass
-
-    def getQuaterionOrientation(self):
-        pass
-
-    def getLinearAccelerationData(self):
-        pass
-
-    def getGravityAccelerationData(self):
-        pass
-
-    def getTemperature(self):
-        pass
-
-    def updateValues(self):
-        self.__accelerationData = self.__sensor.acceleration
-        self.__magnetometerData = self.__sensor.magnetic
-        self.__angularVelocityData = self.__sensor.gyro
-        self.__eulerOrientation = self.__sensor.euler
-        self.__quaternionOrientation = self.__sensor.quaternion
-        self.__linearAccelerationData = self.__sensor.linear_acceleration
-        self.__gravityAccelerationData = self.__sensor.gravity
-        self.__temperature = self.__sensor.temperature

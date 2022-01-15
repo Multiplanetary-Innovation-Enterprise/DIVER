@@ -2,24 +2,23 @@ from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 
 from collectors.DataCollector import DataCollector
-from ROV import ROV
+from subsystems.Subsystem import Subsystem
 
 #Represents a periodic sensor data collector that sends the data through the
 #provided message channel
 class SensorDataCollector(DataCollector):
-    __rov:ROV = None #The rov itself that the sensors belong to
+    __subsystem:Subsystem = None #The rov itself that the sensors belong to
 
-    def __init__(self, rov:ROV, messageChannel:MessageChannel):
+    def __init__(self, subsystem:Subsystem, messageChannel:MessageChannel):
         #Configures the data sender
         super().__init__(messageChannel, MessageType.SENSOR_DATA)
 
-        self.__rov = rov
+        self.__subsystem = subsystem
 
     #Gets the sensor data and returns it as a dict
     def getData(self) -> dict:
-        #Get internal internal temperture of the electronics capsule
-        sensorSystem = self.__rov.getSensorSystem()
-        tempSensor = sensorSystem.getInternalTempSensor()
+        #Get internal internal temperature of the electronics capsule
+        tempSensor = self.__subsystem.getInternalTempSensor()
 
         #Formats the sensor data as key-value pairs
         sensorData = {

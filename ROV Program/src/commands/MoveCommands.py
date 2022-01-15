@@ -53,7 +53,7 @@ class MoveZCommand(Command):
         elif(self.__action == Action.MOVE_Z_STOP):
             speed = 0
 
-        self.__propSystem.setVerticalSpeedSame(speed)
+        self.__propSystem.setVerticalSpeedSpeed(speed, speed)
 
     def isRepeatable(self):
         return False

@@ -59,6 +59,35 @@ class PropulsionSubsystem(Subsystem):
     def setVerticalSpeedSame(self, speed:float) -> None:
         self.setVerticalSpeed(speed, speed)
 
+    #Gets the speeds of all the thrusters
+    def getSpeed(self) -> list:
+        speeds = [
+            self.__leftThruster.getSpeed(),
+            self.__rightThruster.getSpeed(),
+            self.__topFrontThruster.getSpeed(),
+            self.__topBackThruster.getSpeed()
+        ]
+
+        return speeds
+
+    #Gets the speeds of the thrusters mounted in the XY plane
+    def getXYSpeed(self) -> list:
+        speeds = [
+            self.__leftThruster.getSpeed(),
+            self.__rightThruster.getSpeed()
+        ]
+
+        return speeds
+
+    #Gets the speeds of the vertical thrusters
+    def getVerticalSpeed(self) -> list:
+        speeds = [
+            self.__topFrontThruster.getSpeed(),
+            self.__topBackThruster.getSpeed()
+        ]
+
+        return speeds
+
     #Stops all of the thrusters
     def stop(self) -> None:
         self.setSpeed(0, 0, 0, 0)

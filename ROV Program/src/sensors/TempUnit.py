@@ -4,3 +4,4 @@ from enum import Enum
 class TempUnit(Enum):
     C = 0
     F = 1
+    K = 2
