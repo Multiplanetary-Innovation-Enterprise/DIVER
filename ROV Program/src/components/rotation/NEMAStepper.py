@@ -9,10 +9,10 @@ from components.rotation.Stepper import Stepper
 #Represents the NEMA## stepper motors used on the ROV
 #url:
 class NEMAStepper(Stepper):
-    __DEGREES_PER_STEP = 1.8                #The angle rotated for one step
-    self.__stepSignal:DigitalSignal = None  #The signal that controls the stepping
-    self.__dirSignal:DigitalSignal = None   #The signal that controls the direction
-    self.__sleepSignal:DigitalSignal = None #The signal that controls sleeping
+    __DEGREES_PER_STEP = 1.8           #The angle rotated for one step
+    __stepSignal:DigitalSignal = None  #The signal that controls the stepping
+    __dirSignal:DigitalSignal = None   #The signal that controls the direction
+    __sleepSignal:DigitalSignal = None #The signal that controls sleeping
 
     #0.002 s does notwork for some reason for delay
 
@@ -32,6 +32,10 @@ class NEMAStepper(Stepper):
         self.__stepSignal.setLow()
 
         time.sleep(self._stepDelay)
+
+    #Performs the actual speed update
+    def _updateSpeed(self) -> None:
+        pass
 
     #Performs the direction update
     def _updateDirectionState(self) -> None:

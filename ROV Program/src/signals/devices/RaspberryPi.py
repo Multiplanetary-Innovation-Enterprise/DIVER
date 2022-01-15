@@ -11,10 +11,10 @@ class RaspberryPi(SignalDevice):
     __pi = None #The raspberry pi
 
     def __init__(self):
-        # os.system ("sudo pigpiod")
-        # time.sleep(1)
-        #
-        # self.__pi = pigpio.pi()
+        os.system ("sudo pigpiod")
+        time.sleep(1)
+
+        self.__pi = pigpio.pi()
         pass
 
     #Updates the mode of the provided pin

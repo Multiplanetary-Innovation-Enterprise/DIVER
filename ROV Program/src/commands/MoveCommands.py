@@ -30,8 +30,7 @@ class MoveXYCommand(Command):
             leftSpeedModifier = 1
             rightSpeedModifier = -1
 
-        self.__propSystem.moveLeft(speed * rightSpeedModifier)
-        self.__propSystem.moveRight(speed * leftSpeedModifier)
+        self.__propSystem.setXYSpeed(speed * rightSpeedModifier, speed * leftSpeedModifier)
 
     def isRepeatable(self):
         False
@@ -54,7 +53,7 @@ class MoveZCommand(Command):
         elif(self.__action == Action.MOVE_Z_STOP):
             speed = 0
 
-        self.__propSystem.moveVertical(speed)
+        self.__propSystem.setVerticalSpeedSame(speed)
 
     def isRepeatable(self):
         return False

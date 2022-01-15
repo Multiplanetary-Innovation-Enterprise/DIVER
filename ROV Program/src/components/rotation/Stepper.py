@@ -11,7 +11,7 @@ class Stepper(Motor, ABC):
     _stepDelay:float = 0.001 #The delay between each step (correlates to speed)
 
     def __init__(self, rotDirection:RotDirection):
-        super(Motor, self).__init__(rotDirection)
+        super().__init__(rotDirection)
 
         #Updates the stepper motor's config
         self._updateDirectionState()

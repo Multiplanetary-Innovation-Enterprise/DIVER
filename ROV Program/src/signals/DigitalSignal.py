@@ -1,5 +1,5 @@
 from signals.SinglePinSignal import SinglePinSignal
-from signals..devices.SignalDevice import SignalDevice
+from signals.devices.SignalDevice import SignalDevice
 from signals.PinMode import PinMode
 from signals.DigitalState import DigitalState
 
