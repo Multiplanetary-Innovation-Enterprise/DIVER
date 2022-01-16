@@ -1,4 +1,4 @@
-from signals.devices.RaspberryPi import RaspberryPi
+from components.controllers.RaspberryPi import RaspberryPi
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
 from subsystems.IlluminationSubsystem import IlluminationSubsystem
 from subsystems.SensorSubsystem import SensorSubsystem

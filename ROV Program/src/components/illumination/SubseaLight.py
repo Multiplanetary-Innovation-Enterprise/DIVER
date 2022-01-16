@@ -1,5 +1,5 @@
 from components.illumination.Light import Light
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 from signals.PWMSignal import PWMSignal
 from signals.PinMode import PinMode
 
@@ -10,8 +10,8 @@ class SubseaLight(Light):
     __LIGHT_OFF:int = 1100         #The pulse-width value to turn the light off
     __LIGHT_MAX:int = 1900         #The maximim brightness pulse-width for the light
 
-    def __init__(self, device:SignalDevice, pinNum:int):
-        self.__pwmSignal = PWMSignal(device, pinNum, PinMode.PIN_OUT)
+    def __init__(self, controller:Controller, pinNum:int):
+        self.__pwmSignal = PWMSignal(controller, pinNum, PinMode.PIN_OUT)
         self.setBrightness(0)
 
     #Performs the brightness update using the PWM interface

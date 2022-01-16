@@ -1,59 +1,173 @@
-from ROVMessaging.Action import Action
-
 from commands.Command import Command
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
 
-class MoveXYCommand(Command):
-    __propSystem:PropulsionSubsystem = None
-    __action:Action = None
+#The command for stopping the ROV's movement in the XY plane
+class MoveXYStopCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
 
-    def __init__(self, action:Action, propSystem:PropulsionSubsystem):
-        self.__propSystem = propSystem
-        self.__action = action
-
-    def execute(self):
-        speed = self.__propSystem.getSpeed()
-
-        leftSpeedModifier = 0
-        rightSpeedModifier = 0
-
-        if(self.__action ==Action.MOVE_XY_FORWARD):
-            leftSpeedModifier = 1
-            rightSpeedModifier = 1
-        elif(self.__action ==Action.MOVE_XY_BACKWARD):
-            leftSpeedModifier = -1
-            rightSpeedModifier = -1
-        elif(self.__action ==Action.MOVE_XY_LEFT):
-            leftSpeedModifier = -1
-            rightSpeedModifier = 1
-        elif(self.__action ==Action.MOVE_XY_RIGHT):
-            leftSpeedModifier = 1
-            rightSpeedModifier = -1
-
-        self.__propSystem.setXYSpeed(speed * rightSpeedModifier, speed * leftSpeedModifier)
-
-    def isRepeatable(self):
-        False
-
-class MoveZCommand(Command):
-    __action = None
-    __propSystem:PropulsionSubsystem = None
-
-    def __init__(self, action:Action, propSystem:PropulsionSubsystem):
-        self.__action = action
+    def __init__(self, propSystem:PropulsionSubsystem):
         self.__propSystem = propSystem
 
-    def execute(self):
-        speed = self.__propSystem.getSpeed()
+    #Executes the command
+    def execute(self) -> None:
+        self.__propSystem.setXYSpeed(0, 0)
 
-        if(self.__action == Action.MOVE_Z_POS):
-            speed = self.__propSystem.getSpeed()
-        elif(self.__action == Action.MOVE_Z_NEG):
-            speed = -self.__propSystem.getSpeed()
-        elif(self.__action == Action.MOVE_Z_STOP):
-            speed = 0
-
-        self.__propSystem.setVerticalSpeedSpeed(speed, speed)
-
-    def isRepeatable(self):
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
         return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 1
+
+#The command for moving the ROV forward
+class MoveForwardCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the XY thrusters
+        # 0 = left, 1 = right
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeed(speeds[0], speeds[1])
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 2
+
+#The command for moving the ROV backwards
+class MoveBackwardCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the XY thrusters
+        # 0 = left, 1 = right
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeed(-speeds[0], -speeds[1])
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 3
+
+#The command for turning the ROV to the left
+class TurnLeftCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the XY thrusters
+        # 0 = left, 1 = right
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeed(-speeds[0], speeds[1])
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 4
+
+#The command for turning the ROV to the right
+class TurnRightCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the XY thrusters
+        # 0 = left, 1 = right
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeed(speeds[0], -speeds[1])
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 5
+
+#The command for stopping the ROV's vertical movement
+class MoveZStopCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the vertical thrusters
+        self.__propSystem.setVerticalSpeed(0, 0)
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 6
+
+#The command for moving the ROV upwards
+class MoveUpCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the vertical thrusters
+        # 0 = front top, 1 = back top
+        speeds = self.__propSystem.getVerticalSpeeds()
+        self.__propSystem.setVerticalSpeed(speeds[0], speeds[1])
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 7
+
+#The command for moving the ROV downwards
+class MoveDownCommand(Command):
+    __propSystem:PropulsionSubsystem = None #The ROV's propulsion system
+
+    def __init__(self, propSystem:PropulsionSubsystem):
+        self.__propSystem = propSystem
+
+    #Executes the command
+    def execute(self) -> None:
+        #Gets the speeds of the vertical thrusters
+        # 0 = front top, 1 = back top
+        speeds = self.__propSystem.getVerticalSpeeds()
+        self.__propSystem.setVerticalSpeed(-speeds[0], -speeds[1])
+
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
+        return False
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 8

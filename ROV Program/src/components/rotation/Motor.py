@@ -5,7 +5,7 @@ from components.rotation.RotDirection import RotDirection
 #Represents a generic motor
 class Motor(ABC):
     _rotDirection:RotDirection = None #The direction that the motor rotates in
-    __speed:float = 0                  #The speed at which the motor rotates
+    _speed:float = 0                  #The speed at which the motor rotates
 
     def __init__(self, rotDirection:RotDirection):
         self._rotDirection = rotDirection
@@ -20,7 +20,7 @@ class Motor(ABC):
 
     #Sets the speed of the thruster. Range [-1,1]
     def setSpeed(self, speed:float) -> None:
-        self.__speed = self.__boundSpeed(speed)
+        self._speed = self.__boundSpeed(speed)
 
         #Performs the speed update
         self._updateSpeed()
@@ -42,4 +42,4 @@ class Motor(ABC):
 
     #Gets the speed of the thruster
     def getSpeed(self) -> float:
-        return self.__speed
+        return self._speed

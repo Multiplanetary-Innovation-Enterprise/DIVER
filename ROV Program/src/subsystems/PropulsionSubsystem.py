@@ -1,5 +1,5 @@
 from subsystems.Subsystem import Subsystem
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 from components.rotation.Thruster import Thruster
 from components.rotation.RotDirection import RotDirection
 
@@ -10,8 +10,8 @@ class PropulsionSubsystem(Subsystem):
     __topFrontThruster:Thruster = None #The thruster mounted on the top front side of the ROV
     __topBackThruster:Thruster = None  #The thruster mounted on the top back side of the ROV
 
-    def __init__(self, device:SignalDevice, config):
-        super().__init__(device, config)
+    def __init__(self, controller:Controller, config):
+        super().__init__(controller, config)
 
         #Gets the GPIO pins for the thrusters
         leftPin = int(config['Propulsion']['LeftThrusterPin'])
@@ -20,10 +20,10 @@ class PropulsionSubsystem(Subsystem):
         topBackPin = int(config['Propulsion']['TopBackThrusterPin'])
 
         #Creates three thrusters. Two for the x-y movement and two for z movement
-        self.__leftThruster = Thruster(device, leftPin, RotDirection.CLOCKWISE)
-        self.__rightThruster = Thruster(device, rightPin, RotDirection.CLOCKWISE)
-        self.__topFrontThruster = Thruster(device, topFrontPin, RotDirection.CLOCKWISE)
-        self.__topBackThruster = Thruster(device, topBackPin, RotDirection.CLOCKWISE)
+        self.__leftThruster = Thruster(controller, leftPin, RotDirection.CLOCKWISE)
+        self.__rightThruster = Thruster(controller, rightPin, RotDirection.CLOCKWISE)
+        self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.CLOCKWISE)
+        self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.CLOCKWISE)
 
     #Arms all of the thrusters
     def arm(self) -> None:
@@ -60,7 +60,7 @@ class PropulsionSubsystem(Subsystem):
         self.setVerticalSpeed(speed, speed)
 
     #Gets the speeds of all the thrusters
-    def getSpeed(self) -> list:
+    def getSpeeds(self) -> list:
         speeds = [
             self.__leftThruster.getSpeed(),
             self.__rightThruster.getSpeed(),
@@ -71,7 +71,7 @@ class PropulsionSubsystem(Subsystem):
         return speeds
 
     #Gets the speeds of the thrusters mounted in the XY plane
-    def getXYSpeed(self) -> list:
+    def getXYSpeeds(self) -> list:
         speeds = [
             self.__leftThruster.getSpeed(),
             self.__rightThruster.getSpeed()
@@ -80,7 +80,7 @@ class PropulsionSubsystem(Subsystem):
         return speeds
 
     #Gets the speeds of the vertical thrusters
-    def getVerticalSpeed(self) -> list:
+    def getVerticalSpeeds(self) -> list:
         speeds = [
             self.__topFrontThruster.getSpeed(),
             self.__topBackThruster.getSpeed()

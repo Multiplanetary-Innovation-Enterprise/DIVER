@@ -2,7 +2,7 @@ import time
 
 from signals.PinMode import PinMode
 from signals.PWMSignal import PWMSignal
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 from components.rotation.Motor import Motor
 from components.rotation.RotDirection import RotDirection
 
@@ -15,10 +15,10 @@ class Thruster(Motor):
     __pwmSignal:PWMSignal = None #The PWM signal used to control the thruster
 
     #Creates the thruster
-    def __init__(self, device:SignalDevice, pinNum:int, rotDirection:RotDirection):
+    def __init__(self, controller:Controller, pinNum:int, rotDirection:RotDirection):
         super().__init__(rotDirection)
 
-        self.__pwmSignal = PWMSignal(device, pinNum, PinMode.PIN_OUT)
+        self.__pwmSignal = PWMSignal(controller, pinNum, PinMode.PIN_OUT)
 
     #Performs the arming sequence for the thruster
     def arm(self) -> None:
@@ -30,7 +30,7 @@ class Thruster(Motor):
 
     #Performs the speed update using the PWM interface
     def _updateSpeed(self) -> None:
-        pulseWidth = self.__convertSpeedToPulsewidth(self.__speed)
+        pulseWidth = self.__convertSpeedToPulsewidth(self._speed)
         self.__pwmSignal.setPulseWidth(pulseWidth)
 
     #Performs the speed conversion from the range [-1,1] to [MAX_REVERSE,MAX_FORWARD]
@@ -43,7 +43,7 @@ class Thruster(Motor):
         speed = self.getRotDirection().value * speed
 
         #Converts the range [-1,1] to the actual PWM range
-        pulseWidth = round(self__.STOPPED + ((self.__MAX_FORWARD - self.__.MAX_REVERSE) / 2) * speed)
+        pulseWidth = round(self.__STOPPED + ((self.__MAX_FORWARD - self.__MAX_REVERSE) / 2) * speed)
 
         return pulseWidth
 

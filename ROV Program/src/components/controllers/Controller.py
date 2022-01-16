@@ -3,8 +3,8 @@ from abc import ABC, abstractmethod
 from signals.PWM import PWM
 from signals.PinMode import PinMode
 
-#Represents a generic device that can send signals
-class SignalDevice(PWM, ABC):
+#Represents a generic controller that can send signals
+class Controller(PWM, ABC):
     def __init__(self):
         super(PWM, self).__init__()
 

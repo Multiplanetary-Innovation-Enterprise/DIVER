@@ -2,7 +2,7 @@ import time
 
 from signals.PinMode import PinMode
 from signals.DigitalSignal import DigitalSignal
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 from components.rotation.RotDirection import RotDirection
 from components.rotation.Stepper import Stepper
 
@@ -16,12 +16,12 @@ class NEMAStepper(Stepper):
 
     #0.002 s does notwork for some reason for delay
 
-    def __init__(self, device:SignalDevice, stepPinNum:int, dirPinNum:int, sleepPinNum:int, rotDirection:RotDirection):
+    def __init__(self, controller:Controller, stepPinNum:int, dirPinNum:int, sleepPinNum:int, rotDirection:RotDirection):
         super().__init__(rotDirection)
 
-        self.__stepSignal = DigitalSignal(device, stepPinNum, PinMode.PIN_OUT)
-        self.__dirSignal = DigitalSignal(device, dirPinNum, PinMode.PIN_OUT)
-        self.__sleepSignal = DigitalSignal(device, sleepPinNum, PinMode.PIN_OUT)
+        self.__stepSignal = DigitalSignal(controller, stepPinNum, PinMode.PIN_OUT)
+        self.__dirSignal = DigitalSignal(controller, dirPinNum, PinMode.PIN_OUT)
+        self.__sleepSignal = DigitalSignal(controller, sleepPinNum, PinMode.PIN_OUT)
 
     #Performs the actual step
     def _step(self) -> None:

@@ -29,6 +29,7 @@ class ROVApp(Subscriber):
     __outgoingMessageChannel:MessageChannel  = None  #The message channel to the client program
     __server:SocketServer  = None                    #The server that listens for client connection requests
     __shutdownEvent = None                           #The event the main thread waits for before shutdown
+    __commandProccessor = None                       #Processes all of the incoming commands
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -45,8 +46,8 @@ class ROVApp(Subscriber):
         rov = ROV(config)
 
         #Used to decode and process commands
-        commandFactory = CommandFactory(rov, self.__outgoingMessageChannel) #message channel temp for testing
-        commandProcessor = CommandProcessor(commandFactory)
+        commandFactory = CommandFactory(rov)
+        self.__commandProcessor = CommandProcessor(commandFactory)
 
         #Sets up the sever to listen at the provided port
         port = int(config['Server']['Port'])
@@ -56,6 +57,8 @@ class ROVApp(Subscriber):
 
         #Wait for the client program to connect
         self.__clientConnection = self.__server.getClientConnection()
+
+        print("Client connected!")
 
         #Reads messages from the client and rebroadcasts them internally using the
         #incoming message channel
@@ -74,7 +77,7 @@ class ROVApp(Subscriber):
 
         #Registers the command processor to listen for actions (correspond to comands)
         #and registers the ROV App to listen for system status changes
-        incomingMessageChannel.subscribe(MessageType.ACTION, commandProcessor)
+        incomingMessageChannel.subscribe(MessageType.ACTION, self.__commandProcessor)
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
         #Listens for sensor data and system status updates and sends it to the client program
@@ -116,6 +119,7 @@ class ROVApp(Subscriber):
         print("shuting down...")
         self.__sensorDataCollector.stop()
         self.__server.stop()
+        self.__commandProcessor.stop()
 
         #Tells the client that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)

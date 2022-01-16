@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 
 #Represents a generic subsytem
 class Subsystem(ABC):
     _config = None              #The configuration file
-    _device:SignalDevice = None #The controlling device
+    _controller:Controller = None #The controlling controller
 
-    def __init__(self, device:SignalDevice, config):
-        self._device = device
+    def __init__(self, controller:Controller, config):
+        self._controller = controller
         self._config = config
 
     #Performs any clean up on system shutdown

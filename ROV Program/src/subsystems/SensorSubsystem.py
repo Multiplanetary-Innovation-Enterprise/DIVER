@@ -1,5 +1,5 @@
 from subsystems.Subsystem import Subsystem
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 from sensors.IMU import IMU
 from sensors.BNO055IMU import BNO055IMU
 from sensors.TempSensor import TempSensor
@@ -10,8 +10,8 @@ class SensorSubsystem(Subsystem):
     __internalTempSensor:TempSensor = None #The sensor for monitoring the elctronics capsule temp
     __imu:IMU = None                       #The IMU sensor
 
-    def __init__(self, device:SignalDevice, config):
-        super().__init__(device, config)
+    def __init__(self, controller:Controller, config):
+        super().__init__(controller, config)
 
         #Sets up the sensors that will be used
         self.__internalTempSensor = DS18B20TempSensor()

@@ -1,14 +1,14 @@
 from abc import ABC
 
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 
-#Represents a generic signal that can be sent from the associated signal device
+#Represents a generic signal that can be sent from the associated controller
 class Signal(ABC):
-    _device:SignalDevice = None #The device that can send the signal
+    _controller:Controller = None #The device that can send the signal
 
-    def __init__(self, device:SignalDevice):
-        self._device = device
+    def __init__(self, controller:Controller):
+        self._controller = controller
 
-    #Gets the device associated with the signal
-    def getDevice(self) -> SignalDevice:
-        return self._device
+    #Gets the controller associated with the signal
+    def getController(self) -> Controller:
+        return self._controller

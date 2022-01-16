@@ -4,22 +4,23 @@ import time
 
 from signals.PinMode import PinMode
 from signals.ResistorType import ResistorType
-from signals.devices.SignalDevice import SignalDevice
+from components.controllers.Controller import Controller
 
 #Represents the Raspberry Pi itself (a wrapper for the pigpio library)
-class RaspberryPi(SignalDevice):
+class RaspberryPi(Controller):
     __pi = None #The raspberry pi
 
     def __init__(self):
-        os.system ("sudo pigpiod")
-        time.sleep(1)
-
-        self.__pi = pigpio.pi()
+        # os.system ("sudo pigpiod")
+        # time.sleep(1)
+        #
+        # self.__pi = pigpio.pi()
         pass
 
     #Updates the mode of the provided pin
     def setPinMode(self, pinNum:int, mode:PinMode) -> None:
-        self.__pi.set_mode(pinNum, mode)
+        #self.__pi.set_mode(pinNum, mode)
+        pass
 
     #Gets the mode of the provided pin
     def getPinMode(self, pinNum:int) -> PinMode:
@@ -35,7 +36,8 @@ class RaspberryPi(SignalDevice):
 
     #Updates the pulse width of the PWM signal
     def setPulseWidth(self, pinNum:int, pulseWidth:int) -> None:
-        self.__pi.set_servo_pulsewidth(pinNum, pulseWidth)
+        #self.__pi.set_servo_pulsewidth(pinNum, pulseWidth)
+        pass
 
     #Gets the pulse width of the PWM signal
     def getPulseWidth(self) -> int:
