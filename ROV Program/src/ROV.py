@@ -37,3 +37,10 @@ class ROV:
     #Gets the vision subsystem
     def getVisionSystem(self) -> VisionSubsystem:
         return self.__visionSystem
+
+    #Shuts down all of the subsystems
+    def shutdown(self) -> None:
+        self.__propSystem.shutdown()
+        self.__illuminationSystem.shutdown()
+        self.__sensorSystem.shutdown()
+        self.__visionSystem.shutdown()

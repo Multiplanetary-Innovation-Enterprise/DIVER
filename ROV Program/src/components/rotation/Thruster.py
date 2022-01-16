@@ -30,7 +30,14 @@ class Thruster(Motor):
 
     #Performs the speed update using the PWM interface
     def _updateSpeed(self) -> None:
-        pulseWidth = self.__convertSpeedToPulsewidth(self._speed)
+        speed = self._speed
+
+        #Checks if the thruster is currently running or not
+        if not self._isActive:
+            speed = 0
+
+        #Updates the speed accordingly
+        pulseWidth = self.__convertSpeedToPulsewidth(speed)
         self.__pwmSignal.setPulseWidth(pulseWidth)
 
     #Performs the speed conversion from the range [-1,1] to [MAX_REVERSE,MAX_FORWARD]

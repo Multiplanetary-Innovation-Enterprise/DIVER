@@ -35,7 +35,7 @@ class ClientApp(Subscriber):
         #Connection info for connecting to the ROV
         host = str(self.__config['ROV_CONNECTION']['Host'])
         port = int(self.__config['ROV_CONNECTION']['Port'])
-
+        print("PORT: " + str(port) + " Host: " + str(host))
         #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
 

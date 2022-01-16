@@ -30,12 +30,13 @@ class ROVApp(Subscriber):
     __server:SocketServer  = None                    #The server that listens for client connection requests
     __shutdownEvent = None                           #The event the main thread waits for before shutdown
     __commandProccessor = None                       #Processes all of the incoming commands
+    __rov:ROV = None                                 #The ROV
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
         #Reads in the configuration file
         config = configparser.ConfigParser()
-        config.read('..\config.ini')
+        config.read('../config.ini') #..\config.ini for Windows because Windows
 
         #The message channels for sending and recieving messages. Incoming can also
         #be used for sending internal messages
@@ -43,17 +44,17 @@ class ROVApp(Subscriber):
         self.__outgoingMessageChannel = MessageChannel()
 
         #The representation of the ROV and its sub systems
-        rov = ROV(config)
+        self.__rov = ROV(config)
 
         #Used to decode and process commands
-        commandFactory = CommandFactory(rov)
+        commandFactory = CommandFactory(self.__rov)
         self.__commandProcessor = CommandProcessor(commandFactory)
 
         #Sets up the sever to listen at the provided port
         port = int(config['Server']['Port'])
         self.__server = SocketServer('', port)
 
-        print("Waiting for client connection")
+        print("Waiting for client connection @ port #" + str(port))
 
         #Wait for the client program to connect
         self.__clientConnection = self.__server.getClientConnection()
@@ -71,7 +72,7 @@ class ROVApp(Subscriber):
         subWriter = SubWriter(socketWriter)
 
         #Retrieves and sends the sensor data to the client
-        self.__sensorDataCollector = SensorDataCollector(rov.getSensorSystem(), self.__outgoingMessageChannel)
+        self.__sensorDataCollector = SensorDataCollector(self.__rov.getSensorSystem(), self.__outgoingMessageChannel)
         self.__sensorDataCollector.setSampleFrequency(1)
         self.__sensorDataCollector.start()
 
@@ -120,6 +121,7 @@ class ROVApp(Subscriber):
         self.__sensorDataCollector.stop()
         self.__server.stop()
         self.__commandProcessor.stop()
+        self.__rov.shutdown()
 
         #Tells the client that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)

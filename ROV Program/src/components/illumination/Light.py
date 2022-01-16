@@ -18,10 +18,15 @@ class Light(ABC):
     #Sets the brightness of the light
     def setBrightness(self, brightness:float) -> None:
         self._brightness = self.__boundBrightness(brightness)
-        self._isActive = self._brightness > 0
 
-        #Updates the state of the light based on the new brightness
-        self._updateBrightness()
+        #Updates the state of the light based on the new brightness if it is currently
+        #turned on
+        if self._isActive:
+            self._updateBrightness()
+
+            #Checks if the brightness was set to zero, if so the light is off
+            if brightness <= 0:
+                self._isActive = False
 
     #Keeps the brightness in the range [0,1]
     def __boundBrightness(self, brightness:float) -> float:

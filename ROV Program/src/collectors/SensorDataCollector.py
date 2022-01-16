@@ -19,10 +19,14 @@ class SensorDataCollector(DataCollector):
     def getData(self) -> dict:
         #Get internal internal temperature of the electronics capsule
         tempSensor = self.__subsystem.getInternalTempSensor()
+        imu = self.__subsystem.getIMU()
 
         #Formats the sensor data as key-value pairs
         sensorData = {
             'internalTemp': tempSensor.getTemperature(),
         }
 
+        #Appends the IMU data to the rest of the sensor data
+        sensorData.update(imu.getSensorData().toDict())
+        
         return sensorData

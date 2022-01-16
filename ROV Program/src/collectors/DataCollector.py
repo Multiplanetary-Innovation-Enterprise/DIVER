@@ -36,11 +36,11 @@ class DataCollector(Publisher, ABC):
         #When the data collection started
         startTime = time.time_ns()
 
-        #Get the data
-        data = self.getData()
-
         #Continue collecting data until stopped
         while self.__isRunning:
+            #Get the data
+            data = self.getData()
+
             #The amount of elapsed time since the data collection was started
             elapsedTime = round((time.time_ns() - startTime) / 1000000000, 2)
 

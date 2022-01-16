@@ -18,7 +18,7 @@ class RaspberryPi(Controller):
 
     #Updates the mode of the provided pin
     def setPinMode(self, pinNum:int, mode:PinMode) -> None:
-        self.__pi.set_mode(pinNum, mode)
+        self.__pi.set_mode(pinNum, mode.value)
 
     #Gets the mode of the provided pin
     def getPinMode(self, pinNum:int) -> PinMode:
@@ -46,4 +46,4 @@ class RaspberryPi(Controller):
 
     #Updates the interal resistor type connected to the pin (none, pull-up, pull-down)
     def setInternalResistorType(self, pinNum:int, type:ResistorType) -> None:
-        self.__pi.set_pull_up_down(pinNum, type)
+        self.__pi.set_pull_up_down(pinNum, type.value)

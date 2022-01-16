@@ -1,5 +1,6 @@
 from commands.Command import Command
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
+from components.rotation.RotDirection import RotDirection
 
 #The command for stopping the ROV's movement in the XY plane
 class MoveXYStopCommand(Command):
@@ -11,7 +12,8 @@ class MoveXYStopCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("XY Stop")
-        self.__propSystem.setXYSpeed(0, 0)
+        #Turns off the  thrusters in the XY plane
+        self.__propSystem.setXYStates(False, False)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -30,11 +32,9 @@ class MoveForwardCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the XY thrusters
-        # 0 = left, 1 = right
-        print("Forward")
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(speeds[0], speeds[1])
+        print("Forwards")
+        self.__propSystem.setXYRotDirections(RotDirection.CLOCKWISE, RotDirection.CLOCKWISE)
+        self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -53,11 +53,9 @@ class MoveBackwardCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the XY thrusters
-        # 0 = left, 1 = right
         print("Backwards")
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(-speeds[0], -speeds[1])
+        self.__propSystem.setXYRotDirections(RotDirection.COUNTER_CLOCKWISE, RotDirection.COUNTER_CLOCKWISE)
+        self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -76,11 +74,9 @@ class TurnLeftCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the XY thrusters
-        # 0 = left, 1 = right
         print("Turn Left")
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(-speeds[0], speeds[1])
+        self.__propSystem.setXYRotDirections(RotDirection.COUNTER_CLOCKWISE, RotDirection.CLOCKWISE)
+        self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -99,11 +95,9 @@ class TurnRightCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the XY thrusters
-        # 0 = left, 1 = right
         print("Turn Right")
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(speeds[0], -speeds[1])
+        self.__propSystem.setXYRotDirections(RotDirection.CLOCKWISE, RotDirection.COUNTER_CLOCKWISE)
+        self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -122,9 +116,9 @@ class MoveZStopCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the vertical thrusters
         print("Z Stop")
-        self.__propSystem.setVerticalSpeed(0, 0)
+        #Turns off the vertical thrusters
+        self.__propSystem.setZStates(False, False)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -143,11 +137,9 @@ class MoveUpCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the vertical thrusters
-        # 0 = front top, 1 = back top
         print("Move Up")
-        speeds = self.__propSystem.getVerticalSpeeds()
-        self.__propSystem.setVerticalSpeed(speeds[0], speeds[1])
+        self.__propSystem.setZRotDirections(RotDirection.CLOCKWISE, RotDirection.CLOCKWISE)
+        self.__propSystem.setZStates(True, True)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -166,11 +158,9 @@ class MoveDownCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
-        #Gets the speeds of the vertical thrusters
-        # 0 = front top, 1 = back top
         print("Move Down")
-        speeds = self.__propSystem.getVerticalSpeeds()
-        self.__propSystem.setVerticalSpeed(-speeds[0], -speeds[1])
+        self.__propSystem.setZRotDirections(RotDirection.COUNTER_CLOCKWISE, RotDirection.COUNTER_CLOCKWISE)
+        self.__propSystem.setZStates(True, True)
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:

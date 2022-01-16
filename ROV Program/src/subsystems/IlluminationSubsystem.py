@@ -23,4 +23,4 @@ class IlluminationSubsystem(Subsystem):
 
     #Performs any clean up on system shutdown
     def shutdown(self) -> None:
-        pass
+        self.__light.turnOff()
