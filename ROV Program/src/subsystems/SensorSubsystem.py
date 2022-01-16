@@ -1,9 +1,9 @@
 from subsystems.Subsystem import Subsystem
 from components.controllers.Controller import Controller
-from sensors.IMU import IMU
-from sensors.BNO055IMU import BNO055IMU
-from sensors.TempSensor import TempSensor
-from sensors.DS18B20TempSensor import DS18B20TempSensor
+from components.sensors.IMU import IMU
+from components.sensors.BNO055IMU import BNO055IMU
+from components.sensors.TempSensor import TempSensor
+from components.sensors.DS18B20TempSensor import DS18B20TempSensor
 
 #Represents the subsystem for collecting data
 class SensorSubsystem(Subsystem):

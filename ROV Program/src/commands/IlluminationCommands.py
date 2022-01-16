@@ -12,6 +12,8 @@ class ToggleLightStateCommand(Command):
     def execute(self) -> None:
         light = self.__illuminationSystem.getLight()
 
+        print("Lights toggle")
+
         #Checks the light's current state
         if(light.isActive()):
             light.turnOff()
@@ -39,6 +41,7 @@ class IncreaseLightBrightnessCommand(Command):
 
         #Gets the current brighness value of the light and increments it by 10%
         brightness = light.getBrightness() + 0.1
+        print("Brightness inc: " + str(brightness))
 
         #Updates the brightness of the light
         light.setBrightness(brightness)
@@ -64,6 +67,7 @@ class DecreaseLightBrightnessCommand(Command):
 
         #Gets the current brighness value of the light and decrements it by 10%
         brightness = light.getBrightness() - 0.1
+        print("Brightness dec: " + str(brightness))
 
         #Updates the brightness of the light
         light.setBrightness(brightness)

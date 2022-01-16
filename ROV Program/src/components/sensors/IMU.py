@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sensors import IMUData
+from components.sensors import IMUData
 
 #Represents a generic IMU sensor
 class IMU(ABC):

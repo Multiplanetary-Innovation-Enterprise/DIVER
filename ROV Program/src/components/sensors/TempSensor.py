@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sensors.TempUnit import TempUnit
+from components.sensors.TempUnit import TempUnit
 
 #Represents a generic temperature sensor
 class TempSensor(ABC):

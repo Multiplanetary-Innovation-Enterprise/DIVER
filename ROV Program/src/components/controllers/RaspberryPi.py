@@ -11,16 +11,14 @@ class RaspberryPi(Controller):
     __pi = None #The raspberry pi
 
     def __init__(self):
-        # os.system ("sudo pigpiod")
-        # time.sleep(1)
-        #
-        # self.__pi = pigpio.pi()
-        pass
+        os.system ("sudo pigpiod")
+        time.sleep(1)
+
+        self.__pi = pigpio.pi()
 
     #Updates the mode of the provided pin
     def setPinMode(self, pinNum:int, mode:PinMode) -> None:
-        #self.__pi.set_mode(pinNum, mode)
-        pass
+        self.__pi.set_mode(pinNum, mode)
 
     #Gets the mode of the provided pin
     def getPinMode(self, pinNum:int) -> PinMode:
@@ -36,8 +34,7 @@ class RaspberryPi(Controller):
 
     #Updates the pulse width of the PWM signal
     def setPulseWidth(self, pinNum:int, pulseWidth:int) -> None:
-        #self.__pi.set_servo_pulsewidth(pinNum, pulseWidth)
-        pass
+        self.__pi.set_servo_pulsewidth(pinNum, pulseWidth)
 
     #Gets the pulse width of the PWM signal
     def getPulseWidth(self) -> int:

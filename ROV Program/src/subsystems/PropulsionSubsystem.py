@@ -33,7 +33,7 @@ class PropulsionSubsystem(Subsystem):
         self.__topBackThruster.arm()
 
     #Sets the speed of all three thrusters independently
-    def setSpeed(self, leftSpeed:float, rightSpeed:float, verticalSpeed:float, frontSpeed:float, backSpeed:float) -> None:
+    def setSpeed(self, leftSpeed:float, rightSpeed:float, frontSpeed:float, backSpeed:float) -> None:
         self.setXYSpeed(leftSpeed, rightSpeed)
         self.setVerticalSpeed(frontSpeed, rightSpeed)
 

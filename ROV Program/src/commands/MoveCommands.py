@@ -10,6 +10,7 @@ class MoveXYStopCommand(Command):
 
     #Executes the command
     def execute(self) -> None:
+        print("XY Stop")
         self.__propSystem.setXYSpeed(0, 0)
 
     #Whether or not the command can be repeated back to back
@@ -31,6 +32,7 @@ class MoveForwardCommand(Command):
     def execute(self) -> None:
         #Gets the speeds of the XY thrusters
         # 0 = left, 1 = right
+        print("Forward")
         speeds = self.__propSystem.getXYSpeeds()
         self.__propSystem.setXYSpeed(speeds[0], speeds[1])
 
@@ -53,6 +55,7 @@ class MoveBackwardCommand(Command):
     def execute(self) -> None:
         #Gets the speeds of the XY thrusters
         # 0 = left, 1 = right
+        print("Backwards")
         speeds = self.__propSystem.getXYSpeeds()
         self.__propSystem.setXYSpeed(-speeds[0], -speeds[1])
 
@@ -75,6 +78,7 @@ class TurnLeftCommand(Command):
     def execute(self) -> None:
         #Gets the speeds of the XY thrusters
         # 0 = left, 1 = right
+        print("Turn Left")
         speeds = self.__propSystem.getXYSpeeds()
         self.__propSystem.setXYSpeed(-speeds[0], speeds[1])
 
@@ -97,6 +101,7 @@ class TurnRightCommand(Command):
     def execute(self) -> None:
         #Gets the speeds of the XY thrusters
         # 0 = left, 1 = right
+        print("Turn Right")
         speeds = self.__propSystem.getXYSpeeds()
         self.__propSystem.setXYSpeed(speeds[0], -speeds[1])
 
@@ -118,6 +123,7 @@ class MoveZStopCommand(Command):
     #Executes the command
     def execute(self) -> None:
         #Gets the speeds of the vertical thrusters
+        print("Z Stop")
         self.__propSystem.setVerticalSpeed(0, 0)
 
     #Whether or not the command can be repeated back to back
@@ -139,6 +145,7 @@ class MoveUpCommand(Command):
     def execute(self) -> None:
         #Gets the speeds of the vertical thrusters
         # 0 = front top, 1 = back top
+        print("Move Up")
         speeds = self.__propSystem.getVerticalSpeeds()
         self.__propSystem.setVerticalSpeed(speeds[0], speeds[1])
 
@@ -161,6 +168,7 @@ class MoveDownCommand(Command):
     def execute(self) -> None:
         #Gets the speeds of the vertical thrusters
         # 0 = front top, 1 = back top
+        print("Move Down")
         speeds = self.__propSystem.getVerticalSpeeds()
         self.__propSystem.setVerticalSpeed(-speeds[0], -speeds[1])
 

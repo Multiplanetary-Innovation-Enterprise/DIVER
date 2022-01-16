@@ -1,18 +1,19 @@
-# import board
-# import adafruit_bno055
+import board
+import adafruit_bno055
 
-from sensors import IMUData
-from sensors.IMU import IMU
+from components.sensors import IMUData
+from components.sensors.IMU import IMU
+
+#Move sensors to components
 
 #Represents the BNO055 IMU sensor from Adafruit
 #url:https://www.adafruit.com/product/2472
 class BNO055IMU(IMU):
-    __sensor = None #The IMU sensor __sensor:BNO055
+     __sensor:BNO055 = None #The IMU sensor
 
     def __init__(self):
-        # i2c = board.I2C()
-        # self.__sensor = adafruit_bno055.BNO055(i2c)
-        pass
+        i2c = board.I2C()
+        self.__sensor = adafruit_bno055.BNO055(i2c)
 
     #Gets all of the data from the IMU sensor
     def getSensorData(self) -> IMUData:
