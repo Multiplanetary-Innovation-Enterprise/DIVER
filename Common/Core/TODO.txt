@@ -1,4 +1,5 @@
 Create a core library some day:
     App base
     system status?
+    Hashmap
     other shared code

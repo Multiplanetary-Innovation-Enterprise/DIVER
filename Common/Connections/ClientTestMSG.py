@@ -1,7 +1,6 @@
 import os
 import signal
 import socket
-import threading
 
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
@@ -67,6 +66,7 @@ def shutdown():
     outgoingMessageChannel.broadcast(message)
 
     #Closes the connection with the server
+    subWriter.stop()
     serverConnection.shutdown(socket.SHUT_WR)
     serverConnection.close()
 
@@ -114,6 +114,7 @@ type = None
 
 print("Running")
 processInput()
+
 
 #Stops listening for messages from the server
 pubListener.stop()
