@@ -1,6 +1,3 @@
-from ROVMessaging.Action import Action
-from ROVMessaging.MessageChannel import MessageChannel
-
 from commands.Command import Command
 from commands.ArmCommand import ArmCommand
 from commands.MoveCommands import *
@@ -9,34 +6,45 @@ from commands.IlluminationCommands import *
 
 from ROV import ROV
 
+#Creates any command from its corresponding action code
 class CommandFactory:
-    __rov = None
-    __messageChannel = None
+    __rov:ROV = None #The ROV (used to get access to its subsystems)
 
-    def __init__(self, rov:ROV, messageChannel:MessageChannel):
+    def __init__(self, rov:ROV):
         self.__rov = rov
-        self.__messageChannel = messageChannel
 
-    def createCommand(self, action:Action) -> Command:
+    #Creates the command associated with the provided action code
+    def createCommand(self, actionCode:int) -> Command:
         command = None
 
-        if(action == Action.MOVE_XY_FORWARD or action == Action.MOVE_XY_BACKWARD or action == Action.MOVE_XY_LEFT or action == Action.MOVE_XY_RIGHT or action == Action.MOVE_XY_STOP):
-            command = MoveXYCommand(action, self.__rov.getPropSystem())
-        elif(action == Action.MOVE_Z_POS or action == Action.MOVE_Z_NEG or action == Action.MOVE_Z_STOP):
-            command = MoveZCommand(action, self.__rov.getPropSystem())
-        elif(action == Action.ARM):
+        #Looks for the command with the matching action code
+        if actionCode == ArmCommand.getActionCode():
             command = ArmCommand(self.__rov.getPropSystem())
-        elif(action == Action.SPEED_INCREASE):
-            command = IncreaseSpeedCommand(self.__rov.getPropSystem())
-        elif(action == Action.SPEED_DECREASE):
-            command = DecreaseSpeedCommand(self.__rov.getPropSystem())
-        elif(action == Action.TOGGLE_LIGHTS):
-            command = LightStateToggleCommand(self.__rov.getIlluminationSystem())
-        elif(action == Action.BRIGHTNESS_INCREASE):
-            command = LightIncreaseBrightnessCommand(self.__rov.getIlluminationSystem())
-        elif(action == Action.BRIGHTNESS_DECREASE):
-            command = LightDecreaseBrightnessCommand(self.__rov.getIlluminationSystem())
-
-        print("Action: " + str(action))
+        elif actionCode == MoveXYStopCommand.getActionCode():
+                command = MoveXYStopCommand(self.__rov.getPropSystem())
+        elif actionCode == MoveForwardCommand.getActionCode():
+                command = MoveForwardCommand(self.__rov.getPropSystem())
+        elif actionCode == MoveBackwardCommand.getActionCode():
+                command = MoveBackwardCommand(self.__rov.getPropSystem())
+        elif actionCode == TurnLeftCommand.getActionCode():
+                command = TurnLeftCommand(self.__rov.getPropSystem())
+        elif actionCode == TurnRightCommand.getActionCode():
+                command = TurnRightCommand(self.__rov.getPropSystem())
+        elif actionCode == MoveZStopCommand.getActionCode():
+                command = MoveZStopCommand(self.__rov.getPropSystem())
+        elif actionCode == MoveUpCommand.getActionCode():
+                command = MoveUpCommand(self.__rov.getPropSystem())
+        elif actionCode == MoveDownCommand.getActionCode():
+                command = MoveDownCommand(self.__rov.getPropSystem())
+        elif actionCode == IncreaseSpeedCommand.getActionCode():
+                command = IncreaseSpeedCommand(self.__rov.getPropSystem())
+        elif actionCode == DecreaseSpeedCommand.getActionCode():
+                command = DecreaseSpeedCommand(self.__rov.getPropSystem())
+        elif actionCode == ToggleLightStateCommand.getActionCode():
+                command = ToggleLightStateCommand(self.__rov.getIlluminationSystem())
+        elif actionCode == IncreaseLightBrightnessCommand.getActionCode():
+                command = IncreaseLightBrightnessCommand(self.__rov.getIlluminationSystem())
+        elif actionCode == DecreaseLightBrightnessCommand.getActionCode():
+                command = DecreaseLightBrightnessCommand(self.__rov.getIlluminationSystem())
 
         return command

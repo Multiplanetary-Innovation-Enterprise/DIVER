@@ -1,63 +1,81 @@
 from commands.Command import Command
 from subsystems.IlluminationSubsystem import IlluminationSubsystem
 
-class LightStateToggleCommand(Command):
-    __illuminationSystem: IlluminationSubsystem = None
+#The command for toggling the ROV's lights
+class ToggleLightStateCommand(Command):
+    __illuminationSystem:IlluminationSubsystem = None #The ROV's illumination system
 
     def __init__(self, illuminationSystem:IlluminationSubsystem):
         self.__illuminationSystem = illuminationSystem
 
-    def execute(self):
+    #Executes the command
+    def execute(self) -> None:
         light = self.__illuminationSystem.getLight()
 
-        if(light.isOn()):
+        print("Lights toggle")
+
+        #Checks the light's current state
+        if(light.isActive()):
             light.turnOff()
         else:
             light.turnOn()
 
-    def isRepeatable(self):
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
         return True
 
-class LightIncreaseBrightnessCommand(Command):
-    __illuminationSystem: IlluminationSubsystem = None
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 11
+
+#The command for increasing the ROV's light's brightness
+class IncreaseLightBrightnessCommand(Command):
+    __illuminationSystem:IlluminationSubsystem = None #The ROV's illumination system
 
     def __init__(self, illuminationSystem:IlluminationSubsystem):
         self.__illuminationSystem = illuminationSystem
 
-    def execute(self):
+    #Executes the command
+    def execute(self) -> None:
         light = self.__illuminationSystem.getLight()
 
-        if not light.isOn():
-            return
+        #Gets the current brighness value of the light and increments it by 10%
+        brightness = light.getBrightness() + 0.1
+        print("Brightness inc: " + str(brightness))
 
-        brightness = light.getBrightness()
-
-        if(brightness < 1):
-            brightness += 0.1;
-
+        #Updates the brightness of the light
         light.setBrightness(brightness)
 
-    def isRepeatable(self):
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
         return True
 
-class LightDecreaseBrightnessCommand(Command):
-    __illuminationSystem: IlluminationSubsystem = None
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 12
+
+#The command for decreasing the ROV's light's brightness
+class DecreaseLightBrightnessCommand(Command):
+    __illuminationSystem:IlluminationSubsystem = None #The ROV's illumination system
 
     def __init__(self, illuminationSystem:IlluminationSubsystem):
         self.__illuminationSystem = illuminationSystem
 
-    def execute(self):
+    #Executes the command
+    def execute(self) -> None:
         light = self.__illuminationSystem.getLight()
 
-        if not light.isOn():
-            return
+        #Gets the current brighness value of the light and decrements it by 10%
+        brightness = light.getBrightness() - 0.1
+        print("Brightness dec: " + str(brightness))
 
-        brightness = light.getBrightness()
-
-        if(brightness > 0):
-            brightness -= 0.1;
-    
+        #Updates the brightness of the light
         light.setBrightness(brightness)
 
-    def isRepeatable(self):
+    #Whether or not the command can be repeated back to back
+    def isRepeatable(self) -> bool:
         return True
+
+    #The action code associated with this command
+    def getActionCode() -> int:
+        return 13

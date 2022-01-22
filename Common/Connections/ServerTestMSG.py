@@ -1,7 +1,7 @@
 import os
 import signal
 import socket
-import threading
+import time
 
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
@@ -46,6 +46,12 @@ def processInput():
         #Checks if the system is shutting down or is sending the shutdown message
         if status == SystemStatus.SHUT_DOWN or action == SystemStatus.SHUT_DOWN:
             break
+#Sends a message periodically
+def sendPeriodic():
+    while True:
+        message = Message(MessageType.SYSTEM_STATUS, "Something")
+        outgoingMessageChannel.broadcast(message)
+        time.sleep(1)
 
 #Handles the shutdown process
 def shutdown():
@@ -62,6 +68,7 @@ def shutdown():
     outgoingMessageChannel.broadcast(message)
 
     #Closes the connection with the client
+    subWriter.stop()
     clientConnection.shutdown(socket.SHUT_WR)
     clientConnection.close()
 
@@ -104,7 +111,8 @@ outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 #The status the system is currently in
 status = SystemStatus.RUNNING
 print("Running...")
-processInput()
+#processInput()
+sendPeriodic()
 
 #Stops listening for messages from the client
 pubListener.stop()

@@ -1,6 +1,5 @@
 import socket
 import configparser
-import time
 
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
@@ -18,23 +17,26 @@ from commands.CommandProcessor import CommandProcessor
 from commands.CommandFactory import CommandFactory
 
 from ROV import ROV
-from DataSender import DataSender
+from collectors.SensorDataCollector import SensorDataCollector
 
 #Represents the ROV program
 class ROVApp(Subscriber):
-    __config = None                             #The config data
-    __isRunning:bool = False                    #Whether or not the program is running
-    __clientConnection: SocketConnection = None #The connection to the client program
-    __pubListener: PubListener = None           #Listens for messages from the client program
-    __dataSender: DataSender = None             #Sends the sensor data to the client
-    __outgoingMessageChannel: MessageChannel    #The message channel to the client program
-    __server: SocketServer                      #The server that listens for client connection requests
+    __config = None                                  #The config data
+    __isRunning:bool = False                         #Whether or not the program is running
+    __clientConnection:SocketConnection = None       #The connection to the client program
+    __pubListener:PubListener = None                 #Listens for messages from the client program
+    __sensorDataCollector:SensorDataCollector = None #Sends the sensor data to the client
+    __outgoingMessageChannel:MessageChannel  = None  #The message channel to the client program
+    __server:SocketServer  = None                    #The server that listens for client connection requests
+    __shutdownEvent = None                           #The event the main thread waits for before shutdown
+    __commandProccessor = None                       #Processes all of the incoming commands
+    __rov:ROV = None                                 #The ROV
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
         #Reads in the configuration file
         config = configparser.ConfigParser()
-        config.read('..\config.ini')
+        config.read('../config.ini') #..\config.ini for Windows because Windows
 
         #The message channels for sending and recieving messages. Incoming can also
         #be used for sending internal messages
@@ -42,20 +44,22 @@ class ROVApp(Subscriber):
         self.__outgoingMessageChannel = MessageChannel()
 
         #The representation of the ROV and its sub systems
-        rov = ROV()
+        self.__rov = ROV(config)
 
         #Used to decode and process commands
-        commandFactory = CommandFactory(rov, self.__outgoingMessageChannel) #message channel temp for testing
-        commandProcessor = CommandProcessor(commandFactory)
+        commandFactory = CommandFactory(self.__rov)
+        self.__commandProcessor = CommandProcessor(commandFactory)
 
         #Sets up the sever to listen at the provided port
         port = int(config['Server']['Port'])
         self.__server = SocketServer('', port)
 
-        print("Waiting for client connection")
+        print("Waiting for client connection @ port #" + str(port))
 
         #Wait for the client program to connect
         self.__clientConnection = self.__server.getClientConnection()
+
+        print("Client connected!")
 
         #Reads messages from the client and rebroadcasts them internally using the
         #incoming message channel
@@ -67,12 +71,14 @@ class ROVApp(Subscriber):
         socketWriter = SocketWriter(self.__clientConnection)
         subWriter = SubWriter(socketWriter)
 
-        self.__dataSender = DataSender(self.__outgoingMessageChannel)
-        self.__dataSender.start()
+        #Retrieves and sends the sensor data to the client
+        self.__sensorDataCollector = SensorDataCollector(self.__rov.getSensorSystem(), self.__outgoingMessageChannel)
+        self.__sensorDataCollector.setSampleFrequency(1)
+        self.__sensorDataCollector.start()
 
         #Registers the command processor to listen for actions (correspond to comands)
         #and registers the ROV App to listen for system status changes
-        incomingMessageChannel.subscribe(MessageType.ACTION, commandProcessor)
+        incomingMessageChannel.subscribe(MessageType.ACTION, self.__commandProcessor)
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
         #Listens for sensor data and system status updates and sends it to the client program
@@ -81,6 +87,9 @@ class ROVApp(Subscriber):
 
         #Start listening for messages from the client program
         self.__pubListener.listen()
+
+        #The shutdown event that the main thread will wait for
+        self.__shutdownEvent = threading.Event()
 
     #Starts the ROV if it is not already running
     def start(self) -> None:
@@ -94,7 +103,11 @@ class ROVApp(Subscriber):
 
         #Put something here instead of infinite loop (wastes cpu time)
         while self.__isRunning:
-            pass
+            #Waits for the shutdown event, since the main thread isn't currently
+            #used for anything
+            self.__shutdownEvent.wait()
+
+            #Maybe send the watchdog keep alive messages here? (TODO)
 
         self.__cleanup()
 
@@ -105,8 +118,10 @@ class ROVApp(Subscriber):
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
         print("shuting down...")
-        self.__dataSender.stop()
+        self.__sensorDataCollector.stop()
         self.__server.stop()
+        self.__commandProcessor.stop()
+        self.__rov.shutdown()
 
         #Tells the client that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
@@ -126,5 +141,7 @@ class ROVApp(Subscriber):
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
-
             self.stop()
+
+            #Wakes the main thread up, so that it can proceed with shutdown
+            self.__shutdownEvent.set()

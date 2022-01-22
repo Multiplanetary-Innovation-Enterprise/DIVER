@@ -1,34 +1,21 @@
-from signals.RaspberryPiIOSignal import RaspberryPiIOSignal
+from signals.SinglePinSignal import SinglePinSignal
+from components.controllers.Controller import Controller
+from signals.PinMode import PinMode
+from signals.DigitalState import DigitalState
 
-class DigitalSignal(RaspberryPiIOSignal):
-    __internalResisorType = None
-    __pinNum:int = None
-    __mode = None
+#Represents a digital signal
+class DigitalSignal(SinglePinSignal):
+    def __init__(self, controller:Controller, pinNum:int, mode:PinMode):
+        super().__init__(controller, pinNum, mode)
 
-    def __init__(self, raspberryPi, pinNum:int, mode):
-        super().__init__(raspberryPi)
-        self.__pinNum = pinNum
-
-        self.setMode(mode)
-
+    #Sets the resistor to the logic high state
     def setHigh(self) -> None:
-        self.getRaspberryPi().write(self.__pinNum, 1)
+        self._controller.pinWrite(self.__pinNum, DigitalState.HIGH)
 
+    #Sets the resistor to the logic low state
     def setLow(self) -> None:
-        self.getRaspberryPi().write(self.__pinNum, 0)
+        self._controller.pinWrite(self.__pinNum, DigitalState.LOW)
 
+    #Gets the voltage value of the pin
     def getValue(self) -> int:
-        return self.getRaspberryPi().read(self.__pinNum)
-
-    def setInternalResistorType(self, type):
-        self.__internalResisorType = type
-        self.getRaspberryPi().set_pull_up_down(self.__pinNum, type)
-
-    def getInternalResistorType(self):
-        return self.__internalResisorType
-
-    def setMode(self, mode):
-        self.getRaspberryPi().set_mode(self.__pinNum, mode)
-
-    def getMode(self):
-        return self.__mode
+        return self._controller.pinRead(self.pinNum)

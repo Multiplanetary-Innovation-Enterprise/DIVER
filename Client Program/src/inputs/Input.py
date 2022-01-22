@@ -5,7 +5,7 @@ from ROVMessaging.Message import Message
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 
-from ROVMessaging.Action import Action
+from inputs.Action import Action
 
 #Represents the base for all input devices
 class Input(Publisher, ABC):
@@ -22,70 +22,70 @@ class Input(Publisher, ABC):
 
     #Sends the move forward action message
     def forward(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_XY_FORWARD)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_FORWARD.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the move backward action message
     def backward(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_XY_BACKWARD)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_BACKWARD.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the move right action message
     def right(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_XY_LEFT)
+        message = Message(MessageType.ACTION, Action.TURN_XY_RIGHT.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the move left action message
     def left(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_XY_RIGHT)
+        message = Message(MessageType.ACTION, Action.TURN_XY_LEFT.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the stop XY action message
     def stopXY(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_XY_STOP)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_STOP.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the move up action message
     def up(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_Z_POS)
+        message = Message(MessageType.ACTION, Action.MOVE_Z_UP.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the move down action message
     def down(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_Z_NEG)
+        message = Message(MessageType.ACTION, Action.MOVE_Z_DOWN.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the stop vertical movement action message
     def stopZ(self, event):
-        message = Message(MessageType.ACTION, Action.MOVE_Z_STOP)
+        message = Message(MessageType.ACTION, Action.MOVE_Z_STOP.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the arm thrusters action message
     def arm(self, event):
-        message = Message(MessageType.ACTION, Action.ARM)
+        message = Message(MessageType.ACTION, Action.ARM.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the increase speed action message
     def increaseSpeed(self, event):
-        message = Message(MessageType.ACTION, Action.SPEED_INCREASE)
+        message = Message(MessageType.ACTION, Action.SPEED_INCREASE.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the decrease speed action message
     def decreaseSpeed(self, event):
-        message = Message(MessageType.ACTION, Action.SPEED_DECREASE)
+        message = Message(MessageType.ACTION, Action.SPEED_DECREASE.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the toggle lights action message
     def toggleLight(self, event):
-        message = Message(MessageType.ACTION, Action.TOGGLE_LIGHTS)
+        message = Message(MessageType.ACTION, Action.TOGGLE_LIGHTS.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the increase lights brightness action message
     def increaseBrightness(self, event):
-        message = Message(MessageType.ACTION, Action.BRIGHTNESS_INCREASE)
+        message = Message(MessageType.ACTION, Action.BRIGHTNESS_INCREASE.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the decrease lights brightness action message
     def decreaseBrightness(self, event):
-        message = Message(MessageType.ACTION, Action.BRIGHTNESS_DECREASE)
+        message = Message(MessageType.ACTION, Action.BRIGHTNESS_DECREASE.value)
         self.sendMessage(message, self.__messageChannel)

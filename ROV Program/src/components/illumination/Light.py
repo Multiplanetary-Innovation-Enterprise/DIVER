@@ -1,42 +1,52 @@
 from abc import ABC, abstractmethod
 
+#Represents a generic light source
 class Light(ABC):
-    __isOn: bool = False
-    __currentBrightness: float = 0
-    __lastBrightness: float = 0.1
+    _isActive:bool = False  #Whether or not the light is currently turned on
+    _brightness:float = 0.1 #The brightness of the light when turned on
 
+    #Turns the light on to its current brightness
     def turnOn(self) -> None:
-        self.__isOn = True
-        self.setOn(True)
+        self._isActive = True
+        self._updateBrightness()
 
+    #Turns the light off
     def turnOff(self) -> None:
-        self.__isOn = False
-        self.setOn(False)
+        self._isActive = False
+        self._updateBrightness()
 
-    @abstractmethod
-    def setOn(self, on: bool) -> None:
-        pass
-
+    #Sets the brightness of the light
     def setBrightness(self, brightness:float) -> None:
-        currentBrightness = self.getBrightness()
+        self._brightness = self.__boundBrightness(brightness)
 
-        self.setLastBrightness(currentBrightness)
+        #Updates the state of the light based on the new brightness if it is currently
+        #turned on
+        if self._isActive:
+            self._updateBrightness()
 
+            #Checks if the brightness was set to zero, if so the light is off
+            if brightness <= 0:
+                self._isActive = False
+
+    #Keeps the brightness in the range [0,1]
+    def __boundBrightness(self, brightness:float) -> float:
         if brightness < 0:
             brightness = 0
         elif brightness > 1:
             brightness = 1
 
-        self.__currentBrightness = brightness
+        return brightness
 
+    #Performs the actual brightness update, since lights can have different
+    #hardware interfaces
+    @abstractmethod
+    def _updateBrightness(self) -> None:
+        pass
+
+    #Gets the brightness of the light when turned on
     def getBrightness(self) -> float:
-        return self.__currentBrightness
+        return self._brightness
 
-    def setLastBrightness(self, brightness:float) -> None:
-        self.__lastBrightness = brightness
-
-    def getLastBrightness(self) -> float:
-        return self.__lastBrightness
-
-    def isOn(self) -> bool:
-        return self.__isOn
+    #Gets the state(on/off) of the light
+    def isActive(self) -> bool:
+        return self._isActive

@@ -1,83 +1,166 @@
-from components.Thruster import Thruster
-from util.RotDirection import RotDirection
+from subsystems.Subsystem import Subsystem
+from components.controllers.Controller import Controller
+from components.rotation.Thruster import Thruster
+from components.rotation.RotDirection import RotDirection
 
-import configparser
+#Represents the subsystem for controlling propulsion
+class PropulsionSubsystem(Subsystem):
+    __leftThruster:Thruster = None     #The thruster mounted on the left side of the ROV
+    __rightThruster:Thruster = None    #The thruster mounted on the right side of the ROV
+    __topFrontThruster:Thruster = None #The thruster mounted on the top front side of the ROV
+    __topBackThruster:Thruster = None  #The thruster mounted on the top back side of the ROV
 
-class PropulsionSubsystem:
-    __speed = 0.1 #Universal speed for all thrusters
-    __activeThrusters = [];
-    __leftThruster = None
-    __rightThruster = None
-    __topThruster = None
+    def __init__(self, controller:Controller, config):
+        super().__init__(controller, config)
 
-    #Constructor for the propulsion subsystem
-    def __init__(self, pi):
-        config = configparser.ConfigParser()
-
-        config.read('config.ini')
+        #Gets the GPIO pins for the thrusters
         leftPin = int(config['Propulsion']['LeftThrusterPin'])
         rightPin = int(config['Propulsion']['RightThrusterPin'])
-        topPin = int(config['Propulsion']['TopThrusterPin'])
+        topFrontPin = int(config['Propulsion']['TopFrontThrusterPin'])
+        topBackPin = int(config['Propulsion']['TopBackThrusterPin'])
 
-        #Creates three thrusters. Two for the x-y movement and one for z movement
-        self.__leftThruster = Thruster(pi, leftPin, RotDirection.CLOCKWISE)
-        self.__rightThruster = Thruster(pi, rightPin, RotDirection.CLOCKWISE)
-        self.__topThruster = Thruster(pi, topPin, RotDirection.CLOCKWISE)
+        #Creates three thrusters. Two for the x-y movement and two for z movement
+        self.__leftThruster = Thruster(controller, leftPin, RotDirection.CLOCKWISE)
+        self.__rightThruster = Thruster(controller, rightPin, RotDirection.CLOCKWISE)
+        self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.CLOCKWISE)
+        self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.CLOCKWISE)
 
-    #Arms all of the thrusters in the chasis
+    #Arms all of the thrusters
     def arm(self) -> None:
+        print("Arming thrusters!!!!!")
         self.__leftThruster.arm()
         self.__rightThruster.arm()
-        self.__topThruster.arm()
+        self.__topFrontThruster.arm()
+        self.__topBackThruster.arm()
 
     #Sets the speed of all three thrusters independently
-    def move(self, leftSpeed:float, rightSpeed:float, verticalSpeed:float) -> None:
-        self.moveLeft(leftSpeed)
-        self.moveRight(rightSpeed)
-        self.moveVertical(topSpeed)
+    def setSpeed(self, leftSpeed:float, rightSpeed:float, frontSpeed:float, backSpeed:float) -> None:
+        self.setXYSpeed(leftSpeed, rightSpeed)
+        self.setVerticalSpeed(frontSpeed, rightSpeed)
 
-        self.updateThrusterState(self.__leftThruster, speed);
-        self.updateThrusterState(self.__rightThruster, speed);
-        self.updateThrusterState(self.__topThruster, speed);
+    #Sets all the thrusters to the same speed (python does not allow function overloading)
+    def setSpeedSame(self, speed:float) -> None:
+        self.setSpeed(speed,speed,speed,speed)
 
-    #Sets the speed for the thruster mounted on the left side of the ROV
-    def moveLeft(self, speed:float) -> None:
-        self.__leftThruster.setSpeed(speed)
-        self.updateThrusterState(self.__leftThruster, speed);
+    #Sets the speed of the thrusters mountd in the XY plane
+    def setXYSpeed(self, leftSpeed:float, rightSpeed:float) -> None:
+        self.__leftThruster.setSpeed(leftSpeed)
+        self.__rightThruster.setSpeed(rightSpeed)
 
-    #Sets the speed for the thruster mounted on the right side of the ROV
-    def moveRight(self, speed:float) -> None:
-        self.__rightThruster.setSpeed(speed)
-        self.updateThrusterState(self.__rightThruster, speed);
+    #Sets the XY thrusters to the same speed (python does not allow function overloading)
+    def setXYSpeedSame(self, speed:float) -> None:
+        self.setXYSpeed(speed, speed)
 
-    #Sets the speed for the thruster mounted on the top of the ROV
-    def moveVertical(self, speed:float) -> None:
-        self.__topThruster.setSpeed(speed)
-        self.updateThrusterState(self.__topThruster, speed);
+    #Sets the speed of the thrusters mounted vertically
+    def setVerticalSpeed(self, frontSpeed:float, backSpeed:float) -> None:
+        self.__topFrontThruster.setSpeed(frontSpeed)
+        self.__topBackThruster.setSpeed(backSpeed)
+
+    #Sets the vertical thrusters to the same speed (python does not allow function overloading)
+    def setVerticalSpeedSame(self, speed:float) -> None:
+        self.setVerticalSpeed(speed, speed)
+
+    #Gets the speeds of all the thrusters
+    def getSpeeds(self) -> list:
+        speeds = [
+            self.__leftThruster.getSpeed(),
+            self.__rightThruster.getSpeed(),
+            self.__topFrontThruster.getSpeed(),
+            self.__topBackThruster.getSpeed()
+        ]
+
+        return speeds
+
+    #Gets the speeds of the thrusters mounted in the XY plane
+    def getXYSpeeds(self) -> list:
+        speeds = [
+            self.__leftThruster.getSpeed(),
+            self.__rightThruster.getSpeed()
+        ]
+
+        return speeds
+
+    #Gets the speeds of the vertical thrusters
+    def getVerticalSpeeds(self) -> list:
+        speeds = [
+            self.__topFrontThruster.getSpeed(),
+            self.__topBackThruster.getSpeed()
+        ]
+
+        return speeds
 
     #Stops all of the thrusters
     def stop(self) -> None:
-        self.move(0, 0, 0)
+        self.setStates(False, False, False, False)
 
-    #Sets the universal speed of the chasis
-    def setSpeed(self, speed:float) -> None:
-        self.__speed = speed
+    #Sets the rotational direction for all thrusters
+    def setRotDirections(self, leftRotDir:RotDirection, rightRotDir:RotDirection, frontRotDir:RotDirection, backRotDir:RotDirection) -> None:
+        self.setRotDirectionsXY(leftRotDir, rightRotDir)
+        self.setRotDirectionsZ(frontRotDir, backRotDir)
 
-        #Update the speed of any thrusters currently running
-        self.updateActiveThrustersSpeed(self.__speed)
+    #Sets the rotational direction for the thrusters in the XY plane
+    def setXYRotDirections(self, leftRotDir:RotDirection, rightRotDir:RotDirection) -> None:
+        self.__leftThruster.setRotDirection(leftRotDir)
+        self.__rightThruster.setRotDirection(rightRotDir)
 
-    #Gets the current speed of the propulsion subsystem
-    def getSpeed(self) -> float:
-        return self.__speed
+    #Sets the rotational direction for the vertical thrusters
+    def setZRotDirections(self, frontRotDir:RotDirection, backRotDir:RotDirection) -> None:
+        self.__topFrontThruster.setRotDirection(frontRotDir)
+        self.__topBackThruster.setRotDirection(backRotDir)
 
-    #Updates the provided thruster's state based on its speed
-    def updateThrusterState(self, thruster: Thruster, speed:float) -> None:
-        if (speed > 0 or speed < 0) and thruster not in self.__activeThrusters:
-            self.__activeThrusters.append(thruster);
-        elif speed <= 0 and thruster in self.__activeThrusters:
-            self.__activeThrusters.remove(thruster);
+    #Gets the rotation directions of all the thrusters
+    def getRotDirections(self) -> list:
+        dirs = [
+            self.__leftThruster.getRotDirection(),
+            self.__rightThruster.getRotDirection(),
+            self.__topFrontThruster.getRotDirection(),
+            self.__topBackThruster.getRotDirection()
+        ]
 
-    #Updates the speeds of the thrusters that are currently running
-    def updateActiveThrustersSpeed(self, speed:float) -> None:
-        for thruster in self.__activeThrusters:
-            thruster.setSpeed(speed)
+        return dirs
+
+    #Sets the states of all the thrusters(active/not-active)
+    def setStates(self, leftActive:bool, rightActive:bool, frontActive:bool, backActive:bool) -> None:
+        self.setXYStates(leftActive, rightActive)
+        self.setZStates(frontActive, backActive)
+
+    #Sets the states of all the thrusters in the XY plane(active/not-active)
+    def setXYStates(self, leftActive:bool, rightActive:bool) -> None:
+        self.__leftThruster.setState(leftActive)
+        self.__rightThruster.setState(rightActive)
+
+    #Sets the states of the vertical thrusters(active/not-active)
+    def setZStates(self, frontActive:bool, backActive:bool) -> None:
+        self.__topFrontThruster.setState(frontActive)
+        self.__topBackThruster.setState(backActive)
+
+    #Gets the states of all the thrusters
+    def getStates(self) -> list:
+        states = [
+            self.__leftThruster.isActive(),
+            self.__rightThruster.isActive(),
+            self.__topFrontThruster.isActive(),
+            self.__topBackThruster.isActive()
+        ]
+
+        return states
+
+    #Gets the the thruster mounted on the left side of the ROV
+    def getLeftThruster(self) -> Thruster:
+        return self.__leftThruster
+
+    #Gets the the thruster mounted on the right side of the ROV
+    def getRightThruster(self) -> Thruster:
+        return self.__rightThruster
+
+    #Gets the the thruster mounted on the top front side of the ROV
+    def getTopFrontThruster(self) -> Thruster:
+        return self.__topFrontThruster
+
+    #Gets the the thruster mounted on the top back side of the ROV
+    def getTopBackThruster(self) -> Thruster:
+        return self.__topBackThruster
+
+    #Performs any clean up on system shutdown
+    def shutdown(self) -> None:
+        self.stop()

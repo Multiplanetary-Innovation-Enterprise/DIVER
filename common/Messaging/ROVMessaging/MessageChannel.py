@@ -9,9 +9,9 @@ from ROVMessaging.HashMap import HashMap
 #recieving messages
 class MessageChannel:
     #The list of subscribers mapped to their subscribed message type
-    __messageTypesToSubscribers: HashMap = None
+    __messageTypesToSubscribers:HashMap = None
     #Determines if the recieved messages will be processed in parallel or not
-    __isProcessingInParallel: bool = False
+    __isProcessingInParallel:bool = False
 
     #Creates the message type to subscribers hashmap
     def __init__(self):
