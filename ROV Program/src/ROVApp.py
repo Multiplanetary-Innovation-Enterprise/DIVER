@@ -18,6 +18,7 @@ from commands.CommandFactory import CommandFactory
 
 from ROV import ROV
 from collectors.SensorDataCollector import SensorDataCollector
+from collectors.CameraFeedCollector import CameraFeedCollector
 
 #Represents the ROV program
 class ROVApp(Subscriber):
@@ -25,12 +26,13 @@ class ROVApp(Subscriber):
     __isRunning:bool = False                         #Whether or not the program is running
     __clientConnection:SocketConnection = None       #The connection to the client program
     __pubListener:PubListener = None                 #Listens for messages from the client program
-    __sensorDataCollector:SensorDataCollector = None #Sends the sensor data to the client
     __outgoingMessageChannel:MessageChannel  = None  #The message channel to the client program
     __server:SocketServer  = None                    #The server that listens for client connection requests
     __shutdownEvent = None                           #The event the main thread waits for before shutdown
     __commandProccessor = None                       #Processes all of the incoming commands
     __rov:ROV = None                                 #The ROV
+    __sensorDataCollector:SensorDataCollector = None #Sends the sensor data to the client
+    __cameraFeedCollector:CameraFeedCollector = None #Sends the camera frames to the client
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -74,7 +76,12 @@ class ROVApp(Subscriber):
         #Retrieves and sends the sensor data to the client
         self.__sensorDataCollector = SensorDataCollector(self.__rov.getSensorSystem(), self.__outgoingMessageChannel)
         self.__sensorDataCollector.setSampleFrequency(1)
-        self.__sensorDataCollector.start()
+        #self.__sensorDataCollector.start()
+
+        #Retrieves and sends the camera frames to the client
+        self.__cameraFeedCollector = CameraFeedCollector(self.__rov.getVisionSystem(), self.__outgoingMessageChannel)
+        self.__cameraFeedCollector.setSampleFrequency(30)
+        self.__cameraFeedCollector.start()
 
         #Registers the command processor to listen for actions (correspond to comands)
         #and registers the ROV App to listen for system status changes
@@ -118,7 +125,8 @@ class ROVApp(Subscriber):
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
         print("shuting down...")
-        self.__sensorDataCollector.stop()
+        #self.__sensorDataCollector.stop()
+        self.__cameraFeedCollector.stop()
         self.__server.stop()
         self.__commandProcessor.stop()
         self.__rov.shutdown()
