@@ -50,7 +50,7 @@ class PiCamera(Camera):
 
     #Updates the FPS of the camera
     def setFPS(self, fps:int) -> None:
-        self.__camera.fps = fps
+        self.__camera.framerate  = fps
 
     #Gets the FPS of the camera
     def getFPS(self) -> int:

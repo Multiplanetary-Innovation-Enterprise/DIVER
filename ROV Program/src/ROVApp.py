@@ -88,8 +88,9 @@ class ROVApp(Subscriber):
         incomingMessageChannel.subscribe(MessageType.ACTION, self.__commandProcessor)
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
-        #Listens for sensor data and system status updates and sends it to the client program
+        #Listens for sensor data, vision data, and system status updates and sends it to the client program
         self.__outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.VISION_DATA, subWriter)
         self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
         #Start listening for messages from the client program

@@ -1,6 +1,7 @@
 import sys
 import socket
 import configparser
+from tkinter import *
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -16,15 +17,17 @@ from ROVMessaging.SystemStatus import *
 from inputs.KeyboardInput import KeyboardInput
 from loggers.DataLogger import DataLogger
 from gui.Window import Window
+from gui.ImageFrame import ImageFrame
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
-    __config = None                            #The config data
-    __serverConnection:SocketConnection = None #The connection to the ROV
-    __dataLogger:DataLogger = None             #The sensor data logger
-    __window:Window = None                     #The GUI window
-    __pubListener: PubListener = None          #Listens for messages from the ROV program
-    __isRunning:bool = False                   #Whether or not the program is running
+    __config = None                                #The config data
+    __serverConnection:SocketConnection = None     #The connection to the ROV
+    __dataLogger:DataLogger = None                 #The sensor data logger
+    __window:Window = None                         #The GUI window
+    __pubListener:PubListener = None              #Listens for messages from the ROV program
+    __isRunning:bool = False                       #Whether or not the program is running
+    __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -48,7 +51,7 @@ class ClientApp(Subscriber):
 
         #The sending and receiving message channels
         incomingMessageChannel = MessageChannel()
-        outgoingMessageChannel = MessageChannel()
+        self.__outgoingMessageChannel = MessageChannel()
 
         #Sets up ability to send messages to the ROV
         socketWriter = SocketWriter(self.__serverConnection)
@@ -59,7 +62,7 @@ class ClientApp(Subscriber):
         self.__pubListener = PubListener(socketReader, incomingMessageChannel)
 
         #The input method that utilizes a keyboard
-        keyboardInput = KeyboardInput(outgoingMessageChannel)
+        keyboardInput = KeyboardInput(self.__outgoingMessageChannel)
 
         #Start listening for messages from the ROV
         self.__pubListener.listen()
@@ -68,9 +71,17 @@ class ClientApp(Subscriber):
         self.__dataLogger = DataLogger()
         self.__dataLogger.openFile("..\logs\data\data_log");
 
+        #Setups the GUI window
+        self.__window = Window()
+        self.__window.create()
+
+        #Create a frame to show the camera feed and sets it to be the current one
+        imageFrame = ImageFrame(self.__window)
+        self.__window.switchFrame(imageFrame)
+
         #Allows the client to send action and system status messages to the ROV
-        outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
-        outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
 
         #Allows the client to recieve sensor data from the ROV
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__dataLogger)
@@ -78,9 +89,8 @@ class ClientApp(Subscriber):
         #Listens for any system status changes from either this program or the ROV
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
-        #Setups the GUI window
-        self.__window = Window(outgoingMessageChannel)
-        self.__window.create()
+        #Listens for new camera images from the ROV
+        incomingMessageChannel.subscribe(MessageType.VISION_DATA, imageFrame)
 
     #Starts the ROV client if it is not already running
     def start(self) -> None:
@@ -93,8 +103,8 @@ class ClientApp(Subscriber):
     def __run(self) -> None:
         self.__setup()
 
-        while self.__isRunning:
-            self.__window.mainloop()
+        # while self.__isRunning:
+        self.__window.mainloop()
 
         self.__cleanup()
 
@@ -107,6 +117,10 @@ class ClientApp(Subscriber):
         print("shutting down...")
         #Stops the data logger
         self.__dataLogger.close()
+
+        #Tells the server that it is shutting down
+        message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
+        self.__outgoingMessageChannel.broadcast(message)
 
         #Sends EOF to the server, so that its socket reader stops blocking
         self.__serverConnection.shutdown(socket.SHUT_WR)
