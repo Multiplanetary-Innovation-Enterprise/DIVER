@@ -12,6 +12,9 @@ class VisionSubsystem(Subsystem):
 
         self.__camera = PiCamera()
         self.__camera.setResolution(640, 480)
+        self.__camera.setFPS(60)
+
+        print(self.__camera.getResolution())
 
     #Gets the main navigational camera of the ROV
     def getCamera(self) -> Camera:

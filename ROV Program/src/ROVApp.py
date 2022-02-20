@@ -80,7 +80,7 @@ class ROVApp(Subscriber):
 
         #Retrieves and sends the camera frames to the client
         self.__cameraFeedCollector = CameraFeedCollector(self.__rov.getVisionSystem(), self.__outgoingMessageChannel)
-        self.__cameraFeedCollector.setSampleFrequency(30)
+        self.__cameraFeedCollector.setSampleFrequency(60)
         self.__cameraFeedCollector.start()
 
         #Registers the command processor to listen for actions (correspond to comands)

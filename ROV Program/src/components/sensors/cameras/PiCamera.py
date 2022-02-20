@@ -1,6 +1,6 @@
 from picamera import PiCamera as PC
 from PIL import Image
-from io import BytesIO
+import numpy as np
 
 from components.sensors.cameras.Camera import Camera
 
@@ -8,7 +8,8 @@ from components.sensors.cameras.Camera import Camera
 #It represents a Raspberry Pi camera that connects over the Camera Serial Interface(CSI)
 class PiCamera(Camera):
     __camera:PC = None      #The underylying Raspberry Pi camera
-    __stream:BytesIO = None #Holds the captured frames
+    __frameWidth:int = 0
+    __frameHeight:int = 0
 
     #Creates and configures the camera
     def _setup(self) -> None:
@@ -17,32 +18,33 @@ class PiCamera(Camera):
     #Closes the camera and releases its resources
     def _close(self) -> None:
         self.__camera.close()
-        self.__stream.close()
 
     #Gets the current frame from the camera in its native format
-    def getRawFrame(self) -> BytesIO:
-        #Creates a new byte stream to store the frame in
-        self.__stream = BytesIO()
+    def getRawFrame(self) -> np.array:
+        #Creates a numpy array to store the frame in
+        frame = np.empty((self.__frameHeight, self.__frameWidth, 3), dtype=np.uint8)
 
         #Captures a frame and stores it in the stream using the JPEG format
-        self.__camera.capture(self.__stream, format="jpeg")
+        self.__camera.capture(frame, format="rgb", use_video_port=True)
 
-        return self.__stream
+        return frame
 
     #Gets the current frame as a PIL image
     def getFrame(self) -> Image:
-        #Gets the current frame and moves to the begining of the data
+        #Gets the current frame in the raw format
         frame = self.getRawFrame()
-        frame.seek(0)
 
-        #Converts the frame from a byte stream to a PIL image
-        image = Image.open(frame)
+        #Converts the frame fram a numpy array to a PIL image
+        image = Image.fromarray(frame)
 
         return image
 
     #Updates the resolution of the camera
     def setResolution(self, width:int, height:int) -> None:
         self.__camera.resolution = (width, height)
+
+        self.__frameWidth = width
+        self.__frameHeight = height
 
     #Gets the resolution of the camera
     def getResolution(self) -> tuple:
