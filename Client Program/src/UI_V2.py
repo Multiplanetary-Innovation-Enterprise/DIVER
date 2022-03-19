@@ -1,11 +1,6 @@
-"""
-Authors: Madison Hessling
-Created: 2/3/2022
+#The program creates a user interface for the Diver ROV Client 
+#Last modified: 3/19/2022
 
-The program creates a user interface for the Diver ROV Client 
-
-Last modified: 3/19/2022
-"""
 import tkinter as tk
 from tkinter import ttk
 
