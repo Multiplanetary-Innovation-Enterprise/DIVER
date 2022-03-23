@@ -23,7 +23,7 @@ class PropulsionSubsystem(Subsystem):
         self.__leftThruster = Thruster(controller, leftPin, RotDirection.CLOCKWISE)
         self.__rightThruster = Thruster(controller, rightPin, RotDirection.CLOCKWISE)
         self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.CLOCKWISE)
-        self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.CLOCKWISE)
+        self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.COUNTER_CLOCKWISE)
 
     #Arms all of the thrusters
     def arm(self) -> None:
