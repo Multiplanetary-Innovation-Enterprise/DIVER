@@ -12,9 +12,8 @@ class UI(Tk, Window):
     #filler value for sensor data
     x = 0
 
-    """
-    Is the main method of the program. Calls other functions to create parts of the UI.
-    """
+    
+    #Main method of the program. Calls other functions to create parts of the UI.
     def start():
 
         #set size
@@ -48,9 +47,8 @@ class UI(Tk, Window):
         #runs root
         root.mainloop()
 
-    """
-    Gets data from external temperature sensor and displays it
-    """
+
+    #Gets data from external temperature sensor and displays it
     def extTemp(container):
 
         #create frame and set size
@@ -70,9 +68,8 @@ class UI(Tk, Window):
         #returns frame
         return extTempFrm
 
-    """
-    Retirieves internal temperature and displays it
-    """
+
+    #Retirieves internal temperature and displays it
     def inTemp(container):
 
         #create frame and set size
@@ -91,9 +88,7 @@ class UI(Tk, Window):
 
         return inTempFrm
 
-    """
-    Retrieves battery life from ?? and displays it
-    """
+    #Retrieves battery life from ?? and displays it
     def batteryDisplay(container):
 
         #create frame and set size
@@ -112,9 +107,8 @@ class UI(Tk, Window):
 
         return batFrm
 
-    """
-    Displays camera feed
-    """
+
+    #Displays camera feed
     def cameraFeed(container):
 
         #create frame and sset size
