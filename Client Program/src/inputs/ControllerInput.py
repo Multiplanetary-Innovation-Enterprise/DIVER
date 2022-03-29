@@ -27,51 +27,59 @@ class ControllerInput(Input):
             if event.type == pygame.QUIT: # If user clicked close.
                 done = True # Flag that we are done so we exit this loop.
 
-        #kills program if you hit the 'A' button
-        if joystick.get_button(0) == 1:
+       if pygame.joystick.get_count() == 0:
             done = True
+        else:
+            #Setup joysticks
+            joystick = pygame.joystick.Joystick(0)
+            joystick.init()
+
+            #kills program if you hit the 'A' button
+            if joystick.get_button(0) == 1:
+                done = True
+
             
-        #Setup joysticks
-        joystick = pygame.joystick.Joystick(0)
-        joystick.init()
+            #Setup joysticks
+            joystick = pygame.joystick.Joystick(0)
+            joystick.init()
         
-        #bottom right joystick controls forward and backward
-        if joystick.get_axis(3) > .5:
-            self.backward;
-            self.stopXY;
+            #bottom right joystick controls forward and backward
+            if joystick.get_axis(3) > .5:
+                self.backward;
+                self.stopXY;
 
-        if joystick.get_axis(3) < -.5:
-            self.forward;
-            self.stopXY;
+            if joystick.get_axis(3) < -.5:
+                self.forward;
+                self.stopXY;
 
-        #The upper left joystick controls the Z-axis
-        if joystick.get_axis(1) > .5:
-            self.down;
-            self.stopZ;
+            #The upper left joystick controls the Z-axis
+            if joystick.get_axis(1) > .5:
+                self.down;
+                self.stopZ;
 
-        if joystick.get_axis(1) < -.5:
-            self.up;
-            self.stopZ;
+            if joystick.get_axis(1) < -.5:
+                self.up;
+                self.stopZ;
 
-        #either joystick can move the vechile left and right
-        if joystick.get_axis(0) > .5:
-            self.right;
-            self.stopXY;
+            #either joystick can move the vechile left and right
+            if joystick.get_axis(0) > .5:
+                self.right;
+                self.stopXY;
 
-        if joystick.get_axis(0) < -.5:
-            self.left;
-            self.stopXY;
+            if joystick.get_axis(0) < -.5:
+                self.left;
+                self.stopXY;
 
-        if joystick.get_axis(2) > .5:
-             self.right;
-             self.stopXY;
+            if joystick.get_axis(2) > .5:
+                 self.right;
+                self.stopXY;
 
-        if joystick.get_axis(2) < -.5:
-            self.left;
-            self.stopXY;
+            if joystick.get_axis(2) < -.5:
+                self.left;
+                self.stopXY;
 
-        #controls how fast the controller gives input
-        clock.tick(5)
+           #controls how fast the controller gives input
+           clock.tick(5);
         
     # Close the window and quit.
     pygame.quit()
