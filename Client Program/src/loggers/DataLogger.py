@@ -12,6 +12,7 @@ class DataLogger(CSVLogger):
         header = [
             "time",
             "temperature",
+           # "externaltemp", #added 3/28/22
             'accel_x',
             'accel_y',
             'accel_z',
@@ -45,6 +46,8 @@ class DataLogger(CSVLogger):
         #temperature data
         temp = message.getContents()['internalTemp']
 
+      #  externaltemp = message.getContents()['externalTemp'] #added 3/28/22
+
         #IMU data
         acc = message.getContents()['acc']
         magnetic = message.getContents()['magentic']
@@ -58,6 +61,7 @@ class DataLogger(CSVLogger):
         self._writer.writerow([
             time,
             temp,
+         #   externaltemp, #added 3/28/22
             round(acc[0], 4),
             round(acc[1], 4),
             round(acc[2], 4),
