@@ -83,4 +83,3 @@ class ControllerInput(Input):
         
     # Close the window and quit.
     pygame.quit()
-

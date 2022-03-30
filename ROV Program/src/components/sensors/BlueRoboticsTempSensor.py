@@ -35,3 +35,4 @@ class BlueRoboticsTempSensor:
         #Returns the current temperature value in fahrenheit
     def _getTemperatureK(self):
         return self.__sensor.temperature()+273.15
+)+273.15
