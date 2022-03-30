@@ -20,8 +20,8 @@ class PropulsionSubsystem(Subsystem):
         topBackPin = int(config['Propulsion']['TopBackThrusterPin'])
 
         #Creates three thrusters. Two for the x-y movement and two for z movement
-        self.__leftThruster = Thruster(controller, leftPin, RotDirection.CLOCKWISE)
-        self.__rightThruster = Thruster(controller, rightPin, RotDirection.CLOCKWISE)
+        self.__leftThruster = Thruster(controller, leftPin, RotDirection.COUNTER_CLOCKWISE)
+        self.__rightThruster = Thruster(controller, rightPin, RotDirection.COUNTER_CLOCKWISE)
         self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.CLOCKWISE)
         self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.COUNTER_CLOCKWISE)
 
