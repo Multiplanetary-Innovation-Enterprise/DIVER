@@ -2,14 +2,14 @@ from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 
 from collectors.DataCollector import DataCollector
-from subsystems.Subsystem import Subsystem
+from subsystems.SensorSubsystem import SensorSubsystem
 
 #Represents a periodic sensor data collector that sends the data through the
 #provided message channel
 class SensorDataCollector(DataCollector):
-    __subsystem:Subsystem = None #The rov itself that the sensors belong to
+    __subsystem:SensorSubsystem = None #The subsystem that the sensors belong to
 
-    def __init__(self, subsystem:Subsystem, messageChannel:MessageChannel):
+    def __init__(self, subsystem:SensorSubsystem, messageChannel:MessageChannel):
         #Configures the data sender
         super().__init__(messageChannel, MessageType.SENSOR_DATA)
 
@@ -28,5 +28,5 @@ class SensorDataCollector(DataCollector):
 
         #Appends the IMU data to the rest of the sensor data
         sensorData.update(imu.getSensorData().toDict())
-        
+
         return sensorData

@@ -10,7 +10,10 @@ class DS18B20TempSensor(TempSensor):
     def __init__(self, tempUnit:TempUnit = TempUnit.F):
         super().__init__(tempUnit)
 
-        self.__sensor = W1ThermSensor()
+        try:
+            self.__sensor = W1ThermSensor()
+        except:
+            print("Failed to detect thermal sensor")
 
     #Gets the temperature in degrees celcius
     def _getTemperatureC(self) -> float:

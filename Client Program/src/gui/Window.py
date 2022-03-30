@@ -1,37 +1,30 @@
 from tkinter import Tk
-
-from ROVMessaging.Publisher import Publisher
-from ROVMessaging.MessageChannel import *
-from ROVMessaging.MessageType import *
-from ROVMessaging.Message import *
-from ROVMessaging.SystemStatus import *
+from gui.Frame import Frame
 
 #Represents the window the houses all GUI frames
-class Window(Tk,Publisher):
-    #The message channel to send GUI events through
-    __messageChannel:MessageChannel = None
-
-    def __init__(self, messageChannel:MessageChannel):
-        super().__init__()
-        self.__messageChannel = messageChannel
+class Window(Tk):
+    __frame:Frame = None #The current frame that is being displayed
 
     #Creates the window and configures it
     def create(self) -> None:
         self.geometry("1000x500")
         self.title("ROV Client")
+        self.configure(background="#F5F5F5")
 
-        #Registers the window close handler
-        self.protocol("WM_DELETE_WINDOW", self.onClose)
+        #Makes the window a 1x1 grid
+        self.grid_columnconfigure(0, weight="1")
+        self.grid_rowconfigure(0, weight="1")
 
-    #The on close window handler that handles shutdown
-    def onClose(self) -> None:
-        #Sends the shutdown message
-        message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
-        self.sendMessage(message, self.__messageChannel)
+    #Updates the currently shown frame to the provided frame
+    def switchFrame(self, frame:Frame) -> None:
+        if not self.__frame == None:
+            #Removes the old frame
+            self.__frame.destroy()
 
-        #Destroys the window
-        self.destroy()
+        #Replaces and shows the new frame
+        self.__frame = frame
+        self.__frame.show()
 
-    #Sends the provided message on the provided message channel
-    def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
-        messageChannel.broadcast(message)
+    #Gets the currently displayed frame
+    def getCurrentFrame(self) -> Frame:
+        return self.__frame
