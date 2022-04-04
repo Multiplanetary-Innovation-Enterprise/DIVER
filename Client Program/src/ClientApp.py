@@ -15,6 +15,7 @@ from ROVMessaging.Subscriber import *
 from ROVMessaging.SystemStatus import *
 
 from inputs.KeyboardInput import KeyboardInput
+from inputs.ControllerInput import ControllerInput
 from loggers.DataLogger import DataLogger
 from gui.Window import Window
 from gui.ImageFrame import ImageFrame
@@ -25,9 +26,10 @@ class ClientApp(Subscriber):
     __serverConnection:SocketConnection = None     #The connection to the ROV
     __dataLogger:DataLogger = None                 #The sensor data logger
     __window:Window = None                         #The GUI window
-    __pubListener:PubListener = None              #Listens for messages from the ROV program
+    __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
     __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
+    __controllerInput::ControllerInput = None      #The xbox controller
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -63,6 +65,10 @@ class ClientApp(Subscriber):
 
         #The input method that utilizes a keyboard
         keyboardInput = KeyboardInput(self.__outgoingMessageChannel)
+
+        #Sets up the xbox controller
+        self.__controllerInput = ControllerInput(self.__outgoingMessageChannel)
+        self.__controllerInput.listen()
 
         #Start listening for messages from the ROV
         self.__pubListener.listen()
@@ -121,6 +127,9 @@ class ClientApp(Subscriber):
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)
+
+        #Stops the xbox controller listener thread
+        self.__controllerInput.stop()
 
         #Sends EOF to the server, so that its socket reader stops blocking
         self.__serverConnection.shutdown(socket.SHUT_WR)
