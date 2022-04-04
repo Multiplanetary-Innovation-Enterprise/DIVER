@@ -29,7 +29,7 @@ class ClientApp(Subscriber):
     __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
     __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
-    __controllerInput::ControllerInput = None      #The xbox controller
+    __controllerInput:ControllerInput = None      #The xbox controller
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -121,15 +121,19 @@ class ClientApp(Subscriber):
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
         print("shutting down...")
+
+        #Stops the xbox controller listener thread
+        self.__controllerInput.stop()
+
         #Stops the data logger
         self.__dataLogger.close()
+
+        print("send shutdown mssage")
+
 
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)
-
-        #Stops the xbox controller listener thread
-        self.__controllerInput.stop()
 
         #Sends EOF to the server, so that its socket reader stops blocking
         self.__serverConnection.shutdown(socket.SHUT_WR)

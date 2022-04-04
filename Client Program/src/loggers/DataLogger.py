@@ -40,7 +40,8 @@ class DataLogger(CSVLogger):
         self._writer.writerow(header)
 
     def recieveMessage(self, message:Message) -> None:
-
+        print("data")
+        print(message.getContents())
         time = message.getContents()['time']
 
         #temperature data

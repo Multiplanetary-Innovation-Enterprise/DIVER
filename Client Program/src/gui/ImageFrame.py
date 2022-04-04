@@ -47,7 +47,7 @@ class ImageFrame(Frame, Subscriber):
         #Gets the camera frame from the message
         frame = message.getContents()["camera"];
 
-        self.setImage(frame)
+        # self.setImage(frame)
 
     #Updates the image shown by the frame
     def setImage(self,image:Image) -> None:

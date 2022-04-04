@@ -26,6 +26,8 @@ class SensorDataCollector(DataCollector):
             'internalTemp': tempSensor.getTemperature(),
         }
 
+        print("temp: " + str(tempSensor.getTemperature()))
+
         #Appends the IMU data to the rest of the sensor data
         sensorData.update(imu.getSensorData().toDict())
 
