@@ -16,7 +16,7 @@ class SocketServer(Server):
         #Configures the socket to listen for client connection requests using a
         #TCP socket at the provided host name and port
         self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.__socket.setsockopt(socket.SOL_SOCKET, socket. SO_REUSEADDR, 1)
+        self.__socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.__socket.bind((host, port))
         self.__socket.listen()
 

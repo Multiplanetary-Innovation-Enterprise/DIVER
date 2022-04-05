@@ -4,11 +4,15 @@ from ROVMessaging.MessageType import MessageType
 from collectors.DataCollector import DataCollector
 from subsystems.VisionSubsystem import VisionSubsystem
 
+import time
+
 #Represents a periodic camera feed collector that sends the frames through
 #provided message channel
 class CameraFeedCollector(DataCollector):
     __subsystem:VisionSubsystem = None #The subsystem that the camera belongs to
-
+    lastTime = 0
+    currTime = 0
+    
     def __init__(self, subsystem:VisionSubsystem, messageChannel:MessageChannel):
         #Configures the data sender
         super().__init__(messageChannel, MessageType.VISION_DATA)
@@ -24,5 +28,11 @@ class CameraFeedCollector(DataCollector):
         visionData = {
             'camera': camera.getFrame()
         }
+
+        self.lastTime = self.currTime
+        self.currTime = time.time_ns()
+
+        print("Elapsed: " + str((self.currTime - self.lastTime) / 1000000000))
+
 
         return visionData

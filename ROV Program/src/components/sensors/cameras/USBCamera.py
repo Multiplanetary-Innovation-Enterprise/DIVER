@@ -29,7 +29,11 @@ class USBCamera(Camera):
 
         #Checks if a frame was successfully retrieved
         if not ret:
+            print("Not Frame")
             frame = None
+        else:
+            #Convert the frame to the RGB format
+            frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
 
         return frame
 
@@ -38,9 +42,8 @@ class USBCamera(Camera):
         frame = self.getRawFrame()
 
         #Checks if a frame was successfully retrieved
-        if frame == None:
+        if not np.any(frame):
             return None
-
         #Converts the frame from a numpy array to an PIL image
         image = Image.fromarray(frame)
 

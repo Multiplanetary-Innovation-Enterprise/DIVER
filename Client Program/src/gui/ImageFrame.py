@@ -38,8 +38,6 @@ class ImageFrame(Frame, Subscriber):
         self.grid_forget()
 
     def recieveMessage(self, message:Message) -> None:
-        print("Message")
-
         #Checks if the message is new camera frame to display
         if not message.getType() == MessageType.VISION_DATA:
             return
@@ -47,7 +45,7 @@ class ImageFrame(Frame, Subscriber):
         #Gets the camera frame from the message
         frame = message.getContents()["camera"];
 
-        # self.setImage(frame)
+        self.setImage(frame)
 
     #Updates the image shown by the frame
     def setImage(self,image:Image) -> None:
@@ -60,4 +58,6 @@ class ImageFrame(Frame, Subscriber):
         self.lastTime = self.currTime
         self.currTime = time.time_ns()
 
-        print("Elapsed: " + str((self.currTime - self.lastTime) / 1000000000))
+        elapsed = (self.currTime - self.lastTime) / 1000000000
+
+        print("Elapsed: " + str(elapsed) + " or " + str(round(1 / elapsed, 2)) + " FPS")

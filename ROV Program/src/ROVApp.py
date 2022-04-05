@@ -76,7 +76,7 @@ class ROVApp(Subscriber):
         #Retrieves and sends the sensor data to the client
         self.__sensorDataCollector = SensorDataCollector(self.__rov.getSensorSystem(), self.__outgoingMessageChannel)
         self.__sensorDataCollector.setSampleFrequency(1)
-        self.__sensorDataCollector.start()
+        # self.__sensorDataCollector.start()
 
         #Retrieves and sends the camera frames to the client
         self.__cameraFeedCollector = CameraFeedCollector(self.__rov.getVisionSystem(), self.__outgoingMessageChannel)
