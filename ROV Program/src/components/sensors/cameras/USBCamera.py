@@ -19,6 +19,13 @@ class USBCamera(Camera):
     def _setup(self) -> None:
         self.__camera = cv.VideoCapture(self.__id)
 
+        #Checks if the camera was detected
+        if not self.__camera.isOpened():
+            print("Failed to detect camera @ port " + str(self.__id))
+            self._isConnected = False
+        else:
+            self._isConnected = True
+
     #The implementation specific closing process
     def _close(self) -> None:
         self.__camera.release()
@@ -29,7 +36,6 @@ class USBCamera(Camera):
 
         #Checks if a frame was successfully retrieved
         if not ret:
-            print("Not Frame")
             frame = None
         else:
             #Convert the frame to the RGB format
@@ -44,6 +50,7 @@ class USBCamera(Camera):
         #Checks if a frame was successfully retrieved
         if not np.any(frame):
             return None
+
         #Converts the frame from a numpy array to an PIL image
         image = Image.fromarray(frame)
 

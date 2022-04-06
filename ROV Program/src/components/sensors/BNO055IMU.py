@@ -16,12 +16,20 @@ class BNO055IMU(IMU):
 
         i2c = board.I2C()
 
+        #Attempts to connect to the IMU sensor
         try:
             self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
+            self._isConnected = True
         except:
             print("Failed to detect the IMU sensor")
+            self._isConnected = False
+
     #Gets all of the data from the IMU sensor
     def getSensorData(self) -> IMUData:
+        #Skips data collection if the sensor is not connected
+        if not self._isConnected:
+            return None
+
         #All of the IMU data
         data = {
             "acc": self.__sensor.acceleration,

@@ -21,14 +21,16 @@ class SensorDataCollector(DataCollector):
         tempSensor = self.__subsystem.getInternalTempSensor()
         imu = self.__subsystem.getIMU()
 
-        #Formats the sensor data as key-value pairs
-        sensorData = {
-            'internalTemp': tempSensor.getTemperature(),
-        }
+        #The collected sensor data
+        sensorData = {}
 
-        print("temp: " + str(tempSensor.getTemperature()))
+        #Checks if the temperature sensor is connected
+        if tempSensor.isConnected():
+            sensorData["internalTemp"] = tempSensor.getTemperature()
 
-        #Appends the IMU data to the rest of the sensor data
-        sensorData.update(imu.getSensorData().toDict())
+        #Checks if the imu sensor is connected
+        if imu.isConnected():
+            #Appends the IMU data to the rest of the sensor data
+            sensorData.update(imu.getSensorData().toDict())
 
         return sensorData

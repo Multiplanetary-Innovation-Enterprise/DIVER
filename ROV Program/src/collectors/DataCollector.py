@@ -41,6 +41,11 @@ class DataCollector(Publisher, ABC):
             #Get the data
             data = self.getData()
 
+            #Checks if no data was retrieved
+            if not data:
+                #Nothing was collectd, so something went wrong. Stop data collection
+                self.stop()
+
             #The amount of elapsed time since the data collection was started
             elapsedTime = round((time.time_ns() - startTime) / 1000000000, 2)
 

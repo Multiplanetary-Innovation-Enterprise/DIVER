@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 
 from components.sensors.TempUnit import TempUnit
+from components.sensors.Sensor import Sensor
 
 #Represents a generic temperature sensor
-class TempSensor(ABC):
+class TempSensor(Sensor, ABC):
     __tempUnit:TempUnit = None #The units used to measure the temperature
 
     def __init__(self, tempUnit:TempUnit = TempUnit.F):

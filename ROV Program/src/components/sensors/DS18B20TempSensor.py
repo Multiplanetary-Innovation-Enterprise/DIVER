@@ -10,10 +10,22 @@ class DS18B20TempSensor(TempSensor):
     def __init__(self, tempUnit:TempUnit = TempUnit.F):
         super().__init__(tempUnit)
 
+        #Attempts to connect to the IMU sensor
         try:
             self.__sensor = W1ThermSensor()
+            self._isConnected = True
         except:
             print("Failed to detect thermal sensor")
+            self._isConnected = False
+
+    #Gets the temperature reading
+    def getTemperature(self) -> float:
+        #Checks if the sensor is connected
+        if self._isConnected:
+            #Sensor is connected, proceeds as normal
+            super().getTemperature()
+        else:
+            return None
 
     #Gets the temperature in degrees celcius
     def _getTemperatureC(self) -> float:

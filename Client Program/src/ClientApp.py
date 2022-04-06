@@ -130,7 +130,6 @@ class ClientApp(Subscriber):
 
         print("send shutdown mssage")
 
-
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)

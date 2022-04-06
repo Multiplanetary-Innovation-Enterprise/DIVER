@@ -12,7 +12,7 @@ class CameraFeedCollector(DataCollector):
     __subsystem:VisionSubsystem = None #The subsystem that the camera belongs to
     lastTime = 0
     currTime = 0
-    
+
     def __init__(self, subsystem:VisionSubsystem, messageChannel:MessageChannel):
         #Configures the data sender
         super().__init__(messageChannel, MessageType.VISION_DATA)
@@ -24,15 +24,16 @@ class CameraFeedCollector(DataCollector):
         #Gets the camera from the subsystem
         camera = self.__subsystem.getCamera()
 
-        #Formats the vision data as key-value pairs
-        visionData = {
-            'camera': camera.getFrame()
-        }
+        #The collected vision data
+        visionData = {}
+
+        #Gets the camera data if it is connectd
+        if camera.isConnected():
+            visionData["camera"] =  camera.getFrame()
 
         self.lastTime = self.currTime
         self.currTime = time.time_ns()
 
-        print("Elapsed: " + str((self.currTime - self.lastTime) / 1000000000))
-
+        # print("Elapsed: " + str((self.currTime - self.lastTime) / 1000000000))
 
         return visionData
