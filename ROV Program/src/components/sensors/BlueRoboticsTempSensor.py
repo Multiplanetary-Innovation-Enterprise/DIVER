@@ -9,18 +9,27 @@ from tsys01 import TSYS01
 
 class BlueRoboticsTempSensor:
     __sensor = None
+    isConnected = None
 
 
 
     def __init__(self):
-        self.__sensor = TSYS01() # Use default I2C bus 1
+       # self.__sensor = TSYS01() # Use default I2C bus 1
         #self.__sensor.init()
-        if not self.__sensor.init():
-           print("Error initializing sensor")
-           exit(1)
-
+       # if not self.__sensor.init():
+        #   print("Error initializing sensor")
+         #  exit(1
+        try:
+           self.__sensor = TSYS01()
+           self.__sensor.init()
+           self.isConnected = True
+        except:
+           print("Failed to detect BR Temp Sensor")
+           self.isConnected = False
+    
 #Read the sensor and update the temperature value
     def _read(self):
+ 
         return self.__sensor.read()
     
 #Returns the current temperature value in celsius
@@ -35,4 +44,3 @@ class BlueRoboticsTempSensor:
         #Returns the current temperature value in fahrenheit
     def _getTemperatureK(self):
         return self.__sensor.temperature()+273.15
-)+273.15

@@ -12,7 +12,7 @@ class DataLogger(CSVLogger):
         header = [
             "time",
             "temperature",
-           # "externaltemp", #added 3/28/22
+            "externaltemp", #added 3/28/22
             'accel_x',
             'accel_y',
             'accel_z',
@@ -45,44 +45,45 @@ class DataLogger(CSVLogger):
         time = message.getContents()['time']
 
         #temperature data
-        temp = message.getContents()['internalTemp']
+        #temp = message.getContents()['internalTemp']
 
-      #  externaltemp = message.getContents()['externalTemp'] #added 3/28/22
+        externaltemp = message.getContents()['externalTemp'] #added 3/28/22
 
         #IMU data
-        acc = message.getContents()['acc']
-        magnetic = message.getContents()['magentic']
-        angV = message.getContents()['angularVelocity']
-        linAcc = message.getContents()['linAcc']
-        gravAcc = message.getContents()['gravAcc']
-        euler = message.getContents()['euler']
-        quaternion = message.getContents()['quaternion']
+        #TEMPORARILY commented out
+        #acc = message.getContents()['acc']
+        #magnetic = message.getContents()['magentic']
+       # angV = message.getContents()['angularVelocity']
+        #linAcc = message.getContents()['linAcc']
+       # gravAcc = message.getContents()['gravAcc']
+        #euler = message.getContents()['euler']
+        #quaternion = message.getContents()['quaternion']
 
         #writes the entry to the csv file
         self._writer.writerow([
             time,
-            temp,
-         #   externaltemp, #added 3/28/22
-            round(acc[0], 4),
-            round(acc[1], 4),
-            round(acc[2], 4),
-            round(magnetic[0], 4),
-            round(magnetic[1], 4),
-            round(magnetic[2], 4),
-            round(angV[0], 4),
-            round(angV[1], 4),
-            round(angV[2], 4),
-            round(linAcc[0], 4),
-            round(linAcc[1], 4),
-            round(linAcc[2], 4),
-            round(gravAcc[0], 4),
-            round(gravAcc[1], 4),
-            round(gravAcc[2], 4),
-            round(euler[0], 4),
-            round(euler[1], 4),
-            round(euler[2], 4),
-            round(quaternion[0], 4),
-            round(quaternion[1], 4),
-            round(quaternion[2], 4),
-            round(quaternion[3], 4)
+           # temp,
+            externaltemp, #added 3/28/22
+            #round(acc[0], 4),
+            #round(acc[1], 4),
+            #round(acc[2], 4),
+            #round(magnetic[0], 4),
+           # round(magnetic[1], 4),
+            #round(magnetic[2], 4),
+           # round(angV[0], 4),
+            #round(angV[1], 4),
+            #round(angV[2], 4),
+           # round(linAcc[0], 4),
+           # round(linAcc[1], 4),
+            #round(linAcc[2], 4),
+            #round(gravAcc[0], 4),
+           # round(gravAcc[1], 4),
+            #round(gravAcc[2], 4),
+            #round(euler[0], 4),
+            #round(euler[1], 4),
+           # round(euler[2], 4),
+           # round(quaternion[0], 4),
+           # round(quaternion[1], 4),
+            #round(quaternion[2], 4),
+           # round(quaternion[3], 4)
         ])
