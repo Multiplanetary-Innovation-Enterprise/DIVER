@@ -11,8 +11,9 @@ class DataLogger(CSVLogger):
         #Adds the header to the csv file
         header = [
             "time",
-            "temperature",
+           # "temperature",
             "externaltemp", #added 3/28/22
+            "pressure", #added 4/8/22
             'accel_x',
             'accel_y',
             'accel_z',
@@ -48,6 +49,8 @@ class DataLogger(CSVLogger):
         #temp = message.getContents()['internalTemp']
 
         externaltemp = message.getContents()['externalTemp'] #added 3/28/22
+        pressure = message.getContents()['pressure'] #added 4/8/22
+
 
         #IMU data
         #TEMPORARILY commented out
@@ -64,6 +67,7 @@ class DataLogger(CSVLogger):
             time,
            # temp,
             externaltemp, #added 3/28/22
+            pressure, #added 4/8/22
             #round(acc[0], 4),
             #round(acc[1], 4),
             #round(acc[2], 4),
