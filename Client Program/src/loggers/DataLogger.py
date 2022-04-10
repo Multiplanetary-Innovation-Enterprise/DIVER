@@ -16,7 +16,7 @@ class DataLogger(CSVLogger):
         #     "time",
         #     "temperature",
         #    # "externaltemp", #added 3/28/22
-        #     "pressure"
+        #     "pressure",
         #     'accel_x',
         #     'accel_y',
         #     'accel_z',
