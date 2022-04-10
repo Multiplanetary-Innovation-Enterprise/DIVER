@@ -1,7 +1,6 @@
 from subsystems.Subsystem import Subsystem
 from components.controllers.Controller import Controller
 from components.sensors.cameras.Camera import Camera
-from components.sensors.cameras.PiCamera import PiCamera
 from components.sensors.cameras.USBCamera import USBCamera
 
 #Represents the subsystem responsible for computer vision
@@ -11,10 +10,6 @@ class VisionSubsystem(Subsystem):
     def __init__(self, controller:Controller, config):
         super().__init__(controller, config)
 
-        # self.__camera = PiCamera()
-        # self.__camera.setResolution(640, 480)
-        # self.__camera.setFPS(60)
-        #
         self.__camera = USBCamera(0)
         self.__camera.setResolution(640, 480)
         self.__camera.setFPS(60)
