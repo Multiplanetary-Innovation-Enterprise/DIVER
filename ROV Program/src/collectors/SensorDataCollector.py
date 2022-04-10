@@ -21,7 +21,7 @@ class SensorDataCollector(DataCollector):
         tempSensor = self.__subsystem.getInternalTempSensor()
         imu = self.__subsystem.getIMU()
         exTempSensor = self.__subsystem.getExternalTempSensor() #added 4/6/22
-        pressureSensor = self.__subsystem.getPressureSensor() # added 4/8/22
+        pressureSensor = self.__subsystem.getPressureSensor()             # added 4/8/22
 
         #The collected sensor data
         sensorData = {}
@@ -35,11 +35,12 @@ class SensorDataCollector(DataCollector):
             #Appends the IMU data to the rest of the sensor data
             sensorData.update(imu.getSensorData().toDict())
 
-        if exTempSensor.isConnected:
-            exTempSensor._read() #added 4/6/22
-            sensorData["externalTemp"] = exTempSensor._getTemperatureC() #added 4/6/22
-        
-        if pressureSensor.isConnected:
+        #Checks if the external temperature sensor is connected
+        if exTempSensor.isConnected():
+            sensorData["externalTemp"] = exTempSensor.getTemperature() #added 4/6/22
+
+        #Checks if the external pressure sensor is connected
+        if pressureSensor.isConnected():
             pressureSensor._read()  #added 4/8/22
             sensorData["pressure"]=pressureSensor._getPressure()
 

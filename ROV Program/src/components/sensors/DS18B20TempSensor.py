@@ -15,7 +15,7 @@ class DS18B20TempSensor(TempSensor):
             self.__sensor = W1ThermSensor()
             self._isConnected = True
         except:
-            print("Failed to detect thermal sensor")
+            print("Failed to detect the internal thermal sensor")
             self._isConnected = False
 
     #Gets the temperature reading
