@@ -29,7 +29,7 @@ class ClientApp(Subscriber):
     __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
     __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
-    __controllerInput:ControllerInput = None      #The xbox controller
+    __controllerInput:ControllerInput = None       #The xbox controller
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:

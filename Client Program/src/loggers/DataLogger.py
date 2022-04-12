@@ -12,9 +12,6 @@ class DataLogger(CSVLogger):
         sensorData = message.getContents()
         data = []
 
-        print("DATA")
-        print(sensorData)
-
         #Creates the header if it has not already been created
         if not self.__isHeaderCreated:
             #Gets all of the keys from the dict that label the sensor data

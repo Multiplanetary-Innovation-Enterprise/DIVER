@@ -33,7 +33,11 @@ class MoveForwardCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("Forwards")
-        self.__propSystem.setXYRotDirections(RotDirection.CLOCKWISE, RotDirection.CLOCKWISE)
+
+        #Sets both thruster speeds push forwards
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeeds(abs(speeds[0]), abs(speeds[1]))
+
         self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
@@ -54,7 +58,11 @@ class MoveBackwardCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("Backwards")
-        self.__propSystem.setXYRotDirections(RotDirection.COUNTER_CLOCKWISE, RotDirection.COUNTER_CLOCKWISE)
+
+        #Sets both thruster speeds push backwards
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeeds(-abs(speeds[0]), -abs(speeds[1]))
+
         self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
@@ -75,7 +83,11 @@ class TurnLeftCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("Turn Left")
-        self.__propSystem.setXYRotDirections(RotDirection.COUNTER_CLOCKWISE, RotDirection.CLOCKWISE)
+
+        #Sets the left thruster speed to pull and the right thruster speed to push
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeeds(-abs(speeds[0]), abs(speeds[1]))
+
         self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
@@ -96,7 +108,11 @@ class TurnRightCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("Turn Right")
-        self.__propSystem.setXYRotDirections(RotDirection.CLOCKWISE, RotDirection.COUNTER_CLOCKWISE)
+
+        #Sets the left thruster speed to push and the right thruster speed to pull
+        speeds = self.__propSystem.getXYSpeeds()
+        self.__propSystem.setXYSpeeds(abs(speeds[0]), -abs(speeds[1]))
+
         self.__propSystem.setXYStates(True, True)
 
     #Whether or not the command can be repeated back to back
@@ -138,7 +154,11 @@ class MoveUpCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("Move Up")
-        self.__propSystem.setZRotDirections(RotDirection.CLOCKWISE, RotDirection.CLOCKWISE)
+
+        #Sets both vertical thruster speeds to pull upward
+        speeds = self.__propSystem.getVerticalSpeeds()
+        self.__propSystem.setVerticalSpeeds(abs(speeds[0]), abs(speeds[1]))
+
         self.__propSystem.setZStates(True, True)
 
     #Whether or not the command can be repeated back to back
@@ -159,7 +179,11 @@ class MoveDownCommand(Command):
     #Executes the command
     def execute(self) -> None:
         print("Move Down")
-        self.__propSystem.setZRotDirections(RotDirection.COUNTER_CLOCKWISE, RotDirection.COUNTER_CLOCKWISE)
+
+        #Sets both vertical thruster speeds to push downward
+        speeds = self.__propSystem.getVerticalSpeeds()
+        self.__propSystem.setVerticalSpeeds(-abs(speeds[0]), -abs(speeds[1]))
+
         self.__propSystem.setZStates(True, True)
 
     #Whether or not the command can be repeated back to back
