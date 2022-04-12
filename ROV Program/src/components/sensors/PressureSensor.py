@@ -8,7 +8,6 @@ from components.sensors.Sensor import Sensor
 
 class PressureSensor(Sensor):
     __sensor = None
-    isConnected = None
 
     def __init__(self):
         try:

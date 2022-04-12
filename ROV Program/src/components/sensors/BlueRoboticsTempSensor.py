@@ -4,12 +4,15 @@ sys.path.insert(0, r"pi\home\tsys01-python-master\tsys01")
 sys.path.insert(0, r"pi\home\tsys01-python-master")
 from tsys01 import TSYS01
 
-from components.sensor.TempSensor impot TempSensor
+from components.sensors.TempUnit import TempUnit
+
+from components.sensors.TempSensor import TempSensor
 
 class BlueRoboticsTempSensor(TempSensor):
     __sensor:TSYS01 = None #The temperature sensor
 
-    def __init__(self):
+    def __init__(self, tempUnit:TempUnit = TempUnit.F):
+        super().__init__(tempUnit)
        # self.__sensor = TSYS01() # Use default I2C bus 1
         #self.__sensor.init()
        # if not self.__sensor.init():
