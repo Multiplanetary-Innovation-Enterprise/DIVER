@@ -36,7 +36,7 @@ class MoveForwardCommand(Command):
 
         #Sets both thruster speeds push forwards
         speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeeds(abs(speeds[0]), abs(speeds[1]))
+        self.__propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]))
 
         self.__propSystem.setXYStates(True, True)
 
@@ -61,7 +61,7 @@ class MoveBackwardCommand(Command):
 
         #Sets both thruster speeds push backwards
         speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeeds(-abs(speeds[0]), -abs(speeds[1]))
+        self.__propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]))
 
         self.__propSystem.setXYStates(True, True)
 
@@ -86,7 +86,7 @@ class TurnLeftCommand(Command):
 
         #Sets the left thruster speed to pull and the right thruster speed to push
         speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeeds(-abs(speeds[0]), abs(speeds[1]))
+        self.__propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]))
 
         self.__propSystem.setXYStates(True, True)
 
@@ -111,7 +111,7 @@ class TurnRightCommand(Command):
 
         #Sets the left thruster speed to push and the right thruster speed to pull
         speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeeds(abs(speeds[0]), -abs(speeds[1]))
+        self.__propSystem.setXYSpeed(abs(speeds[0]), -abs(speeds[1]))
 
         self.__propSystem.setXYStates(True, True)
 
@@ -157,7 +157,7 @@ class MoveUpCommand(Command):
 
         #Sets both vertical thruster speeds to pull upward
         speeds = self.__propSystem.getVerticalSpeeds()
-        self.__propSystem.setVerticalSpeeds(abs(speeds[0]), abs(speeds[1]))
+        self.__propSystem.setVerticalSpeed(abs(speeds[0]), abs(speeds[1]))
 
         self.__propSystem.setZStates(True, True)
 
@@ -182,7 +182,7 @@ class MoveDownCommand(Command):
 
         #Sets both vertical thruster speeds to push downward
         speeds = self.__propSystem.getVerticalSpeeds()
-        self.__propSystem.setVerticalSpeeds(-abs(speeds[0]), -abs(speeds[1]))
+        self.__propSystem.setVerticalSpeed(-abs(speeds[0]), -abs(speeds[1]))
 
         self.__propSystem.setZStates(True, True)
 

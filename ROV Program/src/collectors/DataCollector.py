@@ -73,6 +73,12 @@ class DataCollector(Publisher, ABC):
     def stop(self) -> None:
         self.__isRunning = False
 
+        print("Joing thread")
+
+        self.__thread.join()
+        print(" thread jopienfd")
+        #thread join!??!?!?!?!
+
     #Sends the colleted data over the provided message channel
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
         messageChannel.broadcast(message)

@@ -12,7 +12,7 @@ from commands.CommandFactory import CommandFactory
 class CommandProcessor(Subscriber):
     __isRunning:bool = False               #Whether or not the processor is currently running
     __isShutdown:bool = False              #Whether or not it is time for shutdown
-    __queue = None                         #Stores the received commands that have not beenn processed yet
+    __queue = None                         #Stores the received commands that have not been processed yet
     __commandFactory:CommandFactory = None #Creates commands from an acion code
     __lastCommand:Command = None           #The last command that was executed
 
