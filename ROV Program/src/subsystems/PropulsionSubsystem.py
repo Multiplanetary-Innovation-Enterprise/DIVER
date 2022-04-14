@@ -22,8 +22,8 @@ class PropulsionSubsystem(Subsystem):
         #Creates three thrusters. Two for the x-y movement and two for z movement
         self.__leftThruster = Thruster(controller, leftPin, RotDirection.COUNTER_CLOCKWISE)
         self.__rightThruster = Thruster(controller, rightPin, RotDirection.COUNTER_CLOCKWISE)
-        self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.CLOCKWISE)
-        self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.COUNTER_CLOCKWISE)
+        self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.COUNTER_CLOCKWISE)
+        self.__topBackThruster = Thruster(controller, topBackPin, RotDirection.CLOCKWISE)
 
     #Arms all of the thrusters
     def arm(self) -> None:
