@@ -139,8 +139,10 @@ class ROVApp(Subscriber):
 
         self.__subWriter.stop()
 
+        print("Closing write end now!!!!!!!!!!!!!")
+
         #Sends EOF to the client, so that its socket reader stops blocking
-        self.__clientConnection.shutdown(socket.SHUT_WR)
+        # self.__clientConnection.shutdown(socket.SHUT_WR)
 
         #Waits for pub listener to stop blocking (occurs once the client sends EOF
         #by shutting down its side of the socekt)

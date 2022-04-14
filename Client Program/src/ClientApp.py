@@ -30,6 +30,7 @@ class ClientApp(Subscriber):
     __isRunning:bool = False                       #Whether or not the program is running
     __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
     __controllerInput:ControllerInput = None       #The xbox controller
+    __subWriter:SubWriter = None
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -57,7 +58,7 @@ class ClientApp(Subscriber):
 
         #Sets up ability to send messages to the ROV
         socketWriter = SocketWriter(self.__serverConnection)
-        subWriter = SubWriter(socketWriter)
+        self.__subWriter = SubWriter(socketWriter)
 
         #Sets up the abilty to recieve messages from the ROV
         socketReader = SocketReader(self.__serverConnection)
@@ -86,8 +87,8 @@ class ClientApp(Subscriber):
         self.__window.switchFrame(imageFrame)
 
         #Allows the client to send action and system status messages to the ROV
-        self.__outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
-        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.ACTION, self.__subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self.__subWriter)
 
         #Allows the client to recieve sensor data from the ROV
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__dataLogger)
@@ -133,6 +134,8 @@ class ClientApp(Subscriber):
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)
+
+        self.__subWriter.stop()
 
         #Sends EOF to the server, so that its socket reader stops blocking
         self.__serverConnection.shutdown(socket.SHUT_WR)
