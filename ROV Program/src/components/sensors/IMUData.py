@@ -34,15 +34,15 @@ class IMUData:
         return self.__data['quaternion']
 
     #Gets the yaw value
-    def getHeading(self) -> list:
+    def getHeading(self) -> float:
         return self.__data['euler'][0]
 
     #Gets the roll value
-    def getRoll(self) -> list:
+    def getRoll(self) -> float:
         return self.__data['euler'][1]
 
     #Gets the pitch value
-    def getPitch(self) -> list:
+    def getPitch(self) -> float:
         return self.__data['euler'][2]
 
     #Gets all the data as a dict

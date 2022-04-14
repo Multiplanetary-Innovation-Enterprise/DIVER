@@ -29,16 +29,38 @@ class BNO055IMU(IMU):
         #Skips data collection if the sensor is not connected
         if not self._isConnected:
             return None
+        acc = self.__sensor.acceleration
+        magentic = self.__sensor.magnetic
+        gyro = self.__sensor.gyro
+        linAcc = self.__sensor.linear_acceleration
+        gravAcc = self.__sensor.gravity
+        euler = self.__sensor.euler
+        quaternion = self.__sensor.quaternion
 
         #All of the IMU data
         data = {
-            "acc": self.__sensor.acceleration,
-            "magentic": self.__sensor.magnetic,
-            "angularVelocity": self.__sensor.gyro,
-            "linAcc": self.__sensor.linear_acceleration,
-            "gravAcc": self.__sensor.gravity,
-            "euler": self.__sensor.euler,
-            "quaternion": self.__sensor.quaternion,
+            "acc_x": acc[0],
+            "acc_y": acc[1],
+            "acc_z": acc[2],
+            "magentic_x": magentic[0],
+            "magentic_y": magentic[1],
+            "magentic_z": magentic[2],
+            "gyro_x": gyro[0],
+            "gyro_y": gyro[1],
+            "gyro_z": gyro[2],
+            "linAcc_x": linAcc[0],
+            "linAcc_y": linAcc[1],
+            "linAcc_z": linAcc[2],
+            "gravAcc_x": gravAcc[0],
+            "gravAcc_y": gravAcc[1],
+            "gravAcc_z": gravAcc[2],
+            "heading": euler[0],
+            "roll": euler[1],
+            "pitch": euler[2],
+            "quaternion_x": quaternion[0],
+            "quaternion_y": quaternion[1],
+            "quaternion_z": quaternion[2],
+            "quaternion_z": quaternion[3],
         };
 
         return IMUData(data)
