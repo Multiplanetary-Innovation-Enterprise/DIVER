@@ -17,6 +17,8 @@ class SubWriter(Subscriber):
         self.__writer = writer
         self.__queue = queue.Queue()
 
+        print("sub init")
+
     #Uses the writer to send the message that it recieves
     def recieveMessage(self, message:Message) -> None:
         #Adds the message to queue of messsages to send out
@@ -36,7 +38,16 @@ class SubWriter(Subscriber):
         while not self.__queue.empty() and self.__isRunning:
             #Gets the next message and sends it
             message = self.__queue.get_nowait()
-            self.__writer.send(message)
+
+            #Handles exceptions if the connection was closed
+            try:
+                self.__writer.send(message)
+            except:
+                #Something broke the connection, so stop the writer and try to
+                #recover elsewhere
+                print("Write connection broken")
+                self.__isRunning = False
+                break
 
             print("Processing messages: " + str(self.__queue.qsize()))
 
@@ -44,4 +55,9 @@ class SubWriter(Subscriber):
 
     def stop(self) -> None:
         self.__isRunning = False
-        self.__thread.join()
+
+        self.join()
+
+    def join(self):
+        if not self.__thread == None:
+            self.__thread.join()
