@@ -126,9 +126,6 @@ class ClientApp(Subscriber):
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
 
-        #Stops the data logger
-        self.__dataLogger.close()
-
         print("send shutdown mssage")
 
         #Tells the server that it is shutting down
@@ -146,6 +143,9 @@ class ClientApp(Subscriber):
 
         #Finally closes the socket, since the server is disconnected
         self.__serverConnection.close()
+
+        #Closes the data log file
+        self.__dataLogger.close()
 
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message

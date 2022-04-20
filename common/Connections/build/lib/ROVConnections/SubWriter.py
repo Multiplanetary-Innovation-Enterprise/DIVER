@@ -35,8 +35,7 @@ class SubWriter(Subscriber):
         #Continues sending messages until all messages have been sent
         while not self.__queue.empty() and self.__isRunning:
             #Gets the next message and sends it
-            print("Queue waiting for more")
-            message = self.__queue.get()
+            message = self.__queue.get_nowait()
             self.__writer.send(message)
 
             print("Processing messages: " + str(self.__queue.qsize()))
@@ -45,6 +44,4 @@ class SubWriter(Subscriber):
 
     def stop(self) -> None:
         self.__isRunning = False
-        print("joinig sub write")
         self.__thread.join()
-        print("Sub write joined")

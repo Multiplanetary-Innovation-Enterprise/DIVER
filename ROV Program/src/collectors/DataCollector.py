@@ -71,17 +71,16 @@ class DataCollector(Publisher, ABC):
 
     #Stops the data collection process
     def stop(self) -> None:
-        self.__isRunning = False
+        #Checks if the data collector has already been stopped
+        if not self.__isRunning:
+            return
 
-        # print("Current thread id " + str(threading.get_ident()))
-        # print("This thread id " + str(self.__thread.ident))
+        self.__isRunning = False
 
         #Checks if trying to stop the data collector internally or externally. If
         #internal, then the thread is done, so don't wait for it  to end (hangs forever)
         if not threading.get_ident() == self.__thread.ident:
-            print("Joing thread")
             self.__thread.join()
-            print(" thread jopienfd")
 
     #Sends the colleted data over the provided message channel
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:

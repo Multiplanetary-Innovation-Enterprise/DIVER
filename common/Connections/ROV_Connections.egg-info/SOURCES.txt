@@ -1,4 +1,3 @@
-README.md
 setup.py
 ROVConnections/Connection.py
 ROVConnections/PubListener.py

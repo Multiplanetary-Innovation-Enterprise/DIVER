@@ -116,6 +116,12 @@ class ROVApp(Subscriber):
             #used for anything
             self.__shutdownEvent.wait()
 
+            #1) Try catch for subwriter and publistener
+                #Stop on exception with error code
+            #2) Wait for both threads to join
+
+            #3) Reattempt connection
+
             #Maybe send the watchdog keep alive messages here? (TODO)
 
         self.__cleanup()
@@ -133,21 +139,24 @@ class ROVApp(Subscriber):
         self.__commandProcessor.stop()
         self.__rov.shutdown()
 
+        print("Sending shutdown message")
+
         #Tells the client that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)
 
         self.__subWriter.stop()
 
-        print("Closing write end now!!!!!!!!!!!!!")
-
+        print("Closing write end now")
         #Sends EOF to the client, so that its socket reader stops blocking
-        # self.__clientConnection.shutdown(socket.SHUT_WR)
+        self.__clientConnection.shutdown(socket.SHUT_WR)
 
+        print("Stop pub listener")
         #Waits for pub listener to stop blocking (occurs once the client sends EOF
         #by shutting down its side of the socekt)
         self.__pubListener.stop()
 
+        print("Close client connection")
         #Finally closes the socket, since the client is disconnected
         self.__clientConnection.close()
 
