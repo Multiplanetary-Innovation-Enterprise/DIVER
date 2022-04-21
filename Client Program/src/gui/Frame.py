@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import tkinter as tk
 
+#NOTE: This class is a temporary placeholder until the new UI is implemented
 #Represents a wrapper for a tkinter frame
 class Frame(tk.Frame, ABC):
     __parent = None #The parent of the frame

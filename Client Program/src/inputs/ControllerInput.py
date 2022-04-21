@@ -5,10 +5,11 @@ from ROVMessaging.MessageChannel import MessageChannel
 
 from inputs.Input import Input
 
-#Represents an implmentation of an input using a xbox one controller
+#Represents an implementation of an input using a game controller
+#Confirmed to work with xbox and Nintendo Pro Controller
 class ControllerInput(Input):
     __isRunning:bool = False #Whether or not the the controller listener is running
-    __thread = None          #The thread that the listener is running on
+    __thread = None          #The thread that processes the controller input
 
     #Registers both joysticks moving and provides the message channel to
     #send the input change messages in
@@ -17,12 +18,14 @@ class ControllerInput(Input):
 
         pygame.init()
 
+    #Starts the controller input listener thread if it is not already running
     def listen(self) -> None:
         if not self.__isRunning:
             self.__thread = threading.Thread(target=self.__run)
             self.__thread.start()
 
-    def __run(self):
+    #Continuously processes the controller input
+    def __run(self) -> None:
         self.__isRunning = True
 
         # Used to manage how fast the screen updates.
@@ -36,11 +39,13 @@ class ControllerInput(Input):
         isStoppedXY:bool = True #Whether or not the stop XY message was sent
         isStoppedZ:bool = True  #Whether or not the stop Z message was sent
 
+        #Continuously processes the controller input until stopped
         while self.__isRunning:
             for event in pygame.event.get(): # User did something.
                 if event.type == pygame.QUIT: # If user clicked close.
                     self.__isRunning = False # Flag that we are done so we exit this loop.
 
+            #Checks if the controller was found
             if pygame.joystick.get_count() == 0:
                 self.__isRunning = False
             else:
@@ -56,30 +61,22 @@ class ControllerInput(Input):
                 joystick = pygame.joystick.Joystick(0)
                 joystick.init()
 
-                # print("controller loop")
-                #
-                # print("Joy: " + str(joystick.get_axis(3)))
-
-                #bottom right joystick controls forward and backward
+                #Bottom right joystick controls forward and backward
                 if joystick.get_axis(3) > .5:
                     self.backward(None)
                     isMoveXY = True
-                    print("Backward-------------------------------------------")
                 elif joystick.get_axis(3) < -.5:
-                    print("Forward-------------------------------------------")
                     self.forward(None)
                     isMoveXY = True
                 else:
-                    isMoveXY = False
-
+                    isMoveXY = False\
+                #Bottom right joystick controls right and left
                 if joystick.get_axis(2) > .5:
                     self.right(None);
                     isMoveXY = True
-                    print("Right-------------------------------------------")
                 elif joystick.get_axis(2) < -.5:
                     self.left(None);
                     isMoveXY = True
-                    print("LEFT-------------------------------------------")
 
                 #Checks if a movement is the XY plane messgae has been  sent, if so,
                 #the ROV is no longer stopped
@@ -91,18 +88,14 @@ class ControllerInput(Input):
                 if not isMoveXY and not isStoppedXY:
                     #The stop XY message was sent
                     isStoppedXY = True
-
                     self.stopXY(None);
-                    print("Stop XY-------------------------------------------")
 
-                #The upper left joystick controls the Z-axis
+                #The upper left joystick controls for the Z-axis
                 if joystick.get_axis(1) > .5:
                     self.down(None);
-                    print("down-------------------------------------------")
                     isMoveZ = True
                 elif joystick.get_axis(1) < -.5:
                     self.up(None);
-                    print("Up-------------------------------------------")
                     isMoveZ = True
                 else:
                     isMoveZ = False
@@ -119,7 +112,6 @@ class ControllerInput(Input):
                     isStoppedZ = True
 
                     self.stopZ(None);
-                    print("Stop Z-------------------------------------------")
 
                 # #either joystick can move the vechile left and right
                 # if joystick.get_axis(0) > .5:
@@ -139,7 +131,6 @@ class ControllerInput(Input):
         # Close the window and quit.
        # pygame.quit()
 
-        print("pygame stopped")
-
+    #Stops the controller input processor
     def stop(self) -> None:
         self.__isRunning = False

@@ -8,6 +8,7 @@ from ROVMessaging.MessageType import MessageType
 
 from gui.Frame import Frame
 
+#NOTE: This class is a temporary placeholder until the new UI is implemented
 #Represents a frame for showing the camera feed
 class ImageFrame(Frame, Subscriber):
     __imageLabel:Label = None #The label containing the image

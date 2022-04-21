@@ -28,8 +28,7 @@ class ROVApp(Subscriber):
     __pubListener:PubListener = None                 #Listens for messages from the client program
     __outgoingMessageChannel:MessageChannel  = None  #The message channel to the client program
     __server:SocketServer  = None                    #The server that listens for client connection requests
-    __shutdownEvent = None                           #The event the main thread waits for before shutdown
-    __commandProccessor = None                       #Processes all of the incoming commands
+    __commandProccessor:CommandProcessor = None      #Processes all of the incoming commands
     __rov:ROV = None                                 #The ROV
     __sensorDataCollector:SensorDataCollector = None #Sends the sensor data to the client
     __cameraFeedCollector:CameraFeedCollector = None #Sends the camera frames to the client
@@ -96,9 +95,6 @@ class ROVApp(Subscriber):
 
         #Start listening for messages from the client program
         self.__pubListener.listen()
-
-        #The shutdown event that the main thread will wait for
-        self.__shutdownEvent = threading.Event()
 
     #Starts the ROV if it is not already running
     def start(self) -> None:

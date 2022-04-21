@@ -11,6 +11,7 @@ from ROVConnections.SubWriter import SubWriter
 
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
+from ROVMessaging.Message import *
 from ROVMessaging.Subscriber import *
 from ROVMessaging.SystemStatus import *
 
@@ -28,9 +29,9 @@ class ClientApp(Subscriber):
     __window:Window = None                         #The GUI window
     __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
-    __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
+    __outgoingMessageChannel:MessageChannel = None #The message channel for sending messages to the ROV program
     __controllerInput:ControllerInput = None       #The xbox controller
-    __subWriter:SubWriter = None
+    __subWriter:SubWriter = None                   #Sends messages to the ROV
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -76,7 +77,7 @@ class ClientApp(Subscriber):
 
         #Sets up the data logger and creates a new log file
         self.__dataLogger = DataLogger()
-        self.__dataLogger.openFile("..\logs\data\data_log");
+        self.__dataLogger.openFile("../logs/data/data_log")
 
         #Setups the GUI window
         self.__window = Window()
@@ -147,6 +148,7 @@ class ClientApp(Subscriber):
         #Closes the data log file
         self.__dataLogger.close()
 
+    #Listens for system status updates
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
