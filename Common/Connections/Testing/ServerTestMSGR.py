@@ -67,8 +67,12 @@ def shutdown():
     message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
     outgoingMessageChannel.broadcast(message)
 
+
+
     #Closes the connection with the client
     subWriter.stop()
+    #Stops listening for messages from the client
+    pubListener.stop()
     clientConnection.shutdown(socket.SHUT_WR)
     clientConnection.close()
 
@@ -124,16 +128,6 @@ def setup():
 
     #The status the system is currently in
     status = SystemStatus.RUNNING
-
-#Cleans up the connection
-def cleanup():
-    global pubListener
-
-    print("cleanup connection")
-
-    #Stops listening for messages from the client
-    pubListener.stop()
-
 
 #The main program loop
 def main():

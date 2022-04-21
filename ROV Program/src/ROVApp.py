@@ -108,31 +108,22 @@ class ROVApp(Subscriber):
 
     #The main loop for the program
     def __run(self) -> None:
-        self.__setup()
-
-        #Put something here instead of infinite loop (wastes cpu time)
         while self.__isRunning:
-            #Waits for the shutdown event, since the main thread isn't currently
-            #used for anything
-            self.__shutdownEvent.wait()
+            self.__setup()
 
-            #1) Try catch for subwriter and publistener
-                #Stop on exception with error code
-            #2) Wait for both threads to join
-
-            #3) Reattempt connection
-
-            #Maybe send the watchdog keep alive messages here? (TODO)
-
-        self.__cleanup()
+            #Waits indefinitely until a connection broken error occurs
+            self.__subWriter.join()
+            self.__pubListener.join()
 
     #Tells the ROV to stop running
     def stop(self) -> None:
         self.__isRunning = False
 
+        self.__cleanup()
+
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        print("shuting down...")
+        print("shutting down...")
         self.__sensorDataCollector.stop()
         self.__cameraFeedCollector.stop()
         self.__server.stop()
@@ -147,24 +138,20 @@ class ROVApp(Subscriber):
 
         self.__subWriter.stop()
 
-        print("Closing write end now")
         #Sends EOF to the client, so that its socket reader stops blocking
         self.__clientConnection.shutdown(socket.SHUT_WR)
 
-        print("Stop pub listener")
         #Waits for pub listener to stop blocking (occurs once the client sends EOF
         #by shutting down its side of the socekt)
         self.__pubListener.stop()
 
-        print("Close client connection")
         #Finally closes the socket, since the client is disconnected
         self.__clientConnection.close()
 
+    #Listens for system status updates
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
-            self.stop()
 
-            #Wakes the main thread up, so that it can proceed with shutdown
-            self.__shutdownEvent.set()
+            self.stop()

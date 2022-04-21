@@ -59,5 +59,8 @@ class PubListener(Publisher):
         #Wait for the reader to stop listening for new messages
         self.join()
 
-    def join(self):
-        self.__listenThread.join()
+    #Forces the calling thread to wait until the publisher listener has stopped
+    def join(self) -> None:
+        #Prevents the listen thread from joining to itself (would infinitly block)
+        if not threading.get_ident() == self.__listenThread.ident:
+            self.__listenThread.join()

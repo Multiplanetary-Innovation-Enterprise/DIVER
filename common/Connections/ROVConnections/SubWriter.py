@@ -17,8 +17,6 @@ class SubWriter(Subscriber):
         self.__writer = writer
         self.__queue = queue.Queue()
 
-        print("sub init")
-
     #Uses the writer to send the message that it recieves
     def recieveMessage(self, message:Message) -> None:
         #Adds the message to queue of messsages to send out
@@ -58,6 +56,12 @@ class SubWriter(Subscriber):
 
         self.join()
 
-    def join(self):
-        if not self.__thread == None:
+    #Forces the calling thread to wait until the publisher listener has stopped
+    def join(self) -> None:
+        #Checks if a thread has been created yet (a message has been sent)
+        if self.__thread == None:
+            return
+
+        #Prevents the listen thread from joining to itself (would infinitly block)
+        if not threading.get_ident() == self.__thread.ident:
             self.__thread.join()

@@ -36,7 +36,16 @@ class SubWriter(Subscriber):
         while not self.__queue.empty() and self.__isRunning:
             #Gets the next message and sends it
             message = self.__queue.get_nowait()
-            self.__writer.send(message)
+
+            #Handles exceptions if the connection was closed
+            try:
+                self.__writer.send(message)
+            except:
+                #Something broke the connection, so stop the writer and try to
+                #recover elsewhere
+                print("Write connection broken")
+                self.__isRunning = False
+                break
 
             print("Processing messages: " + str(self.__queue.qsize()))
 
@@ -44,4 +53,15 @@ class SubWriter(Subscriber):
 
     def stop(self) -> None:
         self.__isRunning = False
-        self.__thread.join()
+
+        self.join()
+
+    #Forces the calling thread to wait until the publisher listener has stopped
+    def join(self) -> None:
+        #Checks if a thread has been created yet (a message has been sent)
+        if self.__thread == None:
+            return
+
+        #Prevents the listen thread from joining to itself (would infinitly block)
+        if not threading.get_ident() == self.__thread.ident:
+            self.__thread.join()

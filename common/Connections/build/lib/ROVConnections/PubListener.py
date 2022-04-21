@@ -34,8 +34,16 @@ class PubListener(Publisher):
 
         #Keeps listening for new messages until shutdown
         while self.__isRunning:
-            #Performs the blocking reads for a new message
-            message = self.__reader.receive()
+            #Handles exceptions if the connection was closed
+            try:
+                #Performs the blocking reads for a new message
+                message = self.__reader.receive()
+            except:
+                #Something broke the connection, so stop the listener and try to
+                #recover elsewhere
+                self.__isRunning = False
+                print("Reader connection broken")
+                break
 
             #Checks if a message was recieved. Used to check if the connection was closed.
             if message == None:
@@ -49,4 +57,10 @@ class PubListener(Publisher):
         self.__isRunning = False
 
         #Wait for the reader to stop listening for new messages
-        self.__listenThread.join()
+        self.join()
+
+    #Forces the calling thread to wait until the publisher listener has stopped
+    def join(self) -> None:
+        #Prevents the listen thread from joining to itself (would infinitly block)
+        if not threading.get_ident() == self.__listenThread.ident:
+            self.__listenThread.join()

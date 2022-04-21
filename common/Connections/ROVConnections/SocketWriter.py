@@ -30,8 +30,7 @@ class SocketWriter(Writer):
 
     #Sends the provided message over the socket connection
     def send(self, message:Message) -> None:
-        print("Message Type: " + str(message.getType()))
         #Encode the message so that it can be sent
         message = self.__encode(message)
-        
+
         self.__socket.sendall(message)
