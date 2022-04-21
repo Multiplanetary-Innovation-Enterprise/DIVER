@@ -5,9 +5,9 @@ from ROVMessaging.MessageType import MessageType
 #A message that can be published to a message channel
 class Message():
     #The contents of the message
-    __contents: Any = None
+    __contents:Any = None
     #The type of the messages
-    __type: MessageType = None
+    __type:MessageType = None
 
     #Creates a message given a type and contents
     def __init__(self, type:MessageType, contents):

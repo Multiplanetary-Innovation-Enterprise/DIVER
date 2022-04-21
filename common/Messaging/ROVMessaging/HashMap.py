@@ -7,7 +7,7 @@ V = TypeVar("V")
 #A hashmap with generics implemented using a dictionary
 class HashMap(Generic[K,V]):
     #The dictionary that holds the key value pairs
-    __dict: Dict[K,V] = None
+    __dict:Dict[K,V] = None
 
     #Creates the dictionary
     def __init__(self):

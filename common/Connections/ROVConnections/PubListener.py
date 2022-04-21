@@ -52,7 +52,7 @@ class PubListener(Publisher):
             #Sends the recieved message over the message channel
             self.sendMessage(message, self.__channel)
 
-    #Tells the message listening thread to stop
+    #Stops the publisher listener from receiving any more messages via the reader
     def stop(self) -> None:
         self.__isRunning = False
 

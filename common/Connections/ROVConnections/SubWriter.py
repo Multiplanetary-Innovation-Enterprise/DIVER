@@ -4,7 +4,6 @@ import threading
 from ROVMessaging.Subscriber import *
 from ROVMessaging.Message import *
 from ROVConnections.Writer import Writer
-from ROVMessaging.MessageType import *
 
 #This class is used to write any messages that it recieves using the provided writer
 class SubWriter(Subscriber):
@@ -51,12 +50,14 @@ class SubWriter(Subscriber):
 
         self.__isRunning = False
 
+    #Stops the subscription writer from sending any more messages via the writer
     def stop(self) -> None:
         self.__isRunning = False
 
+        #Waits for the message processing thread to stop
         self.join()
 
-    #Forces the calling thread to wait until the publisher listener has stopped
+    #Forces the calling thread to wait until the subscription writer has stopped
     def join(self) -> None:
         #Checks if a thread has been created yet (a message has been sent)
         if self.__thread == None:
