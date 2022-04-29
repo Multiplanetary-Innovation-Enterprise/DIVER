@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-#Represents the pwm protocol
+#Represents the PWM protocol
 class PWM(ABC):
     #Updates the pulse width of the PWM signal
     @abstractmethod

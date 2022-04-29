@@ -3,7 +3,7 @@ import os
 import time
 
 from signals.PinMode import PinMode
-from components.ResistorType import ResistorType
+from components.controllers.ResistorType import ResistorType
 from components.controllers.Controller import Controller
 
 #Represents the Raspberry Pi itself (a wrapper for the pigpio library)

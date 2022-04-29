@@ -15,7 +15,6 @@ class Stepper(Motor, ABC):
 
         #Updates the stepper motor's config
         self._updateDirectionState()
-        self._updateSleepState()
 
     #Performs the actual step, which is dependent on the stepper motor's
     #hardware interface

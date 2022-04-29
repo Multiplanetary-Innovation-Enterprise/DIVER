@@ -19,9 +19,9 @@ class PressureSensor(Sensor):
            self._isConnected = False
 
     #Read the sensor and update the pressure value
-    def _read(self):
+    def _read(self) ->float:
         return self.__sensor.read()
 
     #Returns the current pressure value
-    def getPressure(self):
+    def getPressure(self) -> float:
         return self.__sensor.pressure()

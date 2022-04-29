@@ -92,7 +92,7 @@ class DataCollector(Publisher, ABC):
         pass
 
     #Updates the sample period based on the provided new sample frequency
-    def setSampleFrequency(self, frequency:float):
+    def setSampleFrequency(self, frequency:float) -> None:
         self.__samplePeriod = 1 / frequency
 
     #Gets the data collection sample frequency
@@ -100,7 +100,7 @@ class DataCollector(Publisher, ABC):
         return 1 / self.__samplePeriod
 
     #Updates the sample period based on the provided new sample period
-    def setSamplePeriod(self, period:float):
+    def setSamplePeriod(self, period:float) -> None:
         self.__samplePeriod = period
 
     #Gets the data collection sample period

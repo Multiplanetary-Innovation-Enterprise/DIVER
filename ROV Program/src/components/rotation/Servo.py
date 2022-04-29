@@ -1,16 +1,12 @@
 from abc import ABC, abstractmethod
 
 from components.rotation.Motor import Motor
-from components.rotation.RotDirection import RotDirection
 
 #Represents a generic servo motor
-class Servo(Motor):
+class Servo(Motor, ABC):
     __angle:float = 0      #The angle that the servo is curently at
     __minAngle:float = 0   #The minimum angle in degrees
     __maxAngle:float = 180 #The maximum angle in degrees
-
-    def __init__(self, rotDirection:RotDirection):
-        super().__init__(rotDirection)
 
     #Sets the angle of the servo
     def setAngle(self, angle:float) -> None:

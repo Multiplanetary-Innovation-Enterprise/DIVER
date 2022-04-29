@@ -26,12 +26,12 @@ class KellerLD(object):
 			if os.uname()[1] == 'raspberrypi':
 				print("Enable the i2c interface using raspi-config!")
 
-	def init(self):
+	def init(self) -> bool:
 		if self._bus is None:
 			print("No bus!")
 			return False
-		
-		# Read out pressure-mode to determine relevant offset 
+
+		# Read out pressure-mode to determine relevant offset
 		self._bus.write_byte(self._SLAVE_ADDRESS, 0x12)
 		time.sleep(0.001)
 		# read three bytes (status, P MSB, P LSB)
@@ -41,26 +41,26 @@ class KellerLD(object):
 		#   E=(0:checksum okay, 1:memory error)
 		#   X=(don't care)
 		data = self._bus.read_i2c_block_data(self._SLAVE_ADDRESS, 0, 3)
-		
+
 		scaling0 = data[1] << 8 | data[2]
 		self.debug(("0x12:", scaling0, data))
-		
+
 		pModeID = scaling0 & 0b11
 		self.pMode = self._P_MODES[pModeID]
 		self.pModeOffset = self._P_MODE_OFFSETS[pModeID]
 		self.debug(("pMode", self.pMode, "pressure offset [bar]", self.pModeOffset))
-		
+
 		self.year = scaling0 >> 11
 		self.month = (scaling0 & 0b0000011110000000) >> 7
 		self.day = (scaling0 & 0b0000000001111100) >> 2
 		self.debug(("calibration date", self.year, self.month, self.day))
-		
+
 		# Read out minimum pressure reading
 		time.sleep(0.001)
 		self._bus.write_byte(self._SLAVE_ADDRESS, 0x13)
 		time.sleep(0.001)
 		data = self._bus.read_i2c_block_data(self._SLAVE_ADDRESS, 0, 3)
-		
+
 		MSWord = data[1] << 8 | data[2]
 		self.debug(("0x13:", MSWord, data))
 
@@ -80,7 +80,7 @@ class KellerLD(object):
 		self._bus.write_byte(self._SLAVE_ADDRESS, 0x15)
 		time.sleep(0.001)
 		data = self._bus.read_i2c_block_data(self._SLAVE_ADDRESS, 0, 3)
-		
+
 		MSWord = data[1] << 8 | data[2]
 		self.debug(("0x15:", MSWord, data))
 
@@ -94,7 +94,7 @@ class KellerLD(object):
 
 		self.pMax = MSWord << 16 | LSWord
 		self.debug(("pMax", self.pMax))
-		
+
 		# 'I' for 32bit unsigned int
 		self.pMin = struct.unpack('f', struct.pack('I', self.pMin))[0]
 		self.pMax = struct.unpack('f', struct.pack('I', self.pMax))[0]
@@ -102,11 +102,11 @@ class KellerLD(object):
 
 		return True
 
-	def read(self):
+	def read(self) -> bool:
 		if self._bus is None:
 			print("No bus!")
 			return False
-		
+
 		if self.pMin is None or self.pMax is None:
 			print("Init required!")
 			print("Call init() at least one time before attempting to read()")
@@ -149,23 +149,23 @@ class KellerLD(object):
 		return True
 
 
-	def temperature(self):
+	def temperature(self) -> float:
 		if self._temperature is None:
 			print("Call read() first to get a measurement")
 			return
 		return self._temperature
 
-	def pressure(self):
+	def pressure(self) -> float:
 		if self._pressure is None:
 			print("Call read() first to get a measurement")
 			return
 		return self._pressure
 
-	def debug(self, msg):
+	def debug(self, msg) -> None:
 		if self._DEBUG:
 			print(msg)
-	
-	def __str__(self):
+
+	def __str__(self) -> str:
 		return ("Keller LD I2C Pressure/Temperature Transmitter\n" +
 			"\ttype: {}\n".format(self.pMode) +
 			"\tcalibration date: {}-{}-{}\n".format(self.year, self.month, self.day) +

@@ -1,17 +1,17 @@
+import time
+
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 
 from collectors.DataCollector import DataCollector
 from subsystems.VisionSubsystem import VisionSubsystem
 
-import time
-
 #Represents a periodic camera feed collector that sends the frames through
 #provided message channel
 class CameraFeedCollector(DataCollector):
     __subsystem:VisionSubsystem = None #The subsystem that the camera belongs to
-    lastTime = 0
-    currTime = 0
+    lastTime = 0 #USED for FPS caclulations for testing
+    currTime = 0 #USED for FPS caclulations for testing
 
     def __init__(self, subsystem:VisionSubsystem, messageChannel:MessageChannel):
         #Configures the data sender

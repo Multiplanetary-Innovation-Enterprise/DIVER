@@ -29,6 +29,7 @@ class BNO055IMU(IMU):
         #Skips data collection if the sensor is not connected
         if not self._isConnected:
             return None
+            
         acc = self.__sensor.acceleration
         magentic = self.__sensor.magnetic
         gyro = self.__sensor.gyro
