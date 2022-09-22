@@ -88,8 +88,8 @@ class ControllerInput(Input):
                     self.left();
                     self.stopXY();
 
-               #controls how fast the controller gives input
-               clock.tick(5);
+            #controls how fast the controller gives input
+            clock.tick(5);
 
         # Close the window and quit.
         pygame.quit()
