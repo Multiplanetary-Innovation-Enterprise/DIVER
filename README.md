@@ -1,1 +1,1 @@
-A repo for the ROV project of the MINE Enterprise
+A repo for the DIVER project of the MINE Enterprise
