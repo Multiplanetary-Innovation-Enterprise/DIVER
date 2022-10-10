@@ -1,7 +1,11 @@
 import time
-import smbus
 import struct
 import os
+
+try:
+	import smbus
+except:
+	print("Failed to import the required libraries for the Pressure Sensor")
 
 class KellerLD(object):
 

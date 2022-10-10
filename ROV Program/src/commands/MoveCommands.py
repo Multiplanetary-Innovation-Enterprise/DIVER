@@ -15,7 +15,7 @@ class MoveXYStopCommand(MoveCommand):
     def execute(self) -> None:
         print("XY Stop")
         #Turns off the  thrusters in the XY plane
-        self.__propSystem.setXYStates(False, False)
+        self._propSystem.setXYStates(False, False)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -28,11 +28,11 @@ class MoveForwardCommand(MoveCommand):
         print("Forwards")
 
         #Sets both thruster speeds push forwards
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]))
+        speeds = self._propSystem.getXYSpeeds()
+        self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]))
 
         #Turns on the XY thrusters
-        self.__propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -45,11 +45,11 @@ class MoveBackwardCommand(MoveCommand):
         print("Backwards")
 
         #Sets both thruster speeds push backwards
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]))
+        speeds = self._propSystem.getXYSpeeds()
+        self._propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]))
 
         #Turns on the XY thrusters
-        self.__propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -62,11 +62,11 @@ class TurnLeftCommand(MoveCommand):
         print("Turn Left")
 
         #Sets the left thruster speed to pull and the right thruster speed to push
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]))
+        speeds = self._propSystem.getXYSpeeds()
+        self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]))
 
         #Turns on the XY thrusters
-        self.__propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -79,11 +79,11 @@ class TurnRightCommand(MoveCommand):
         print("Turn Right")
 
         #Sets the left thruster speed to push and the right thruster speed to pull
-        speeds = self.__propSystem.getXYSpeeds()
-        self.__propSystem.setXYSpeed(abs(speeds[0]), -abs(speeds[1]))
+        speeds = self._propSystem.getXYSpeeds()
+        self._propSystem.setXYSpeed(abs(speeds[0]), -abs(speeds[1]))
 
         #Turns on the XY thrusters
-        self.__propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -95,7 +95,7 @@ class MoveZStopCommand(MoveCommand):
     def execute(self) -> None:
         print("Z Stop")
         #Turns off the vertical thrusters
-        self.__propSystem.setZStates(False, False)
+        self._propSystem.setZStates(False, False)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -108,11 +108,11 @@ class MoveUpCommand(MoveCommand):
         print("Move Up")
 
         #Sets both vertical thruster speeds to pull upward
-        speeds = self.__propSystem.getVerticalSpeeds()
-        self.__propSystem.setVerticalSpeed(abs(speeds[0]), abs(speeds[1]))
+        speeds = self._propSystem.getVerticalSpeeds()
+        self._propSystem.setVerticalSpeed(abs(speeds[0]), abs(speeds[1]))
 
         #Turns on the vertical thrusters
-        self.__propSystem.setZStates(True, True)
+        self._propSystem.setZStates(True, True)
 
     #The action code associated with this command
     def getActionCode() -> int:
@@ -125,11 +125,11 @@ class MoveDownCommand(MoveCommand):
         print("Move Down")
 
         #Sets both vertical thruster speeds to push downward
-        speeds = self.__propSystem.getVerticalSpeeds()
-        self.__propSystem.setVerticalSpeed(-abs(speeds[0]), -abs(speeds[1]))
+        speeds = self._propSystem.getVerticalSpeeds()
+        self._propSystem.setVerticalSpeed(-abs(speeds[0]), -abs(speeds[1]))
 
         #Turns on the vertical thrusters
-        self.__propSystem.setZStates(True, True)
+        self._propSystem.setZStates(True, True)
 
     #The action code associated with this command
     def getActionCode() -> int:

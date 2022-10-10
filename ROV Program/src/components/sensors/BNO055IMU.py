@@ -1,6 +1,6 @@
 # from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
-import board
-import adafruit_bno055
+# import board
+# import adafruit_bno055
 
 from components.sensors.IMUData import IMUData
 from components.sensors.IMU import IMU
@@ -14,11 +14,11 @@ class BNO055IMU(IMU):
         # i2c = I2C(0, mode=I2C.MASTER, baudrate=1000000)
         # self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
 
-        i2c = board.I2C()
-
         #Attempts to connect to the IMU sensor
         try:
+            i2c = board.I2C()
             self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
+
             self._isConnected = True
         except:
             print("Failed to detect the IMU sensor")
@@ -29,7 +29,7 @@ class BNO055IMU(IMU):
         #Skips data collection if the sensor is not connected
         if not self._isConnected:
             return None
-            
+
         acc = self.__sensor.acceleration
         magentic = self.__sensor.magnetic
         gyro = self.__sensor.gyro

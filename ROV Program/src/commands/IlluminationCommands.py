@@ -5,10 +5,10 @@ from subsystems.IlluminationSubsystem import IlluminationSubsystem
 
 #Represents a generic illumination command
 class IlluminationCommand(Command, ABC):
-    __illuminationSystem:IlluminationSubsystem = None #The ROV's illumination system
+    _illuminationSystem:IlluminationSubsystem = None #The ROV's illumination system
 
     def __init__(self, illuminationSystem:IlluminationSubsystem):
-        self.__illuminationSystem = illuminationSystem
+        self._illuminationSystem = illuminationSystem
 
     #Whether or not the command can be repeated back to back
     def isRepeatable(self) -> bool:
@@ -18,7 +18,7 @@ class IlluminationCommand(Command, ABC):
 class ToggleLightStateCommand(IlluminationCommand):
     #Executes the command
     def execute(self) -> None:
-        light = self.__illuminationSystem.getLight()
+        light = self._illuminationSystem.getLight()
 
         print("Lights toggle")
 
@@ -36,7 +36,7 @@ class ToggleLightStateCommand(IlluminationCommand):
 class IncreaseLightBrightnessCommand(IlluminationCommand):
     #Executes the command
     def execute(self) -> None:
-        light = self.__illuminationSystem.getLight()
+        light = self._illuminationSystem.getLight()
 
         #Gets the current brighness value of the light and increments it by 10%
         brightness = light.getBrightness() + 0.1
@@ -53,7 +53,7 @@ class IncreaseLightBrightnessCommand(IlluminationCommand):
 class DecreaseLightBrightnessCommand(IlluminationCommand):
     #Executes the command
     def execute(self) -> None:
-        light = self.__illuminationSystem.getLight()
+        light = self._illuminationSystem.getLight()
 
         #Gets the current brighness value of the light and decrements it by 10%
         brightness = light.getBrightness() - 0.1

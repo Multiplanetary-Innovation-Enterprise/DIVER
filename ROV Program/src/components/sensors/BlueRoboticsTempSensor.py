@@ -1,15 +1,19 @@
 import sys
-sys.path.append("tsys01-python-master")
-sys.path.insert(0, r"pi\home\tsys01-python-master\tsys01")
-sys.path.insert(0, r"pi\home\tsys01-python-master")
-from tsys01 import TSYS01
+
+#Attempts to import the required libraries for the sensor
+try:
+    sys.path.append("tsys01-python-master")
+    sys.path.insert(0, r"pi\home\tsys01-python-master\tsys01")
+    sys.path.insert(0, r"pi\home\tsys01-python-master")
+    from tsys01 import TSYS01
+except ImportError as error:
+    print("Failed to import the required libraries for the Blue Robotics Temperature Sensor")
 
 from components.sensors.TempUnit import TempUnit
-
 from components.sensors.TempSensor import TempSensor
 
 class BlueRoboticsTempSensor(TempSensor):
-    __sensor:TSYS01 = None #The temperature sensor
+    __sensor = None #The temperature sensor
 
     def __init__(self, tempUnit:TempUnit = TempUnit.F):
         super().__init__(tempUnit)
@@ -18,10 +22,10 @@ class BlueRoboticsTempSensor(TempSensor):
        # if not self.__sensor.init():
         #   print("Error initializing sensor")
          #  exit(1
+
         try:
            self.__sensor = TSYS01()
-           self.__sensor.init()
-           self._isConnected = True
+           self._isConnected = self.__sensor.init()
         except:
            print("Failed to detect BR Temp Sensor")
            self._isConnected = False

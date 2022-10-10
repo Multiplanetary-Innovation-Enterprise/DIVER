@@ -1,11 +1,15 @@
-from w1thermsensor import W1ThermSensor, Unit
+try:
+    from w1thermsensor import W1ThermSensor, Unit
+except:
+    print("Failed to import the required libraries for the DS18B20 Temperature Sensor")
+
 
 from components.sensors.TempUnit import TempUnit
 from components.sensors.TempSensor import TempSensor
 
 #Represents the DS18B20 temperature sensor
 class DS18B20TempSensor(TempSensor):
-    __sensor:W1ThermSensor = None #The temperature sensor
+    __sensor = None #The temperature sensor
 
     def __init__(self, tempUnit:TempUnit = TempUnit.F):
         super().__init__(tempUnit)

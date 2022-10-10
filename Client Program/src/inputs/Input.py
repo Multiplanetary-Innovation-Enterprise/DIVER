@@ -19,7 +19,7 @@ class Input(Publisher, ABC):
     #Creates the action message and sends it over the message channel
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
         messageChannel.broadcast(message)
-        
+
     #Sends the arm thrusters action message
     def arm(self, event) -> None:
         message = Message(MessageType.ACTION, Action.ARM.value)
@@ -88,4 +88,9 @@ class Input(Publisher, ABC):
     #Sends the decrease lights brightness action message
     def decreaseBrightness(self, event) -> None:
         message = Message(MessageType.ACTION, Action.BRIGHTNESS_DECREASE.value)
+        self.sendMessage(message, self.__messageChannel)
+
+    #Sends the capture image action message
+    def captureImage(self, event) -> None:
+        message = Message(MessageType.ACTION, Action.CAPTURE_IMAGE.value)
         self.sendMessage(message, self.__messageChannel)

@@ -38,3 +38,5 @@ class KeyboardInput(Input):
 
         keyboard.on_press_key(']', self.increaseBrightness, True)
         keyboard.on_press_key('[', self.decreaseBrightness, True)
+
+        keyboard.on_press_key('c', self.captureImage, True)

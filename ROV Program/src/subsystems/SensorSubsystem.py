@@ -13,7 +13,7 @@ class SensorSubsystem(Subsystem):
     __internalTempSensor:TempSensor = None #The sensor for monitoring the elctronics capsule temp
     __imu:IMU = None                       #The IMU sensor
     __externalTempSensor:TempSensor = None #Blue Robotics sensor (added 4-6-22)
-    __pressureSensor:PressureSensor = None  #Pressure sensor added 4/8/22
+    __pressureSensor:PressureSensor = None #Pressure sensor added 4/8/22
 
     def __init__(self, controller:Controller, config):
         super().__init__(controller, config)
