@@ -11,10 +11,13 @@ class RaspberryPi(Controller):
     __pi = None #The raspberry pi
 
     def __init__(self):
-        os.system ("sudo pigpiod")
-        time.sleep(1)
+        try:
+            os.system ("sudo pigpiod")
+            time.sleep(1)
 
-        self.__pi = pigpio.pi()
+            self.__pi = pigpio.pi()
+        except:
+            print("Failed to connect to the Raspberry Pi!")
 
     #Updates the mode of the provided pin
     def setPinMode(self, pinNum:int, mode:PinMode) -> None:
