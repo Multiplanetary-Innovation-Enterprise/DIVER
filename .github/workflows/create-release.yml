@@ -1,0 +1,39 @@
+# Creates a new release when 
+name: Create Release
+
+# Controls when the workflow will run
+on:
+  # Triggers the release creation when changes are pushed onto the master branch
+  push:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# The list of tasks to perform
+jobs:
+  # This workflow contains a single job called "build"
+  build-dependences:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    # steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # TODO
+
+          
+  # Creates the executables for the ROV and Client Programs
+  build-applications:
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+      
+       # TODO
+      
+  # Creates the actual release
+  create-release:
+      # The type of runner that the job will run on
+      runs-on: ubuntu-latest
+      
+       # TODO
+      
