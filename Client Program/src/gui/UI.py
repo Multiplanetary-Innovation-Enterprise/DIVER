@@ -1,58 +1,36 @@
 #The program creates a user interface for the Diver ROV Client 
-#Last modified: 3/24/2022
+#Last modified: 9/27/2022
 
-import tkinter as tk
-from tkinter import ttk
+import tkinter
+from tkinter import ttk, Tk
+import datetime
 
-class UI(Tk, Window):
-    #creates root
-    root = tk.Tk()
-    root.title('ROV UI')
+class UI(Tk):
 
-    #filler value for sensor data
-    x = 0
-
-    
     #Main method of the program. Calls other functions to create parts of the UI.
-    def start():
+    def _init_(self, master):
+        self.master = master
+        master.title('ROV UI')
+
+        #filler
+        x = 0
 
         #set size
-        root.geometry("1000x500")
+        self.geometry("1000x500")
 
         #set up grid so that there are 2 columns, the right is bigger than the left
-        root.columnconfigure(0, weight=1)
-        root.columnconfigure(1, weight=3)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=3)
 
         #set up grid so that there are 3 rows on the left and one big row on the right
-        root.rowconfigure(0, weight =1)
-        root.rowconfigure(1, weight =1)
-        root.rowconfigure(2, weight =1)
-
-        #creates the external tempature frame and adds it to the root
-        inputExtTemp = extTemp(root)
-        inputExtTemp.grid(column = 0, row = 0, sticky=tk.N)
-
-        #creates the internal tempature frame and adds it to the root
-        inputInTemp = inTemp(root)
-        inputInTemp.grid(column = 0, row = 1,sticky=tk.N)
-
-         #creates the battery frame and adds it to the root
-        inputBat = batteryDisplay(root)
-        inputBat.grid(column = 0, row = 2, sticky=tk.N)
-
-         #create the  tempature frame and adds it to the root
-        inputCam = cameraFeed(root)
-        inputCam.grid(column = 1, row = 0,rowspan = 3, sticky=tk.N)
-
-        #runs root
-        root.mainloop()
-
+        self.rowconfigure(0, weight =1)
+        self.rowconfigure(1, weight =1)
+        self.rowconfigure(2, weight =1)
 
     #Gets data from external temperature sensor and displays it
-    def extTemp(container):
 
         #create frame and set size
-        extTempFrm = tk.Frame(root)
+        extTempFrm = Tk.Frame(self)
         extTempFrm.columnconfigure(0, weight=1)
 
         #create header label
@@ -65,15 +43,10 @@ class UI(Tk, Window):
         else :
             extTempFailLabel = ttk.Label(extTempFrm, text ="No External Tempature data", foreground = '#f00').pack()
 
-        #returns frame
-        return extTempFrm
-
-
-    #Retirieves internal temperature and displays it
-    def inTemp(container):
+        extTempFrm.grid(column = 0, row = 0, sticky=Tk.N)
 
         #create frame and set size
-        inTempFrm = tk.Frame(root)
+        inTempFrm = Tk.Frame(self)
         inTempFrm.columnconfigure(0, weight=1) 
 
         #create header label
@@ -86,13 +59,13 @@ class UI(Tk, Window):
         else :
             inTempFailLabel = ttk.Label(inTempFrm, text ="No External Tempature data", foreground = '#f00').pack()
 
-        return inTempFrm
+        #return inTempFrm
+        inTempFrm.grid(column = 0, row = 1,sticky=Tk.N)
 
     #Retrieves battery life from ?? and displays it
-    def batteryDisplay(container):
 
         #create frame and set size
-        batFrm = tk.Frame(root)
+        batFrm = Tk.Frame(root)
         batFrm.columnconfigure(0, weight=1)
 
         #create header label
@@ -105,14 +78,14 @@ class UI(Tk, Window):
         else :
             batteryFailLabel = ttk.Label(batFrm, text ="No battery data", foreground = '#f00').pack()
 
-        return batFrm
+        #return batFrm
+        batFrm.grid(column = 0, row = 2, sticky=Tk.N)
 
 
     #Displays camera feed
-    def cameraFeed(container):
 
         #create frame and sset size
-        camFrm = tk.Frame(root)
+        camFrm = Tk.Frame(root)
         camFrm.columnconfigure(0, weight=1) 
 
         #create header label
@@ -125,8 +98,15 @@ class UI(Tk, Window):
         else :
             camFailLabel = ttk.Label(camFrm, text ="No camera data", foreground = '#f00').pack() 
 
-        return camFrm
+        #return camFrm
+        camFrm.grid(column = 1, row = 0,rowspan = 3, sticky=Tk.N)
+    
+    def update_clock(self):
+        #Update the label
+        self.after(1000, self.update_clock) # run itself again after 1000 ms
 
-    #control to make sure mehtods are called in the right order
-    if __name__ == "__main__":
-        start()
+root = Tk()
+rov_UI = UI(root)
+root.mainloop()
+UI.update_clock()
+>>>>>>> 7015b38e1e8a2bec0faaa5b4c7e478130ef7eb26

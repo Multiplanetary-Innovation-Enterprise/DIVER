@@ -113,20 +113,8 @@ class ControllerInput(Input):
 
                     self.stopZ(None);
 
-                # #either joystick can move the vechile left and right
-                # if joystick.get_axis(0) > .5:
-                #     print("right-------------------------------")
-                #     self.right(None);
-                # elif joystick.get_axis(0) < -.5:
-                #     print("LEFT -----------------------------")
-                #     self.left(None);
-                # else:
-                #     self.stopXY(None);
-
             #controls how fast the controller gives input
             clock.tick(5);
-
-        print("pyame stop")
 
         # Close the window and quit.
        # pygame.quit()
