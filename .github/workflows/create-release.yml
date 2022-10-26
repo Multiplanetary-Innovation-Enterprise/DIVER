@@ -49,7 +49,6 @@ jobs:
           # Rename the library file that was created
           
           # Moves the built library to the release folder
-          cd dist
           mv .whl ../../Release
           
           cd ~
