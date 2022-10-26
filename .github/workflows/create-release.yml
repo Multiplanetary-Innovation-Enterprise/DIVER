@@ -22,12 +22,22 @@ jobs:
         with:
           python-version: '3.10'
           check-latest: true
-      - name: Setup commands
+      - name: Setup Tools
         run: |
+          echo "----Python Version----"
           python --version
+          echo "----------------------"
+          
+          # Installs the python package manager
           python -m pip install --upgrade pip
+          
+          # Dependencies for building the packages
           pip install setuptools
           pip install wheel
+          
+        # Create the folder to hold the files for the release
+      - name: Create Release Folder
+        run: mkdir Release
           
         # Builds the messaging library
       - name: Build Messaging
@@ -35,6 +45,14 @@ jobs:
           cd "Common/Messaging"
           python setup.py bdist_wheel
           cd dist
+          
+          # Rename the library file that was created
+          
+          # Moves the built library to the release folder
+          cd dist
+          mv .whl ../../Release
+          
+          cd ~
           ls
           
   # Builds the custom packages
