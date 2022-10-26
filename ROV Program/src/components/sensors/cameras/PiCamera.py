@@ -7,9 +7,9 @@ from components.sensors.cameras.Camera import Camera
 #A wrapper for the picamera library to be consistent with out camera interface.
 #It represents a Raspberry Pi camera that connects over the Camera Serial Interface(CSI)
 class PiCamera(Camera):
-    __camera:PC = None      #The underylying Raspberry Pi camera
-    __frameWidth:int = 0
-    __frameHeight:int = 0
+    __camera:PC = None    #The underylying Raspberry Pi camera
+    __frameWidth:int = 0  #The horizontal width of the image in pixels
+    __frameHeight:int = 0 #The vertical height of the image in pixels
 
     #Creates and configures the camera
     def _setup(self) -> None:

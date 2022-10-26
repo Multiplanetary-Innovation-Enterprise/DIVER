@@ -20,13 +20,28 @@ class SensorDataCollector(DataCollector):
         #Get internal internal temperature of the electronics capsule
         tempSensor = self.__subsystem.getInternalTempSensor()
         imu = self.__subsystem.getIMU()
+        exTempSensor = self.__subsystem.getExternalTempSensor() #added 4/6/22
+        pressureSensor = self.__subsystem.getPressureSensor()             # added 4/8/22
 
-        #Formats the sensor data as key-value pairs
-        sensorData = {
-            'internalTemp': tempSensor.getTemperature(),
-        }
+        #The collected sensor data
+        sensorData = {}
 
-        #Appends the IMU data to the rest of the sensor data
-        sensorData.update(imu.getSensorData().toDict())
+        #Checks if the temperature sensor is connected
+        if tempSensor.isConnected():
+            sensorData["internalTemp"] = tempSensor.getTemperature()
+
+        #Checks if the imu sensor is connected
+        if imu.isConnected():
+            #Appends the IMU data to the rest of the sensor data
+            sensorData.update(imu.getSensorData().toDict())
+
+        #Checks if the external temperature sensor is connected
+        if exTempSensor.isConnected():
+            sensorData["externalTemp"] = exTempSensor.getTemperature() #added 4/6/22
+
+        #Checks if the external pressure sensor is connected
+        if pressureSensor.isConnected():
+            pressureSensor._read()  #added 4/8/22
+            sensorData["pressure"]=pressureSensor._getPressure()
 
         return sensorData

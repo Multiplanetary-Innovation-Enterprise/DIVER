@@ -11,6 +11,7 @@ from ROVConnections.SubWriter import SubWriter
 
 from ROVMessaging.MessageChannel import *
 from ROVMessaging.MessageType import *
+from ROVMessaging.Message import *
 from ROVMessaging.Subscriber import *
 from ROVMessaging.SystemStatus import *
 
@@ -28,8 +29,9 @@ class ClientApp(Subscriber):
     __window:Window = None                         #The GUI window
     __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
-    __outgoingMessageChannel:MessageChannel = None #The message channel to the ROV program
-    __controllerInput::ControllerInput = None      #The xbox controller
+    __outgoingMessageChannel:MessageChannel = None #The message channel for sending messages to the ROV program
+    __controllerInput:ControllerInput = None       #The xbox controller
+    __subWriter:SubWriter = None                   #Sends messages to the ROV
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -57,7 +59,7 @@ class ClientApp(Subscriber):
 
         #Sets up ability to send messages to the ROV
         socketWriter = SocketWriter(self.__serverConnection)
-        subWriter = SubWriter(socketWriter)
+        self.__subWriter = SubWriter(socketWriter)
 
         #Sets up the abilty to recieve messages from the ROV
         socketReader = SocketReader(self.__serverConnection)
@@ -75,7 +77,7 @@ class ClientApp(Subscriber):
 
         #Sets up the data logger and creates a new log file
         self.__dataLogger = DataLogger()
-        self.__dataLogger.openFile("..\logs\data\data_log");
+        self.__dataLogger.openFile("../logs/data/data_log")
 
         #Setups the GUI window
         self.__window = Window()
@@ -86,8 +88,8 @@ class ClientApp(Subscriber):
         self.__window.switchFrame(imageFrame)
 
         #Allows the client to send action and system status messages to the ROV
-        self.__outgoingMessageChannel.subscribe(MessageType.ACTION, subWriter)
-        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.ACTION, self.__subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self.__subWriter)
 
         #Allows the client to recieve sensor data from the ROV
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__dataLogger)
@@ -121,15 +123,17 @@ class ClientApp(Subscriber):
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
         print("shutting down...")
-        #Stops the data logger
-        self.__dataLogger.close()
+
+        #Stops the xbox controller listener thread
+        self.__controllerInput.stop()
+
+        print("send shutdown mssage")
 
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)
 
-        #Stops the xbox controller listener thread
-        self.__controllerInput.stop()
+        self.__subWriter.stop()
 
         #Sends EOF to the server, so that its socket reader stops blocking
         self.__serverConnection.shutdown(socket.SHUT_WR)
@@ -141,6 +145,10 @@ class ClientApp(Subscriber):
         #Finally closes the socket, since the server is disconnected
         self.__serverConnection.close()
 
+        #Closes the data log file
+        self.__dataLogger.close()
+
+    #Listens for system status updates
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and

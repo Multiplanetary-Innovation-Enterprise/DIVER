@@ -9,7 +9,7 @@ from components.rotation.Stepper import Stepper
 #Represents the NEMA## stepper motors used on the ROV
 #url:
 class NEMAStepper(Stepper):
-    __DEGREES_PER_STEP = 1.8           #The angle rotated for one step
+    __DEGREES_PER_STEP:float = 1.8           #The angle rotated for one step
     __stepSignal:DigitalSignal = None  #The signal that controls the stepping
     __dirSignal:DigitalSignal = None   #The signal that controls the direction
     __sleepSignal:DigitalSignal = None #The signal that controls sleeping

@@ -4,7 +4,7 @@ from ROVMessaging.MessageChannel import MessageChannel
 
 from inputs.Input import Input
 
-#Represents an implmentation of an input using a keyboard
+#Represents an implementation of a generic input device using a keyboard
 class KeyboardInput(Input):
     #Registers all of the key bindings and provides the message channel to
     #send the input change messages in
@@ -38,3 +38,5 @@ class KeyboardInput(Input):
 
         keyboard.on_press_key(']', self.increaseBrightness, True)
         keyboard.on_press_key('[', self.decreaseBrightness, True)
+
+        keyboard.on_press_key('c', self.captureImage, True)

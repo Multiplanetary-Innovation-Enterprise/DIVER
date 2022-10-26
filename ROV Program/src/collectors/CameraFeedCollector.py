@@ -1,3 +1,5 @@
+import time
+
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 
@@ -8,6 +10,8 @@ from subsystems.VisionSubsystem import VisionSubsystem
 #provided message channel
 class CameraFeedCollector(DataCollector):
     __subsystem:VisionSubsystem = None #The subsystem that the camera belongs to
+    lastTime = 0 #USED for FPS caclulations for testing
+    currTime = 0 #USED for FPS caclulations for testing
 
     def __init__(self, subsystem:VisionSubsystem, messageChannel:MessageChannel):
         #Configures the data sender
@@ -20,9 +24,16 @@ class CameraFeedCollector(DataCollector):
         #Gets the camera from the subsystem
         camera = self.__subsystem.getCamera()
 
-        #Formats the vision data as key-value pairs
-        visionData = {
-            'camera': camera.getFrame()
-        }
+        #The collected vision data
+        visionData = {}
+
+        #Gets the camera data if it is connectd
+        if camera.isConnected():
+            visionData["camera"] =  camera.getFrame()
+
+        self.lastTime = self.currTime
+        self.currTime = time.time_ns()
+
+        # print("Elapsed: " + str((self.currTime - self.lastTime) / 1000000000))
 
         return visionData

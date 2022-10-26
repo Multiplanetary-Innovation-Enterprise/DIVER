@@ -3,8 +3,10 @@ from abc import ABC, abstractmethod
 
 from PIL import Image
 
+from components.sensors.Sensor import Sensor
+
 #Represents a generic camera
-class Camera(ABC):
+class Camera(Sensor, ABC):
     _isActive:bool = False #Whether or not the camera is on
 
     #Runs the camera setup

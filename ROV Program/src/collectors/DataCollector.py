@@ -41,6 +41,11 @@ class DataCollector(Publisher, ABC):
             #Get the data
             data = self.getData()
 
+            #Checks if no data was retrieved
+            if not data:
+                #Nothing was collectd, so something went wrong. Stop data collection
+                self.stop()
+
             #The amount of elapsed time since the data collection was started
             elapsedTime = round((time.time_ns() - startTime) / 1000000000, 2)
 
@@ -66,7 +71,16 @@ class DataCollector(Publisher, ABC):
 
     #Stops the data collection process
     def stop(self) -> None:
+        #Checks if the data collector has already been stopped
+        if not self.__isRunning:
+            return
+
         self.__isRunning = False
+
+        #Checks if trying to stop the data collector internally or externally. If
+        #internal, then the thread is done, so don't wait for it  to end (hangs forever)
+        if not threading.get_ident() == self.__thread.ident:
+            self.__thread.join()
 
     #Sends the colleted data over the provided message channel
     def sendMessage(self, message:Message, messageChannel:MessageChannel) -> None:
@@ -78,7 +92,7 @@ class DataCollector(Publisher, ABC):
         pass
 
     #Updates the sample period based on the provided new sample frequency
-    def setSampleFrequency(self, frequency:float):
+    def setSampleFrequency(self, frequency:float) -> None:
         self.__samplePeriod = 1 / frequency
 
     #Gets the data collection sample frequency
@@ -86,7 +100,7 @@ class DataCollector(Publisher, ABC):
         return 1 / self.__samplePeriod
 
     #Updates the sample period based on the provided new sample period
-    def setSamplePeriod(self, period:float):
+    def setSamplePeriod(self, period:float) -> None:
         self.__samplePeriod = period
 
     #Gets the data collection sample period

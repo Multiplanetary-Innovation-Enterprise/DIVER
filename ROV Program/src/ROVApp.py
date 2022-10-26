@@ -28,11 +28,11 @@ class ROVApp(Subscriber):
     __pubListener:PubListener = None                 #Listens for messages from the client program
     __outgoingMessageChannel:MessageChannel  = None  #The message channel to the client program
     __server:SocketServer  = None                    #The server that listens for client connection requests
-    __shutdownEvent = None                           #The event the main thread waits for before shutdown
-    __commandProccessor = None                       #Processes all of the incoming commands
+    __commandProccessor:CommandProcessor = None      #Processes all of the incoming commands
     __rov:ROV = None                                 #The ROV
     __sensorDataCollector:SensorDataCollector = None #Sends the sensor data to the client
     __cameraFeedCollector:CameraFeedCollector = None #Sends the camera frames to the client
+    __subWriter:SubWriter = None
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -71,7 +71,7 @@ class ROVApp(Subscriber):
         #Listens for messages that it is registered to and sends them over the
         #socekt to the client program
         socketWriter = SocketWriter(self.__clientConnection)
-        subWriter = SubWriter(socketWriter)
+        self.__subWriter = SubWriter(socketWriter)
 
         #Retrieves and sends the sensor data to the client
         self.__sensorDataCollector = SensorDataCollector(self.__rov.getSensorSystem(), self.__outgoingMessageChannel)
@@ -89,15 +89,12 @@ class ROVApp(Subscriber):
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
         #Listens for sensor data, vision data, and system status updates and sends it to the client program
-        self.__outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, subWriter)
-        self.__outgoingMessageChannel.subscribe(MessageType.VISION_DATA, subWriter)
-        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.VISION_DATA, self.__subWriter)
+        self.__outgoingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self.__subWriter)
 
         #Start listening for messages from the client program
         self.__pubListener.listen()
-
-        #The shutdown event that the main thread will wait for
-        self.__shutdownEvent = threading.Event()
 
     #Starts the ROV if it is not already running
     def start(self) -> None:
@@ -107,34 +104,35 @@ class ROVApp(Subscriber):
 
     #The main loop for the program
     def __run(self) -> None:
-        self.__setup()
-
-        #Put something here instead of infinite loop (wastes cpu time)
         while self.__isRunning:
-            #Waits for the shutdown event, since the main thread isn't currently
-            #used for anything
-            self.__shutdownEvent.wait()
+            self.__setup()
 
-            #Maybe send the watchdog keep alive messages here? (TODO)
-
-        self.__cleanup()
+            #Waits indefinitely until a connection broken error occurs
+            self.__subWriter.join()
+            self.__pubListener.join()
 
     #Tells the ROV to stop running
     def stop(self) -> None:
         self.__isRunning = False
 
+        self.__cleanup()
+
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        print("shuting down...")
-        #self.__sensorDataCollector.stop()
+        print("shutting down...")
+        self.__sensorDataCollector.stop()
         self.__cameraFeedCollector.stop()
         self.__server.stop()
         self.__commandProcessor.stop()
         self.__rov.shutdown()
 
+        print("Sending shutdown message")
+
         #Tells the client that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
         self.__outgoingMessageChannel.broadcast(message)
+
+        self.__subWriter.stop()
 
         #Sends EOF to the client, so that its socket reader stops blocking
         self.__clientConnection.shutdown(socket.SHUT_WR)
@@ -146,11 +144,10 @@ class ROVApp(Subscriber):
         #Finally closes the socket, since the client is disconnected
         self.__clientConnection.close()
 
+    #Listens for system status updates
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message
         if (message.getType()     == MessageType.SYSTEM_STATUS and
             message.getContents() == SystemStatus.SHUT_DOWN):
-            self.stop()
 
-            #Wakes the main thread up, so that it can proceed with shutdown
-            self.__shutdownEvent.set()
+            self.stop()

@@ -8,6 +8,7 @@ from ROVMessaging.MessageType import MessageType
 
 from gui.Frame import Frame
 
+#NOTE: This class is a temporary placeholder until the new UI is implemented
 #Represents a frame for showing the camera feed
 class ImageFrame(Frame, Subscriber):
     __imageLabel:Label = None #The label containing the image
@@ -38,8 +39,6 @@ class ImageFrame(Frame, Subscriber):
         self.grid_forget()
 
     def recieveMessage(self, message:Message) -> None:
-        print("Message")
-
         #Checks if the message is new camera frame to display
         if not message.getType() == MessageType.VISION_DATA:
             return
@@ -60,4 +59,6 @@ class ImageFrame(Frame, Subscriber):
         self.lastTime = self.currTime
         self.currTime = time.time_ns()
 
-        print("Elapsed: " + str((self.currTime - self.lastTime) / 1000000000))
+        elapsed = (self.currTime - self.lastTime) / 1000000000
+
+        print("Elapsed: " + str(elapsed) + " or " + str(round(1 / elapsed, 2)) + " FPS")

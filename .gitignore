@@ -1,5 +1,12 @@
 ROV/ROV/commands/__pycache__/
 ROV/ROV/prototype/__pycache__/
-ROV/ROV/commands/__pycache__/__init__.cpython-39.pyc
-ROV/ROV/common/Messaging/.eggs/
 __pycache__
+
+Common/Connections/.eggs
+Common/Connections/build
+Common/Connections/dist
+Common/Connections/ROV_Connections.egg-info
+
+Common/Messaging/build
+Common/Messaging/dist
+Common/Messaging/ROV_Messaging.egg-info

@@ -3,6 +3,7 @@ from commands.ArmCommand import ArmCommand
 from commands.MoveCommands import *
 from commands.SpeedCommands import *
 from commands.IlluminationCommands import *
+from commands.CaptureImageCommand import *
 
 from ROV import ROV
 
@@ -46,5 +47,7 @@ class CommandFactory:
                 command = IncreaseLightBrightnessCommand(self.__rov.getIlluminationSystem())
         elif actionCode == DecreaseLightBrightnessCommand.getActionCode():
                 command = DecreaseLightBrightnessCommand(self.__rov.getIlluminationSystem())
+        elif actionCode == CaptureImageCommand.getActionCode():
+            command = CaptureImageCommand(self.__rov.getVisionSystem())
 
         return command

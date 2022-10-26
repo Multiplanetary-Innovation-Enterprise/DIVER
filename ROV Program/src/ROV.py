@@ -1,4 +1,7 @@
 from components.controllers.RaspberryPi import RaspberryPi
+from components.controllers.DummyController import DummyController
+from components.controllers.Controller import Controller
+
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
 from subsystems.IlluminationSubsystem import IlluminationSubsystem
 from subsystems.SensorSubsystem import SensorSubsystem
@@ -6,7 +9,7 @@ from subsystems.VisionSubsystem import VisionSubsystem
 
 #Represents the ROV and all the subsystems that it encompasses
 class ROV:
-    __pi:RaspberryPi = None                           #The Raspberry Pi used to control the ROV
+    __controller:Controller = None                    #The controller used to control the ROV
     __propSystem:PropulsionSubsystem = None           #The propulsion subsystem
     __illuminationSystem:IlluminationSubsystem = None #The lightings subsystem
     __sensorSystem:SensorSubsystem = None             #The sensor subsystem
@@ -14,13 +17,19 @@ class ROV:
     __config = None                                   #The configuration file
 
     def __init__(self, config):
-        self.__pi = RaspberryPi()
         self.__config = config
 
-        self.__propSystem = PropulsionSubsystem(self.__pi, self.__config)
-        self.__illuminationSystem = IlluminationSubsystem(self.__pi, self.__config)
-        self.__sensorSystem = SensorSubsystem(self.__pi, self.__config)
-        self.__visionSystem = VisionSubsystem(self.__pi, self.__config)
+        #Used to determine which controller to use
+        if self.__config['Testing']['FakeHardware'].lower() == "true":
+            print("Testing mode! Hardware is being faked with a dummy controller")
+            self.__controller = DummyController()
+        else:
+            self.__controller = RaspberryPi()
+
+        self.__propSystem = PropulsionSubsystem(self.__controller, self.__config)
+        self.__illuminationSystem = IlluminationSubsystem(self.__controller, self.__config)
+        self.__sensorSystem = SensorSubsystem(self.__controller, self.__config)
+        self.__visionSystem = VisionSubsystem(self.__controller, self.__config)
 
     #Gets the propulsion subsystem
     def getPropSystem(self) -> PropulsionSubsystem:
