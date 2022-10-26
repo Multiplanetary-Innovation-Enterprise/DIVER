@@ -25,8 +25,8 @@ jobs:
       - name: Setup commands
           run python version
           run python -m pip install --upgrade pip
-          pip install setuptools
-          pip install wheel
+          run pip install setuptools
+          run pip install wheel
           
         # Builds the messaging library
       - name: Build Messaging
@@ -36,9 +36,9 @@ jobs:
           run ls
           
   # Builds the custom packages
-  build-dependences:
+ # build-dependences:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+  #  runs-on: ubuntu-latest
     
     #steps:
         
@@ -46,16 +46,16 @@ jobs:
 
           
   # Creates the executables for the ROV and Client Programs
-  build-applications:
+#  build-applications:
       # The type of runner that the job will run on
-      runs-on: ubuntu-latest
+   #   runs-on: ubuntu-latest
       
        # TODO
       
   # Creates the actual release
-  create-release:
+  #create-release:
       # The type of runner that the job will run on
-      runs-on: ubuntu-latest
+ #     runs-on: ubuntu-latest
       
        # TODO
       
