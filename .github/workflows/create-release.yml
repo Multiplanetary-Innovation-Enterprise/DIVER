@@ -12,14 +12,36 @@ on:
 
 # The list of tasks to perform
 jobs:
-  # This workflow contains a single job called "build"
+  #Sets up all the required tools and build the packages and applications
+  build:
+    # Perform all of the setup an a machine running Ubuntu/Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+          check-latest: true
+      - name: Setup commands
+          run python version
+          run python -m pip install --upgrade pip
+          pip install setuptools
+          pip install wheel
+          
+        # Builds the messaging library
+      - name: Build Messaging
+          run cd "Common/Messaging"
+          run python setup.py bdist_wheel
+          run cd dist
+          run ls
+          
+  # Builds the custom packages
   build-dependences:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    # steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    
+    #steps:
+        
       # TODO
 
           
