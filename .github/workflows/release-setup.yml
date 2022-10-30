@@ -1,0 +1,32 @@
+# Peforms the setup requried to create a new release
+name: Setup For Release
+
+# Allows you to run this workflow manually from the Actions tab
+workflow_dispatch:
+
+# The list of tasks to perform
+jobs:
+  #Sets up all the required tools required to build the libraries and applications
+  setup:
+    # Perform all of the setup an a machine running Ubuntu/Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+          check-latest: true
+      - name: Setup Tools
+        run: |
+          echo "----Python Version----"
+          python --version
+          echo "----------------------"
+          
+          # Installs the python package manager
+          python -m pip install --upgrade pip
+          
+          # Dependencies required for building the packages/libraries
+          pip install setuptools
+          pip install wheel
+       
+          
