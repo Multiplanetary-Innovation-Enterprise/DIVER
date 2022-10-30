@@ -22,6 +22,7 @@ jobs:
         # Creates the folder to hold the files for creating the release
       - name: Create Release Folder
         #run: mkdir Release
+        run: ls
 
   # Builds the messaging library
   build-messaging-library:
