@@ -12,6 +12,7 @@ runs:
           python-version: '3.10'
           check-latest: true
       - name: Setup Tools
+        shell: bash
         run: |
           echo "----Python Version----"
           python --version
