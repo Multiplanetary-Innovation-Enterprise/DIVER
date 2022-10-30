@@ -30,7 +30,7 @@ jobs:
     needs: setup
     steps:     
       - uses: actions/checkout@v2
-      - uses: ./.github/workflows/setup-release@v1
+      - uses: .github/workflows/setup-release@v1
         # Builds the messaging library
       - name: Build Messaging
         run: |
