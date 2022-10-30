@@ -83,5 +83,6 @@ jobs:
         - uses: ./.github/actions/setup-release
 
         - run: echo "Creating release"
+        - run: |
             cd Release
             ls
