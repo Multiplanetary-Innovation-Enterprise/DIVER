@@ -18,22 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.10'
-          check-latest: true
-      - name: Setup Tools
-        run: |
-          echo "----Python Version----"
-          python --version
-          echo "----------------------"
-          
-          # Installs the python package manager
-          python -m pip install --upgrade pip
-          
-          # Dependencies for building the packages
-          pip install setuptools
-          pip install wheel
           
         # Creates the folder to hold the files for creating the release
       - name: Create Release Folder
@@ -45,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup
     steps:     
+      - uses: DIVER/setup-release@v1
         # Builds the messaging library
       - name: Build Messaging
         run: |
