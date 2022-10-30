@@ -56,7 +56,7 @@ jobs:
       # Builds the netowrking library
       - name: Build Networking
         run: |
-          cd "Common/Networking"
+          cd "Common/Connections"
           python setup.py bdist_wheel
           cd dist
 
