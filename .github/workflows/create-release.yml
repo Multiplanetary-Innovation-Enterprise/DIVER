@@ -106,16 +106,11 @@ jobs:
           with:
             version: ${{steps.previous-tag.outputs.tag}}     
             
-        - name: Prev tag
-          run : echo ${{steps.semvers.outputs.patch}}
-          
-        - name: Prev tag 2
-          run : echo "Release ${{steps.semvers.outputs.patch}}"
-        
         - uses: softprops/action-gh-release@v1
           with:
-            tag_name: "Release ${{steps.semvers.outputs.patch}}"
+            tag_name: "${{steps.semvers.outputs.patch}}"
             fail_on_unmatched_files: true
+            title: "Release ${{steps.semvers.outputs.patch}}"
             files: |
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
