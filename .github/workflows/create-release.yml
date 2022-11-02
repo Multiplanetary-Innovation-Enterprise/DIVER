@@ -12,22 +12,10 @@ on:
 
 # The list of tasks to perform
 jobs:
-  #Sets up all the required tools and build the packages and applications
-  setup:
-    # Perform all of the setup an a machine running Ubuntu/Linux
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-        # Creates the folder to hold the files for creating the release
-      - name: Create Release Folder
-        run: mkdir Release
-
   # Builds the messaging library
   build-messaging-library:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-release
@@ -37,18 +25,26 @@ jobs:
         run: |
           cd "Common/Messaging"
           python setup.py bdist_wheel
+          
+          # Move into the distribution folder where the build files are
           cd dist
 
           # Rename the library file that was created
-
-          # Moves the built library to the release folder
-          mv *.whl ../../Release
+          mv *.whl messaging-library.whl
+          
+      # Upload the built library as an artafact
+      - name: Upload messaging library
+        uses: actions/upload-artifact@v3
+        with:
+          name: messaging-library
+          path: messaging-library.whl
+          retention-days: 1
 
   # Builds the netowrking library
   build-networking-library:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    needs: setup
+
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-release
@@ -58,12 +54,21 @@ jobs:
         run: |
           cd "Common/Connections"
           python setup.py bdist_wheel
+         
+          # Move into the distribution folder where the build files are
           cd dist
 
           # Rename the library file that was created
+          mv *.whl networking-library.whl
+          
+        # Upload the built library as an artafact
+      - name: Upload networking library
+        uses: actions/upload-artifact@v3
+        with:
+          name: networking-library
+          path: networking-library.whl
+          retention-days: 1
 
-          # Moves the built library to the release folder
-          mv *.whl ../../Release
 
   # Creates the executables for the ROV and Client Programs
 #  build-applications:
@@ -76,14 +81,17 @@ jobs:
   create-release:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
-      needs: [setup, build-messaging-library, build-networking-library]
+      needs: [build-messaging-library, build-networking-library]
 
       steps:
         - uses: actions/checkout@v3
         - uses: ./.github/actions/setup-release
 
+        - name: Download artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: messaging-library, networking-library
+
         - run: echo "Creating release"
         - run: |
-            ls
-            cd Release
             ls
