@@ -26,21 +26,19 @@ jobs:
           cd "Common/Messaging"
           python setup.py bdist_wheel
         
-        
       - name: Rename file  
         # Move into the distribution folder where the build files are
         run: |
           cd "Common/Messaging/dist"
-          ls
 
           # Rename the library file that was created
           mv *.whl messaging-library.whl
-        
-          ls
           
-      # Upload the built library as an artafact
       - name: Upload messaging library
-        uses: actions/upload-artifact@v3
+        run:  cd "Common/Messaging/dist"
+       
+        # Upload the built library as an artafact
+      - uses: actions/upload-artifact@v3
         with:
           name: messaging-library
           path: messaging-library.whl
@@ -60,16 +58,20 @@ jobs:
         run: |
           cd "Common/Connections"
           python setup.py bdist_wheel
-         
-          # Move into the distribution folder where the build files are
-          cd dist
+                   
+      - name: Rename file  
+        # Move into the distribution folder where the build files are
+        run: |
+          cd "Common/Connections/dist"
 
           # Rename the library file that was created
-          mv *.whl networking-library.whl
+          mv *.whl networking-library.whll
           
         # Upload the built library as an artafact
       - name: Upload networking library
-        uses: actions/upload-artifact@v3
+        run:  cd "Common/Messaging/dist"
+      
+      - uses: actions/upload-artifact@v3
         with:
           name: networking-library
           path: networking-library.whl
