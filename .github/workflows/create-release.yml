@@ -63,7 +63,7 @@ jobs:
           cd "Common/Connections/dist"
 
           # Rename the library file that was created
-          mv *.whl networking-library.whll
+          mv *.whl networking-library.whl
           
         # Upload the built library as an artafact
       - name: Upload networking library
