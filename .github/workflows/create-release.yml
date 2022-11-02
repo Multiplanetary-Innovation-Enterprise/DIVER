@@ -96,6 +96,7 @@ jobs:
         
         - uses: softprops/action-gh-release@v1
           with:
+            tag_name: "2.0.0"
             fail_on_unmatched_files: true
             files: |
               messaging-library.whl
