@@ -104,7 +104,7 @@ jobs:
           uses: WyriHaximus/github-action-next-semvers@v1
           id: semvers
           with:
-            version: ${{steps.previoustag.output.tag}}     
+            version: ${{steps.previoustag.outputs.tag}}     
         
         - uses: softprops/action-gh-release@v1
           with:
