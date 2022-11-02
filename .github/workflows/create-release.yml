@@ -101,7 +101,7 @@ jobs:
           uses: WyriHaximus/github-action-get-previous-tag@v1
           id: previous-tag
           with:
-            fallback: 1.0.0
+            fallback: 2.0.0
             
         - name: Get next minor version
           uses: WyriHaximus/github-action-next-semvers@v1
@@ -111,9 +111,10 @@ jobs:
             
         - uses: softprops/action-gh-release@v1
           with:
+            name: "Release ${{steps.semvers.outputs.patch}}"
             tag_name: "${{steps.semvers.outputs.patch}}"
             fail_on_unmatched_files: true
-            title: "Release ${{steps.semvers.outputs.patch}}"
+          
             files: |
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
