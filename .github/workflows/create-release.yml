@@ -93,9 +93,11 @@ jobs:
 
         - name: Download artifacts
           uses: actions/download-artifact@v3
+        
+        - uses: softprops/action-gh-release@v1
           with:
-            name: messaging-library, networking-library
+            fail_on_unmatched_files: true
+            files: |
+              messaging-library.whl
+              networking-library.whl
 
-        - run: echo "Creating release"
-        - run: |
-            ls
