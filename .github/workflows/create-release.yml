@@ -31,6 +31,8 @@ jobs:
 
           # Rename the library file that was created
           mv *.whl messaging-library.whl
+      - name: List files
+        run: ls
           
       # Upload the built library as an artafact
       - name: Upload messaging library
