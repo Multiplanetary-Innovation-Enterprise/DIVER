@@ -25,14 +25,18 @@ jobs:
         run: |
           cd "Common/Messaging"
           python setup.py bdist_wheel
-          
-          # Move into the distribution folder where the build files are
-          cd dist
+        
+        
+      - name: Rename file  
+        # Move into the distribution folder where the build files are
+        run: |
+          cd "Common/Messaging/dist"
+          ls
 
           # Rename the library file that was created
           mv *.whl messaging-library.whl
-      - name: List files
-        run: ls
+        
+          ls
           
       # Upload the built library as an artafact
       - name: Upload messaging library
