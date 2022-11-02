@@ -89,6 +89,9 @@ jobs:
 
       steps:
         - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0 # Required for get previous tag to work
+       
         - uses: ./.github/actions/setup-release
 
         - name: Download artifacts
