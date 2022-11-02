@@ -34,14 +34,12 @@ jobs:
           # Rename the library file that was created
           mv *.whl messaging-library.whl
           
-      - name: Upload messaging library
-        run:  cd "Common/Messaging/dist"
-       
+      - name: Upload messaging library    
         # Upload the built library as an artafact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: messaging-library
-          path: messaging-library.whl
+          path: Common/Messaging/dist/messaging-library.whl
           retention-days: 1
 
   # Builds the netowrking library
@@ -69,12 +67,10 @@ jobs:
           
         # Upload the built library as an artafact
       - name: Upload networking library
-        run:  cd "Common/Messaging/dist"
-      
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         with:
           name: networking-library
-          path: networking-library.whl
+          path: Common/Connections/dist/networking-library.whl
           retention-days: 1
 
 
