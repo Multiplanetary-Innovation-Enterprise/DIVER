@@ -82,7 +82,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-release
-      - run: cd ClientProgram
+      - run: cd "Client Program"
       - name: Run Pyinstaller
         run: pyinstaller --clean ClientProgram.spec
 
