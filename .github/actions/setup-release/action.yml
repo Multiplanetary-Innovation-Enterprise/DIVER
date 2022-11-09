@@ -17,12 +17,11 @@ runs:
           echo "----Python Version----"
           python --version
           echo "----------------------"
-          
+
           # Installs the python package manager
           python -m pip install --upgrade pip
-          
+
           # Dependencies required for building the packages/libraries
           pip install setuptools
           pip install wheel
-       
-          
+          pip install pyinstaller

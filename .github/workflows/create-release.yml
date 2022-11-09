@@ -19,22 +19,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-release
-     
+
      # Builds the messaging library
       - name: Build Messaging
         run: |
           cd "Common/Messaging"
           python setup.py bdist_wheel
-        
-      - name: Rename file  
+
+      - name: Rename file
         # Move into the distribution folder where the build files are
         run: |
           cd "Common/Messaging/dist"
 
           # Rename the library file that was created
           mv *.whl messaging-library.whl
-          
-      - name: Upload messaging library    
+
+      - name: Upload messaging library
         # Upload the built library as an artafact
         uses: actions/upload-artifact@v3
         with:
@@ -50,21 +50,21 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/setup-release
-      
+
       # Builds the netowrking library
       - name: Build Networking
         run: |
           cd "Common/Connections"
           python setup.py bdist_wheel
-                   
-      - name: Rename file  
+
+      - name: Rename file
         # Move into the distribution folder where the build files are
         run: |
           cd "Common/Connections/dist"
 
           # Rename the library file that was created
           mv *.whl networking-library.whl
-          
+
         # Upload the built library as an artafact
       - name: Upload networking library
         uses: actions/upload-artifact@v3
@@ -74,48 +74,61 @@ jobs:
           retention-days: 1
 
 
-  # Creates the executables for the ROV and Client Programs
-#  build-applications:
-      # The type of runner that the job will run on
-   #   runs-on: ubuntu-latest
+  # Creates the executable for the Client Program
+  build-client-program-application:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
 
-       # TODO
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-release
+      - run: cd ClientProgram
+      - name: Run Pyinstaller
+        run: pyinstaller --clean ClientProgram.spec
+
+        # Upload the client program executable
+      - name: Upload client program
+        uses: actions/upload-artifact@v3
+        with:
+          name: client-program
+          path: "Client Program/dist/Client Program.exe"
+          retention-days: 1
 
   #Creates the actual release
   create-release:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
-      needs: [build-messaging-library, build-networking-library]
+      needs: [build-messaging-library, build-networking-library, build-client-program-application]
 
       steps:
         - uses: actions/checkout@v3
           with:
             fetch-depth: 0 # Required for get previous tag to work
-       
+
         - uses: ./.github/actions/setup-release
 
         - name: Download artifacts
           uses: actions/download-artifact@v3
-          
+
         - name: Get previous version tag
           uses: WyriHaximus/github-action-get-previous-tag@v1
           id: previous-tag
           with:
             fallback: 2.0.0
-            
+
         - name: Get next minor version
           uses: WyriHaximus/github-action-next-semvers@v1
           id: semvers
           with:
-            version: ${{steps.previous-tag.outputs.tag}}     
-            
+            version: ${{steps.previous-tag.outputs.tag}}
+
         - uses: softprops/action-gh-release@v1
           with:
             name: "Release ${{steps.semvers.outputs.patch}}"
             tag_name: "${{steps.semvers.outputs.patch}}"
             fail_on_unmatched_files: true
-          
+
             files: |
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
-
+              "client-program/Client Program.exe"

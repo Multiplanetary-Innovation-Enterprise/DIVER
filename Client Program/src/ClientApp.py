@@ -2,6 +2,7 @@ import sys
 import socket
 import configparser
 from tkinter import *
+import os.path
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -35,9 +36,19 @@ class ClientApp(Subscriber):
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
+    
+        #Checks for which config path to use
+        #The default is up one directory for development
+        configPath = '..\config.ini'
+        
+        # Checks if the config file was not found. It is in
+        # the same folder when packaged as an exe file
+        if not os.path.isfile(configPath):
+            configPath = 'config.ini'
+    
         #Opens the config file
         self.__config = configparser.ConfigParser()
-        self.__config.read('..\config.ini')
+        self.__config.read(configPath)
 
         #Connection info for connecting to the ROV
         host = str(self.__config['ROV_CONNECTION']['Host'])
@@ -51,6 +62,7 @@ class ClientApp(Subscriber):
             self.__serverConnection.connect()
         except:
             print("Failed to connect to ROV")
+            os.system('pause')
             sys.exit()
 
         #The sending and receiving message channels
