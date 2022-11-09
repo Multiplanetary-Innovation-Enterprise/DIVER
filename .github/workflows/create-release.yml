@@ -84,7 +84,7 @@ jobs:
       - uses: ./.github/actions/setup-release
       - name: Run Pyinstaller
         run: |
-          cd "Client Program"
+          cd "Client Program/src"
           pyinstaller --clean ClientProgram.spec
 
         # Upload the client program executable
