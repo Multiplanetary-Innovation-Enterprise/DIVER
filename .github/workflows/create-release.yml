@@ -134,4 +134,4 @@ jobs:
             files: |
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
-              "client-program/ClientProgram.exe"
+              client-program/ClientProgram.exe
