@@ -92,9 +92,8 @@ jobs:
       - name: Create zip file
         uses: vimtor/action-zip@v1
         with:
-            files: |
-                Client Program/src/dist/ClientProgram.exe
-                Client Program/src/dist/config.ini
+            files: "Client Program/src/dist/ClientProgram.exe"
+
             dest: client-program.zip
 
         # Upload the client program executable
