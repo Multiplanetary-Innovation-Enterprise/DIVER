@@ -89,10 +89,10 @@ jobs:
           cd dist
           ls
 
-        - name: ls
-          run: |
-            Client Program/dist/
-            ls
+      - name: ls
+        run: |
+          Client Program/dist/
+          ls
 
         # Upload the client program executable
       - name: Upload client program
