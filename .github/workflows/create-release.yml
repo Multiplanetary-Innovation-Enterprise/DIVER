@@ -89,19 +89,14 @@ jobs:
           cd dist
           ls
 
-      - name: Create zip file
-        uses: vimtor/action-zip@v1
-        with:
-            files: "Client Program/src/dist/ClientProgram.exe"
-
-            dest: client-program.zip
-
         # Upload the client program executable
       - name: Upload client program
         uses: actions/upload-artifact@v3
         with:
           name: client-program
-          path: client-program.zip
+          path: |
+            "Client Program/src/dist/ClientProgram.exe"
+            "Client Program/src/dist/config.ini"
           retention-days: 1
 
   #Creates the actual release
@@ -141,4 +136,4 @@ jobs:
             files: |
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
-              client-program/client-program.zip
+              client-program/ClientProgram.exe
