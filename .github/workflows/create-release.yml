@@ -93,8 +93,8 @@ jobs:
         uses: vimtor/action-zip@v1
         with:
             files: |
-                "Client Program/src/dist/ClientProgram.exe"
-                "Client Program/src/dist/config.ini"
+                Client Program/src/dist/ClientProgram.exe
+                Client Program/src/dist/config.ini
             dest: client-program.zip
 
         # Upload the client program executable
