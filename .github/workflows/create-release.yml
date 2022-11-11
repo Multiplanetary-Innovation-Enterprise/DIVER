@@ -94,9 +94,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: client-program
-          path: |
-            "Client Program/src/dist/ClientProgram.exe"
-            "Client Program/src/dist/config.ini"
+          path: "Client Program/src/dist"
           retention-days: 1
 
   #Creates the actual release
@@ -127,6 +125,10 @@ jobs:
           with:
             version: ${{steps.previous-tag.outputs.tag}}
 
+        - name: Bundle client program files into zip
+          run: |
+
+
         - uses: softprops/action-gh-release@v1
           with:
             name: "Release ${{steps.semvers.outputs.patch}}"
@@ -137,3 +139,4 @@ jobs:
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
               client-program/ClientProgram.exe
+              client-program/config.ini
