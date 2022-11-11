@@ -89,17 +89,12 @@ jobs:
           cd dist
           ls
 
-        - name: ls
-          run: |
-            Client Program/dist/
-            ls
-
         # Upload the client program executable
       - name: Upload client program
         uses: actions/upload-artifact@v3
         with:
           name: client-program
-          path: "Client Program/dist/ClientProgram.exe"
+          path: "Client Program/src/dist/ClientProgram.exe"
           retention-days: 1
 
   #Creates the actual release
