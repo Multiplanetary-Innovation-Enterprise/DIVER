@@ -88,7 +88,7 @@ jobs:
           pyinstaller --clean ClientProgram.spec
           cd dist
           ls
-       
+
         # Upload the client program executable
       - name: Upload client program
         uses: actions/upload-artifact@v3
@@ -134,4 +134,4 @@ jobs:
             files: |
               messaging-library/messaging-library.whl
               networking-library/networking-library.whl
-              "client-program/Client Program.exe"
+              "client-program/ClientProgram.exe"
