@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['ClientLauncher.py'],
+    ['src\\ClientLauncher.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -44,4 +44,4 @@ exe = EXE(
 )
 
 import shutil
-shutil.copyfile('../config.ini', '{0}/config.ini'.format(DISTPATH))
+shutil.copyfile('config.ini', '{0}/config.ini'.format(DISTPATH))
