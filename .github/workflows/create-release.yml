@@ -78,9 +78,19 @@ jobs:
   build-client-program-application:
     # The type of runner that the job will run on
     runs-on: windows-latest
+    needs: [build-messaging-library, build-networking-library]
 
     steps:
       - uses: actions/checkout@v3
+      
+      - name: Download the library artifacts
+        uses: actions/download-artifact@v3
+         
+      - name: Install the libraries
+      - run: |
+          ls
+          pip install messaging-library/messaging-library.whl
+          
       - uses: ./.github/actions/setup-release
       - name: Run Pyinstaller
         run: |
