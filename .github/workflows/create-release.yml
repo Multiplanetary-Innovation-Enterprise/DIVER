@@ -32,14 +32,13 @@ jobs:
           cd "Common/Messaging/dist"
 
           # Rename the library file that was created
-          mv *.whl messaging-library.whl
 
       - name: Upload messaging library
         # Upload the built library as an artafact
         uses: actions/upload-artifact@v3
         with:
           name: messaging-library
-          path: Common/Messaging/dist/messaging-library.whl
+          path: Common/Messaging/dist/ROV_Messaging*.whl
           retention-days: 1
 
   # Builds the netowrking library
@@ -70,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: networking-library
-          path: Common/Connections/dist/networking-library.whl
+          path: Common/Connections/dist/ROV_Connections*.whl
           retention-days: 1
 
 
