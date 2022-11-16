@@ -87,6 +87,7 @@ jobs:
          
       - name: Install the libraries
         run: |
+          shell: cmd
           ls
           cd  messaging-library
           ls
