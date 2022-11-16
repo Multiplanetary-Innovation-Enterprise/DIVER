@@ -86,8 +86,8 @@ jobs:
         uses: actions/download-artifact@v3
          
       - name: Install the libraries
+        shell: cmd
         run: |
-          shell: cmd
           ls
           cd  messaging-library
           ls
