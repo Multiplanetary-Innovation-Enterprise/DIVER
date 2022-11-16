@@ -87,11 +87,12 @@ jobs:
         uses: actions/download-artifact@v3
          
       - name: Install the libraries
-      - run: |
+        run: |
           ls
           pip install messaging-library/messaging-library.whl
           
       - uses: ./.github/actions/setup-release
+     
       - name: Run Pyinstaller
         run: |
           cd "Client Program/src"
