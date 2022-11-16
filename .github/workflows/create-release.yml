@@ -89,7 +89,9 @@ jobs:
       - name: Install the libraries
         run: |
           ls
-          pip install messaging-library/messaging-library.whl
+          cd  messaging-library
+          ls
+          pip install messaging-library.whl
           
       - uses: ./.github/actions/setup-release
      
