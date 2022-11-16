@@ -83,7 +83,7 @@ jobs:
           ls
           cd  messaging-library
           ls
-          for %%x in (messaging-library/*.whl) do pip install %x
+          for %%x in (*.whl) do pip install %x
           pip list
           
       - name: Check installs
