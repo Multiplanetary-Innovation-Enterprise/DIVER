@@ -90,7 +90,7 @@ jobs:
           ls
           cd  messaging-library
           ls
-          pip install messaging-library.whl
+          pip install ROV_Connection*.whl
           
       - uses: ./.github/actions/setup-release
      
@@ -148,6 +148,6 @@ jobs:
             fail_on_unmatched_files: true
 
             files: |
-              messaging-library/messaging-library.whl
-              networking-library/networking-library.whl
+              messaging-library/ROV_Messaging*.whl
+              networking-library/ROV_Connections*.whl
               client-program.zip
