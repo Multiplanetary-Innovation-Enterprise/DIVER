@@ -56,14 +56,6 @@ jobs:
           cd "Common/Connections"
           python setup.py bdist_wheel
 
-      - name: Rename file
-        # Move into the distribution folder where the build files are
-        run: |
-          cd "Common/Connections/dist"
-
-          # Rename the library file that was created
-          mv *.whl networking-library.whl
-
         # Upload the built library as an artafact
       - name: Upload networking library
         uses: actions/upload-artifact@v3
@@ -92,6 +84,10 @@ jobs:
           cd  messaging-library
           ls
           for %%x in (messaging-library/*.whl) do pip install %x
+          pip list
+          
+      - name: Check installs
+        run: pip list
           
       - uses: ./.github/actions/setup-release
      
