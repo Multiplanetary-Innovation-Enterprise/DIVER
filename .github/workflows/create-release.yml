@@ -90,7 +90,7 @@ jobs:
           ls
           cd  messaging-library
           ls
-          pip install ROV_Connection*.whl
+          for %x in (messaging-library/*.whl) do pip install %x
           
       - uses: ./.github/actions/setup-release
      
