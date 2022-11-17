@@ -83,7 +83,8 @@ jobs:
           ls
           cd  messaging-library
           ls
-          for %%x in (*.whl) do pip install %x
+          for %%l in (*.whl) do echo %%l
+          for %%l in (*.whl) do pip install %%l
           pip list
           
       - name: Check installs
