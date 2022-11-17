@@ -77,17 +77,19 @@ jobs:
       - name: Download the library artifacts
         uses: actions/download-artifact@v3
          
-      - name: Install the libraries
+      - name: Install the messaging library
         shell: cmd
         run: |
-          ls
           cd  messaging-library
-          ls
-          for %%l in (*.whl) do echo %%l
           for %%l in (*.whl) do pip install %%l
-          pip list
           
-      - name: Check installs
+      - name: Install the networking library
+        shell: cmd
+        run: |
+          cd  networking-library
+          for %%l in (*.whl) do pip install %%l
+          
+      - name: Check library installs
         run: pip list
           
       - uses: ./.github/actions/setup-release
