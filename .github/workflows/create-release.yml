@@ -107,10 +107,11 @@ jobs:
           python -m site
           
       - name: ROV-Connections packages path
-        shell: cmd
         run: |
-          pip show ROV-Connections
-          
+          ls "C:\\hostedtoolcache\\windows\\Python\\3.10.8\\x64\\lib\\site-packages"
+          ls "C:\\hostedtoolcache\\windows\\Python\\3.10.8\\x64\\lib"
+          pip list
+
       - name: Display warnings
         shell: cmd
         run: |
