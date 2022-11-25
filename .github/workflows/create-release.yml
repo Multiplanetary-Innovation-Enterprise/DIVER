@@ -76,6 +76,8 @@ jobs:
       
       - name: Download the library artifacts
         uses: actions/download-artifact@v3
+        
+      - uses: ./.github/actions/setup-release
          
       - name: Install the messaging library
         shell: cmd
@@ -91,8 +93,6 @@ jobs:
           
       - name: Check library installs
         run: pip list
-          
-      - uses: ./.github/actions/setup-release
      
       - name: Run Pyinstaller
         run: |
