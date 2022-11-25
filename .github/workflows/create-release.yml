@@ -96,7 +96,7 @@ jobs:
      
       - name: Run Pyinstaller
         run: |
-          cd "Client Program/src"
+          cd "Client Program"
           pyinstaller --clean ClientProgram.spec
           cd dist
           ls
@@ -138,7 +138,7 @@ jobs:
      
       - name: Run Pyinstaller
         run: |
-          cd "ROV Program/src"
+          cd "ROV Program"
           pyinstaller --clean ROVProgram.spec
           cd dist
           ls
