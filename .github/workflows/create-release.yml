@@ -101,6 +101,11 @@ jobs:
           cd dist
           ls
           
+      - name: Site packages path
+        shell: cmd
+        run: |
+          pythom -m site
+          
       - name: Display warnings
         shell: cmd
         run: |
