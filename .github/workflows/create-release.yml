@@ -148,7 +148,7 @@ jobs:
           
       - name: Display warnings
         run: |
-           cd "ROV Program\build\ROVProgram"
+           cd "ROV Program/build/ROVProgram"
            cat warn-ROVProgram.txt
 
         # Upload the rov program executable
