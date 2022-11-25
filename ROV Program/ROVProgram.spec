@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['src\\ROVLauncher.py'],
+    ['src/ROVLauncher.py'],
     pathex=[],
     binaries=[],
     datas=[],
