@@ -81,13 +81,13 @@ jobs:
         shell: cmd
         run: |
           cd  messaging-library
-          for %%l in (*.whl) do pip install %%l
+          for FILE in *; do  pip install $FILE; done
           
       - name: Install the networking library
         shell: cmd
         run: |
           cd  networking-library
-          for %%l in (*.whl) do pip install %%l
+          for FILE in *; do  pip install $FILE; done
           
       - name: Check library installs
         run: pip list
