@@ -104,7 +104,7 @@ jobs:
       - name: Site packages path
         shell: cmd
         run: |
-          pythom -m site
+          python -m site
           
       - name: Display warnings
         shell: cmd
