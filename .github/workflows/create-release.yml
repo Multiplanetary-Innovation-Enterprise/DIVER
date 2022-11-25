@@ -188,8 +188,8 @@ jobs:
 
         - uses: softprops/action-gh-release@v1
           with:
-            name: "Release ${{steps.semvers.outputs.patch}}"
-            tag_name: "${{steps.semvers.outputs.patch}}"
+            name: "Release ${{steps.semvers.outputs.minor}}"
+            tag_name: "${{steps.semvers.outputs.minor}}"
             fail_on_unmatched_files: true
 
             files: |
