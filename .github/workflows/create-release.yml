@@ -183,7 +183,7 @@ jobs:
           run: zip client-program.zip client-program/ClientProgram.exe client-program/config.ini
           
         - name: Bundle rov program files into zip
-          run: zip rov-program.zip rov-program/ROVProgram.exe rov-program/config.i
+          run: zip rov-program.zip rov-program/ROVProgram rov-program/config.ini
 
 
         - uses: softprops/action-gh-release@v1
