@@ -136,9 +136,8 @@ jobs:
         
       - name: Test import
         run: |
-          python
-          import ROVConnections
-          
+          python -c "import ROVConnections"
+ 
       - uses: ./.github/actions/setup-release
      
       - name: Run Pyinstaller
