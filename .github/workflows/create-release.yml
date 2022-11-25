@@ -133,6 +133,11 @@ jobs:
           
       - name: Check library installs
         run: pip list
+        
+      - name: Test import
+        run: |
+          python
+          import ROVConnections
           
       - uses: ./.github/actions/setup-release
      
