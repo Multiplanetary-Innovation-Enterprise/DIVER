@@ -36,16 +36,16 @@ class ClientApp(Subscriber):
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
-    
+
         #Checks for which config path to use
         #The default is up one directory for development
-        configPath = '..\config.ini'
-        
+        configPath = '..\config.ini' #..\config.ini for Windows because Windows
+
         # Checks if the config file was not found. It is in
         # the same folder when packaged as an exe file
         if not os.path.isfile(configPath):
             configPath = 'config.ini'
-    
+
         #Opens the config file
         self.__config = configparser.ConfigParser()
         self.__config.read(configPath)

@@ -1,5 +1,6 @@
 import socket
 import configparser
+import os.path
 
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
@@ -36,9 +37,20 @@ class ROVApp(Subscriber):
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
-        #Reads in the configuration file
-        config = configparser.ConfigParser()
-        config.read('../config.ini') #..\config.ini for Windows because Windows
+        #Checks for which config path to use
+        #The default is up one directory for development
+        configPath = '../config.ini'
+
+        # Checks if the config file was not found. It is in
+        # the same folder when packaged as an exe file
+        if not os.path.isfile(configPath):
+            configPath = 'config.ini'
+
+        print("Using config file: " + str(configPath))
+
+        #Opens the config file
+        self.__config = configparser.ConfigParser()
+        self.__config.read(configPath)
 
         #The message channels for sending and recieving messages. Incoming can also
         #be used for sending internal messages
@@ -46,14 +58,14 @@ class ROVApp(Subscriber):
         self.__outgoingMessageChannel = MessageChannel()
 
         #The representation of the ROV and its sub systems
-        self.__rov = ROV(config)
+        self.__rov = ROV(self.__config)
 
         #Used to decode and process commands
         commandFactory = CommandFactory(self.__rov)
         self.__commandProcessor = CommandProcessor(commandFactory)
 
         #Sets up the sever to listen at the provided port
-        port = int(config['Server']['Port'])
+        port = int(self.__config['Server']['Port'])
         self.__server = SocketServer('', port)
 
         print("Waiting for client connection @ port #" + str(port))

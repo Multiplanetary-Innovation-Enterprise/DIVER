@@ -1,6 +1,10 @@
-import pigpio
 import os
 import time
+
+try:
+	import pigpio
+except:
+	print("Failed to import the required libraries for the Raspberry Pi Sensor")
 
 from signals.PinMode import PinMode
 from components.controllers.ResistorType import ResistorType
