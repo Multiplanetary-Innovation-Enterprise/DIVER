@@ -100,6 +100,13 @@ jobs:
           pyinstaller --clean ClientProgram.spec
           cd dist
           ls
+          type 
+          
+      - name: Display warnings
+        shell: cmd
+        run: |
+           cd "Client Program\build\ClientProgram"
+           type warn-ClientProgram.txt
 
         # Upload the client program executable
       - name: Upload client program
