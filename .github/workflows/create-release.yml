@@ -26,13 +26,6 @@ jobs:
           cd "Common/Messaging"
           python setup.py bdist_wheel
 
-      - name: Rename file
-        # Move into the distribution folder where the build files are
-        run: |
-          cd "Common/Messaging/dist"
-
-          # Rename the library file that was created
-
       - name: Upload messaging library
         # Upload the built library as an artafact
         uses: actions/upload-artifact@v3
@@ -73,44 +66,39 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        
+
       - uses: ./.github/actions/setup-release
-      
+
       - name: Download the library artifacts
         uses: actions/download-artifact@v3
-         
+
       - name: Install the messaging library
         shell: cmd
         run: |
           cd  messaging-library
           for %%l in (*.whl) do pip install %%l
-          
+
       - name: Install the networking library
         shell: cmd
         run: |
           cd  networking-library
           for %%l in (*.whl) do pip install %%l
-          
+
       - name: Check library installs
         run: pip list
-     
+
+      - name: Install additonal libraries
+        run: |
+          pip install pygame
+          pip install keyboard
+          pip install PIL
+
       - name: Run Pyinstaller
         run: |
           cd "Client Program"
           pyinstaller --clean ClientProgram.spec
           cd dist
           ls
-          
-      - name: Site packages path
-        shell: cmd
-        run: |
-          python -m site
-          
-      - name: ROV-Connections packages path
-        run: |
-          ls "C:\\hostedtoolcache\\windows\\Python\\3.10.8\\x64\\lib\\site-packages"
-          ls "C:\\hostedtoolcache\\windows\\Python\\3.10.8\\x64\\lib"
-          pip list
 
       - name: Display warnings
         shell: cmd
@@ -134,29 +122,29 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Download the library artifacts
         uses: actions/download-artifact@v3
-         
+
       - name: Install the messaging library
         run: |
           cd  messaging-library
           for FILE in *; do  pip install $FILE; done
-          
+
       - name: Install the networking library
         run: |
           cd  networking-library
           for FILE in *; do  pip install $FILE; done
-          
+
       - name: Check library installs
         run: pip list
-        
+
       - name: Test import
         run: |
           python -c "import ROVConnections"
- 
+
       - uses: ./.github/actions/setup-release
-     
+
       - name: Run Pyinstaller
         run: |
           cd "ROV Program"
@@ -171,7 +159,7 @@ jobs:
           name: rov-program
           path: "ROV Program/dist"
           retention-days: 1
-          
+
   #Creates the actual release
   create-release:
       # The type of runner that the job will run on
@@ -202,7 +190,7 @@ jobs:
 
         - name: Bundle client program files into zip
           run: zip client-program.zip client-program/ClientProgram.exe client-program/config.ini
-          
+
         - name: Bundle rov program files into zip
           run: zip rov-program.zip rov-program/ROVProgram rov-program/config.ini
 
