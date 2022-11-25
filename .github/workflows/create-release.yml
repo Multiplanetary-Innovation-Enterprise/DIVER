@@ -100,7 +100,6 @@ jobs:
           pyinstaller --clean ClientProgram.spec
           cd dist
           ls
-          type 
           
       - name: Display warnings
         shell: cmd
