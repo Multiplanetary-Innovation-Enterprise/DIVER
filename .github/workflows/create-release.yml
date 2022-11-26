@@ -83,14 +83,16 @@ jobs:
           cd  networking-library
           for %%l in (*.whl) do pip install %%l
 
-      - name: Check library installs
-        run: pip list
-
       - name: Install additonal libraries
         run: |
           pip install pygame
           pip install keyboard
           pip install Pillow
+
+      - name: Check library installs
+        run: |
+          pip list
+          python -m site
 
       - name: Run Pyinstaller
         run: |
@@ -135,6 +137,16 @@ jobs:
         run: |
           cd  networking-library
           for FILE in *; do  pip install $FILE; done
+          
+      - name: Install additonal libraries
+        run: |
+          pip install numpy
+          sudo apt-get install python-smbus
+          pip install bluerobotics-tsys01
+          pip install w1thermsensor
+          pip install pigpio
+          pip install Pillow
+          pip install opencv-python
 
       - name: Check library installs
         run: pip list
