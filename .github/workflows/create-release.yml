@@ -141,7 +141,6 @@ jobs:
       - name: Install additonal libraries
         run: |
           pip install numpy
-          pip install bluerobotics-tsys01
           pip install w1thermsensor
           pip install pigpio
           pip install Pillow
