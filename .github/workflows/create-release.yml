@@ -141,7 +141,6 @@ jobs:
       - name: Install additonal libraries
         run: |
           pip install numpy
-          sudo apt-get install python-smbus
           pip install bluerobotics-tsys01
           pip install w1thermsensor
           pip install pigpio
