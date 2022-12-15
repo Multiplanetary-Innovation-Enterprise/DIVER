@@ -116,64 +116,64 @@ jobs:
           retention-days: 1
 
   # Creates the executable for the ROV Program
-  build-rov-program-application:
+ # build-rov-program-application:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    needs: [build-messaging-library, build-networking-library]
+  #  runs-on: ubuntu-latest
+   # needs: [build-messaging-library, build-networking-library]
 
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-release
+    #steps:
+     # - uses: actions/checkout@v3
+      #- uses: ./.github/actions/setup-release
 
-      - name: Download the library artifacts
-        uses: actions/download-artifact@v3
+      #- name: Download the library artifacts
+      #  uses: actions/download-artifact@v3
 
-      - name: Install the messaging library
-        run: |
-          cd  messaging-library
-          for FILE in *; do  pip install $FILE; done
+      #- name: Install the messaging library
+       # run: |
+        #  cd  messaging-library
+         # for FILE in *; do  pip install $FILE; done
 
-      - name: Install the networking library
-        run: |
-          cd  networking-library
-          for FILE in *; do  pip install $FILE; done
+      #- name: Install the networking library
+       # run: |
+        #  cd  networking-library
+        #  for FILE in *; do  pip install $FILE; done
           
-      - name: Install additonal libraries
-        run: |
-          pip install numpy
-          pip install w1thermsensor
-          pip install pigpio
-          pip install Pillow
-          pip install opencv-python
+      #- name: Install additonal libraries
+        #  run: |
+        #  pip install numpy
+        #   pip install w1thermsensor
+        #   pip install pigpio
+        #    pip install Pillow
+        #   pip install opencv-python
 
-      - name: Check library installs
-        run: pip list
+      # - name: Check library installs
+      #  run: pip list
 
-      - name: Run Pyinstaller
-        run: |
-          cd "ROV Program"
-          pyinstaller --clean ROVProgram.spec
-          cd dist
-          ls
+      # - name: Run Pyinstaller
+      #  run: |
+      #    cd "ROV Program"
+      #    pyinstaller --clean ROVProgram.spec
+      #    cd dist
+      #    ls
           
-      - name: Display warnings
-        run: |
-           cd "ROV Program/build/ROVProgram"
-           cat warn-ROVProgram.txt
+      # - name: Display warnings
+      #  run: |
+      #     cd "ROV Program/build/ROVProgram"
+      #     cat warn-ROVProgram.txt
 
         # Upload the rov program executable
-      - name: Upload rov program
-        uses: actions/upload-artifact@v3
-        with:
-          name: rov-program
-          path: "ROV Program/dist"
-          retention-days: 1
+      # - name: Upload rov program
+       # uses: actions/upload-artifact@v3
+       # with:
+        #  name: rov-program
+         # path: "ROV Program/dist"
+         # retention-days: 1
 
   #Creates the actual release
   create-release:
       # The type of runner that the job will run on
       runs-on: ubuntu-latest
-      needs: [build-messaging-library, build-networking-library, build-client-program-application, build-rov-program-application]
+      needs: [build-messaging-library, build-networking-library, build-client-program-application] #build-rov-program-application
 
       steps:
         - uses: actions/checkout@v3
@@ -200,8 +200,8 @@ jobs:
         - name: Bundle client program files into zip
           run: zip client-program.zip client-program/ClientProgram.exe client-program/config.ini
 
-        - name: Bundle rov program files into zip
-          run: zip rov-program.zip rov-program/ROVProgram rov-program/config.ini
+        # - name: Bundle rov program files into zip
+         # run: zip rov-program.zip rov-program/ROVProgram rov-program/config.ini
 
 
         - uses: softprops/action-gh-release@v1
@@ -214,4 +214,4 @@ jobs:
               messaging-library/ROV_Messaging*.whl
               networking-library/ROV_Connections*.whl
               client-program.zip
-              rov-program.zip
+         #     rov-program.zip
