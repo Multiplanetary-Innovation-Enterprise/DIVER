@@ -17,8 +17,8 @@ class IncreaseSpeedCommand(PropulsionCommand):
         speeds[2] += 0.025
         speeds[3] += 0.025
         
-        #Wait 1 second
-        time.sleep(1)
+        #Wait .1 second
+        time.sleep(.1)
             
         #Increment by 2.5%
         speeds[0] += 0.025
@@ -26,8 +26,8 @@ class IncreaseSpeedCommand(PropulsionCommand):
         speeds[2] += 0.025
         speeds[3] += 0.025
         
-        #Wait 1 second
-        time.sleep(1)
+        #Wait .1 second
+        time.sleep(.1)
         
         #Increment by 2.5%
         speeds[0] += 0.025
@@ -35,8 +35,8 @@ class IncreaseSpeedCommand(PropulsionCommand):
         speeds[2] += 0.025
         speeds[3] += 0.025
         
-        #Wait 1 second
-        time.sleep(1)
+        #Wait .1 second
+        time.sleep(.1)
         
         #Increment by 2.5%
         speeds[0] += 0.025
@@ -72,8 +72,8 @@ class DecreaseSpeedCommand(PropulsionCommand):
         speeds[2] -= 0.025
         speeds[3] -= 0.025
         
-        #Wait 1 second
-        time.sleep(1)
+        #Wait .1 second
+        time.sleep(.1)
             
         #Decrement by 2.5%
         speeds[0] -= 0.025
@@ -81,8 +81,8 @@ class DecreaseSpeedCommand(PropulsionCommand):
         speeds[2] -= 0.025
         speeds[3] -= 0.025
         
-        #Wait 1 second
-        time.sleep(1)
+        #Wait .1 second
+        time.sleep(.1)
         
         #Decrement by 2.5%
         speeds[0] -= 0.025
@@ -90,8 +90,8 @@ class DecreaseSpeedCommand(PropulsionCommand):
         speeds[2] -= 0.025
         speeds[3] -= 0.025
         
-        #Wait 1 second
-        time.sleep(1)
+        #Wait .1 second
+        time.sleep(.1)
         
         #Decrement by 2.5%
         speeds[0] -= 0.025
