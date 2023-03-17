@@ -10,11 +10,39 @@ class IncreaseSpeedCommand(PropulsionCommand):
         #0 = left, 1 = right, 2 = top front, 3 = top back
         speeds = self._propSystem.getSpeeds()
 
-        #Increments all of the thrusters speeds by 10%
-        speeds[0] += 0.1
-        speeds[1] += 0.1
-        speeds[2] += 0.1
-        speeds[3] += 0.1
+        #Slowly increments all of the thrusters speeds by 10%
+        #Increment by 2.5%
+        speeds[0] += 0.025
+        speeds[1] += 0.025
+        speeds[2] += 0.025
+        speeds[3] += 0.025
+        
+        #Wait .1 second
+        time.sleep(.1)
+            
+        #Increment by 2.5%
+        speeds[0] += 0.025
+        speeds[1] += 0.025
+        speeds[2] += 0.025
+        speeds[3] += 0.025
+        
+        #Wait .1 second
+        time.sleep(.1)
+        
+        #Increment by 2.5%
+        speeds[0] += 0.025
+        speeds[1] += 0.025
+        speeds[2] += 0.025
+        speeds[3] += 0.025
+        
+        #Wait .1 second
+        time.sleep(.1)
+        
+        #Increment by 2.5%
+        speeds[0] += 0.025
+        speeds[1] += 0.025
+        speeds[2] += 0.025
+        speeds[3] += 0.025
 
         print("Increase speed: " + str(speeds[0]))
 
@@ -37,11 +65,39 @@ class DecreaseSpeedCommand(PropulsionCommand):
         #0 = left, 1 = right, 2 = top front, 3 = top back
         speeds = self._propSystem.getSpeeds()
 
-        #Decrements all of the thrusters speeds by 10%
-        speeds[0] -= 0.1
-        speeds[1] -= 0.1
-        speeds[2] -= 0.1
-        speeds[3] -= 0.1
+        #Slowly decrements all of the thrusters speeds by 10%
+        #Decrement by 2.5%
+        speeds[0] -= 0.025
+        speeds[1] -= 0.025
+        speeds[2] -= 0.025
+        speeds[3] -= 0.025
+        
+        #Wait .1 second
+        time.sleep(.1)
+            
+        #Decrement by 2.5%
+        speeds[0] -= 0.025
+        speeds[1] -= 0.025
+        speeds[2] -= 0.025
+        speeds[3] -= 0.025
+        
+        #Wait .1 second
+        time.sleep(.1)
+        
+        #Decrement by 2.5%
+        speeds[0] -= 0.025
+        speeds[1] -= 0.025
+        speeds[2] -= 0.025
+        speeds[3] -= 0.025
+        
+        #Wait .1 second
+        time.sleep(.1)
+        
+        #Decrement by 2.5%
+        speeds[0] -= 0.025
+        speeds[1] -= 0.025
+        speeds[2] -= 0.025
+        speeds[3] -= 0.025
 
         print("Decrease speed: " + str(speeds[0]))
 
