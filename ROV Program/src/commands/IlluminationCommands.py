@@ -29,6 +29,7 @@ class ToggleLightStateCommand(IlluminationCommand):
             light.turnOn()
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 11
 
@@ -46,6 +47,7 @@ class IncreaseLightBrightnessCommand(IlluminationCommand):
         light.setBrightness(brightness)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 12
 
@@ -63,5 +65,6 @@ class DecreaseLightBrightnessCommand(IlluminationCommand):
         light.setBrightness(brightness)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 13

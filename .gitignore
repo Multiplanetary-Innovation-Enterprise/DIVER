@@ -10,3 +10,5 @@ Common/Connections/ROV_Connections.egg-info
 Common/Messaging/build
 Common/Messaging/dist
 Common/Messaging/ROV_Messaging.egg-info
+
+Client Program/logs

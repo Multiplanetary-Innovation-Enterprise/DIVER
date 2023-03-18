@@ -20,5 +20,5 @@ class Command(ABC):
         pass
 
     #Allows for command objects to compared and to see if all of their attributes match
-    def __eq__(self, other) -> bool:
-        return self.__dict__ == other.__dict__
+    def __eq__(self, otherCommand) -> bool:
+        return  self.getActionCode() == otherCommand.getActionCode()

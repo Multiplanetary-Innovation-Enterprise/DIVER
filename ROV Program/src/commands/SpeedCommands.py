@@ -1,3 +1,5 @@
+import time
+
 from commands.Command import Command
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
 from commands.PropulsionCommand import PropulsionCommand
@@ -16,28 +18,28 @@ class IncreaseSpeedCommand(PropulsionCommand):
         speeds[1] += 0.025
         speeds[2] += 0.025
         speeds[3] += 0.025
-        
+
         #Wait .1 second
         time.sleep(.1)
-            
+
         #Increment by 2.5%
         speeds[0] += 0.025
         speeds[1] += 0.025
         speeds[2] += 0.025
         speeds[3] += 0.025
-        
+
         #Wait .1 second
         time.sleep(.1)
-        
+
         #Increment by 2.5%
         speeds[0] += 0.025
         speeds[1] += 0.025
         speeds[2] += 0.025
         speeds[3] += 0.025
-        
+
         #Wait .1 second
         time.sleep(.1)
-        
+
         #Increment by 2.5%
         speeds[0] += 0.025
         speeds[1] += 0.025
@@ -54,6 +56,7 @@ class IncreaseSpeedCommand(PropulsionCommand):
         return True
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 9
 
@@ -71,28 +74,28 @@ class DecreaseSpeedCommand(PropulsionCommand):
         speeds[1] -= 0.025
         speeds[2] -= 0.025
         speeds[3] -= 0.025
-        
+
         #Wait .1 second
         time.sleep(.1)
-            
+
         #Decrement by 2.5%
         speeds[0] -= 0.025
         speeds[1] -= 0.025
         speeds[2] -= 0.025
         speeds[3] -= 0.025
-        
+
         #Wait .1 second
         time.sleep(.1)
-        
+
         #Decrement by 2.5%
         speeds[0] -= 0.025
         speeds[1] -= 0.025
         speeds[2] -= 0.025
         speeds[3] -= 0.025
-        
+
         #Wait .1 second
         time.sleep(.1)
-        
+
         #Decrement by 2.5%
         speeds[0] -= 0.025
         speeds[1] -= 0.025
@@ -109,5 +112,6 @@ class DecreaseSpeedCommand(PropulsionCommand):
         return True
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 10

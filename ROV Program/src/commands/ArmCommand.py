@@ -18,5 +18,6 @@ class ArmCommand(Command):
         return False
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 0

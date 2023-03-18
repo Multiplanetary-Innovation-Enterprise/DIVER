@@ -18,6 +18,7 @@ class MoveXYStopCommand(MoveCommand):
         self._propSystem.setXYStates(False, False)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 1
 
@@ -35,6 +36,7 @@ class MoveForwardCommand(MoveCommand):
         self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 2
 
@@ -52,6 +54,7 @@ class MoveBackwardCommand(MoveCommand):
         self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 3
 
@@ -69,6 +72,7 @@ class TurnLeftCommand(MoveCommand):
         self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 4
 
@@ -86,6 +90,7 @@ class TurnRightCommand(MoveCommand):
         self._propSystem.setXYStates(True, True)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 5
 
@@ -98,6 +103,7 @@ class MoveZStopCommand(MoveCommand):
         self._propSystem.setZStates(False, False)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 6
 
@@ -115,6 +121,7 @@ class MoveUpCommand(MoveCommand):
         self._propSystem.setZStates(True, True)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 7
 
@@ -132,5 +139,6 @@ class MoveDownCommand(MoveCommand):
         self._propSystem.setZStates(True, True)
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 8

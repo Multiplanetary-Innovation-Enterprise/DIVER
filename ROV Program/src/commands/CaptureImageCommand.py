@@ -31,5 +31,6 @@ class CaptureImageCommand(Command):
         return True
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 14

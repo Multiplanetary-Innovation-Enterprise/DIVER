@@ -56,7 +56,7 @@ class CommandProcessor(Subscriber):
         #Converts the recieved action to command
         action = message.getContents()
         command = self.__commandFactory.createCommand(action)
-
+        
         #If the command was invalid, so ignore it
         if command is None:
             return
