@@ -1,5 +1,3 @@
-import time
-
 from commands.Command import Command
 from subsystems.PropulsionSubsystem import PropulsionSubsystem
 from commands.PropulsionCommand import PropulsionCommand
@@ -12,39 +10,11 @@ class IncreaseSpeedCommand(PropulsionCommand):
         #0 = left, 1 = right, 2 = top front, 3 = top back
         speeds = self._propSystem.getSpeeds()
 
-        #Slowly increments all of the thrusters speeds by 10%
-        #Increment by 2.5%
-        speeds[0] += 0.025
-        speeds[1] += 0.025
-        speeds[2] += 0.025
-        speeds[3] += 0.025
-
-        #Wait .1 second
-        time.sleep(.1)
-
-        #Increment by 2.5%
-        speeds[0] += 0.025
-        speeds[1] += 0.025
-        speeds[2] += 0.025
-        speeds[3] += 0.025
-
-        #Wait .1 second
-        time.sleep(.1)
-
-        #Increment by 2.5%
-        speeds[0] += 0.025
-        speeds[1] += 0.025
-        speeds[2] += 0.025
-        speeds[3] += 0.025
-
-        #Wait .1 second
-        time.sleep(.1)
-
-        #Increment by 2.5%
-        speeds[0] += 0.025
-        speeds[1] += 0.025
-        speeds[2] += 0.025
-        speeds[3] += 0.025
+        #Increments all of the thrusters speeds by 10%
+        speeds[0] += 0.05
+        speeds[1] += 0.05
+        speeds[2] += 0.05
+        speeds[3] += 0.05
 
         print("Increase speed: " + str(speeds[0]))
 
@@ -56,7 +26,6 @@ class IncreaseSpeedCommand(PropulsionCommand):
         return True
 
     #The action code associated with this command
-    @staticmethod
     def getActionCode() -> int:
         return 9
 
@@ -68,39 +37,11 @@ class DecreaseSpeedCommand(PropulsionCommand):
         #0 = left, 1 = right, 2 = top front, 3 = top back
         speeds = self._propSystem.getSpeeds()
 
-        #Slowly decrements all of the thrusters speeds by 10%
-        #Decrement by 2.5%
-        speeds[0] -= 0.025
-        speeds[1] -= 0.025
-        speeds[2] -= 0.025
-        speeds[3] -= 0.025
-
-        #Wait .1 second
-        time.sleep(.1)
-
-        #Decrement by 2.5%
-        speeds[0] -= 0.025
-        speeds[1] -= 0.025
-        speeds[2] -= 0.025
-        speeds[3] -= 0.025
-
-        #Wait .1 second
-        time.sleep(.1)
-
-        #Decrement by 2.5%
-        speeds[0] -= 0.025
-        speeds[1] -= 0.025
-        speeds[2] -= 0.025
-        speeds[3] -= 0.025
-
-        #Wait .1 second
-        time.sleep(.1)
-
-        #Decrement by 2.5%
-        speeds[0] -= 0.025
-        speeds[1] -= 0.025
-        speeds[2] -= 0.025
-        speeds[3] -= 0.025
+        #Decrements all of the thrusters speeds by 10%
+        speeds[0] -= 0.05
+        speeds[1] -= 0.05
+        speeds[2] -= 0.05
+        speeds[3] -= 0.05
 
         print("Decrease speed: " + str(speeds[0]))
 
@@ -112,6 +53,5 @@ class DecreaseSpeedCommand(PropulsionCommand):
         return True
 
     #The action code associated with this command
-    @staticmethod
     def getActionCode() -> int:
         return 10
