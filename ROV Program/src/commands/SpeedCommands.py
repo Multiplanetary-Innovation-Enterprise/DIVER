@@ -26,6 +26,7 @@ class IncreaseSpeedCommand(PropulsionCommand):
         return True
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 9
 
@@ -53,5 +54,6 @@ class DecreaseSpeedCommand(PropulsionCommand):
         return True
 
     #The action code associated with this command
+    @staticmethod
     def getActionCode() -> int:
         return 10
