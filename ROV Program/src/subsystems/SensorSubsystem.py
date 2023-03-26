@@ -7,6 +7,7 @@ from components.sensors.DS18B20TempSensor import DS18B20TempSensor
 from components.sensors.BlueRoboticsTempSensor import BlueRoboticsTempSensor #4/6/22
 from components.sensors.PressureSensor import PressureSensor
 from components.sensors.TempUnit import TempUnit
+from components.sensors.CoreTempSensor import CoreTempSensor #3/24/23
 
 #Represents the subsystem for collecting data
 class SensorSubsystem(Subsystem):
@@ -14,8 +15,8 @@ class SensorSubsystem(Subsystem):
     __imu:IMU = None                       #The IMU sensor
     __externalTempSensor:TempSensor = None #Blue Robotics sensor (added 4-6-22)
     __pressureSensor:PressureSensor = None #Pressure sensor added 4/8/22
-
-    def __init__(self, controller:Controller, config):
+    __coreSensor:TempSensor = None #Core Sensor ##Added 3/24/23##
+    def __init__(self, controller:Controller, config): ##changed 3/24/23##
         super().__init__(controller, config)
 
         #Sets up the sensors that will be used
@@ -23,6 +24,7 @@ class SensorSubsystem(Subsystem):
         self.__imu = BNO055IMU()
         self.__externalTempSensor = BlueRoboticsTempSensor(TempUnit.C) #added 4/6/22
         self.__pressureSensor = PressureSensor() #added 4/8/22
+        self.__coreSensor = CoreTempSensor() #Added 3/24/2023
 
     #Gets the temperature sensor that is inside the electronics capsule
     def getInternalTempSensor(self) -> TempSensor:
@@ -39,6 +41,11 @@ class SensorSubsystem(Subsystem):
     #Gets the externally mounted pressure sensor on the ROV
     def getPressureSensor(self) -> PressureSensor:
         return self.__pressureSensor #added 4/8/22
+
+    #Gets core temp sensor
+    def getCoreSensor(self) -> TempSensor: #NEW
+        return self.__coreSensor   #NEW
+
 
     #Performs any clean up on system shutdown
     def shutdown(self) -> None:
