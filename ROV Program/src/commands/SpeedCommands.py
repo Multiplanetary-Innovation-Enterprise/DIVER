@@ -10,7 +10,7 @@ class IncreaseSpeedCommand(PropulsionCommand):
         #0 = left, 1 = right, 2 = top front, 3 = top back
         speeds = self._propSystem.getSpeeds()
 
-        #Increments all of the thrusters speeds by 10%
+        #Increments all of the thrusters speeds by 5%
         if speeds[0] <= .98:
             speeds[0] += 0.05
             speeds[1] += 0.05
@@ -39,7 +39,7 @@ class DecreaseSpeedCommand(PropulsionCommand):
         #0 = left, 1 = right, 2 = top front, 3 = top back
         speeds = self._propSystem.getSpeeds()
 
-        #Decrements all of the thrusters speeds by 10%
+        #Decrements all of the thrusters speeds by 5%
         if speeds[0] >= 0.02:
             speeds[0] -= 0.05
             speeds[1] -= 0.05
