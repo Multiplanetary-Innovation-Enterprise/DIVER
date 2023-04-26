@@ -11,14 +11,17 @@ class BNO055IMU(IMU):
     __sensor = None #The IMU sensor
 
     def __init__(self):
-        # i2c = I2C(0, mode=I2C.MASTER, baudrate=1000000)
-        # self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
+        i2c = board.I2C()
+        #^ formally I2C(0, mode=I2C.MASTER, baudrate=1000000), but this doesn't work since
+        #the libraries got updated
+        self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
 
         #Attempts to connect to the IMU sensor
         try:
             i2c = board.I2C()
             self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
-
+#Not sure why this has to be expressed twice: once before the try statement, and once after
+#but it doesn't work without the prior statement
             self._isConnected = True
         except:
             print("Failed to detect the IMU sensor")
