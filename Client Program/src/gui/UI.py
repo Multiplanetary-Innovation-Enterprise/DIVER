@@ -10,10 +10,11 @@ FakeHardware = False
 root = Tk(baseName="test")
 
 #TODO: hook up real hardware instead of using the stuff below
-temp = 65
-battery = "100%"
-camfeed = cv2.VideoCapture(0)
-logtext = "Test"
+if FakeHardware:
+    temp = 65
+    battery = "100%"
+    camfeed = cv2.VideoCapture(0)
+    logtext = "Test"
 
 #puts info in labels
 batterydisplay = Label(root,text=battery)
@@ -52,5 +53,13 @@ def startVideo():
     #repeats this process every 1ms
     root.after(1,startVideo)
 
+#Checks for updates
+def updateDisplays():
+    batterydisplay.configure(text=battery)
+    tempdisplay.configure(text=externaltemp)
+    
+    root.after(1,updateDisplays)
+
 startVideo()
+updateDisplays()
 root.mainloop()
