@@ -3,6 +3,7 @@ import socket
 import configparser
 from tkinter import *
 import os.path
+import paramiko
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -167,3 +168,23 @@ class ClientApp(Subscriber):
             message.getContents() == SystemStatus.SHUT_DOWN):
 
             self.stop()
+    
+    #starts the python program on the ROV
+    global sshClient
+    def startpipython():
+        if sshClient != None:
+            raise Exception()
+        sshClient = paramiko.SSHClient()
+        #TODO: add ROV IP Address
+        sshClient.connect("ROV IP",username="pi",password="Mine21",)
+        stdin,stdout,stderr = sshClient.exec_command("cd Programs\ROV\src")
+        print(stdout)
+        stdin,stdout,stderr = sshClient.exec_command("python3 ROVLauncher.py")
+        print(stdout)
+    
+    #closes the python program on the ROV
+    def closepipython():
+        if sshClient == None:
+            raise Exception()
+        sshClient.exec_command("sudo shutdown -h now")
+        sshClient.close()

@@ -1,8 +1,7 @@
 from tkinter import *
 from PIL import Image,ImageTk
 import cv2
-from loggers.ActionLogger import externaltemp,battery,cameraframe,action
-FakeHardware = False
+FakeHardware = True
 
 #Notes:
 #Resolution: 640x480
@@ -15,25 +14,39 @@ if FakeHardware:
     battery = "100%"
     camfeed = cv2.VideoCapture(0)
     logtext = "Test"
+    pressure = 0
+else:
+    from loggers.ActionLogger import externaltemp,battery,cameraframe,action
 
 #puts info in labels
 batterydisplay = Label(root,text=battery)
-tempdisplay = Label(root,text=str(temp) + "F")
-camdisplay = Label()
+tempdisplay = Label(root,text=(str(temp) + "F"))
+camdisplay = Label(root)
+pressuredisplay = Label(root,text=(str(pressure) + "psi"))
 log = Label(bg="black",fg="white",text=logtext,height=10,anchor=W)
 
-button1 = Button(text="hotpockets")
-button1.grid(row=2,column=2,sticky=N)
-
+if FakeHardware:
+    startbutton = Button(root,text="Start ROV program")
+    endbutton = Button(root,text="End ROV program")
+else:
+    from ClientApp import closepipython
+    from ClientApp import startpipython
+    startbutton = Button(root,text="Start ROV program",command=startpipython)
+    endbutton = Button(root,text="End ROV program",command=closepipython)
+    
 #aligning things to grid
 batterydisplay.grid(row=1,column=1,sticky=N)
 tempdisplay.grid(row=1,column=2,sticky=N)
-camdisplay.grid(row=1,column=3)
+pressuredisplay.grid(row=1,column=3,sticky=N)
+camdisplay.grid(row=1,column=4)
+startbutton.grid(row=2,column=2,sticky=N)
+endbutton.grid(row=3,column=2,sticky=N)
+
 #control panel in bottom row
-log.grid(row=2,column=3,sticky=EW)
+log.grid(row=2,column=4,sticky=EW)
 
 
-#starts showing video
+#starts showing video from client's camera
 def startVideo():
     
     #pulls a frame as an image
@@ -56,7 +69,7 @@ def startVideo():
 #Checks for updates
 def updateDisplays():
     batterydisplay.configure(text=battery)
-    tempdisplay.configure(text=externaltemp)
+    tempdisplay.configure(text=temp)
     
     root.after(1,updateDisplays)
 
