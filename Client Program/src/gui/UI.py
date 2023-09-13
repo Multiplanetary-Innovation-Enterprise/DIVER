@@ -6,28 +6,30 @@ FakeHardware = True
 #Notes:
 #Resolution: 640x480
 
-root = Tk(baseName="test")
+root = Tk()
+root.configure(bg="Dark Gray",padx=0)
+root.title("ROV Control Panel")
 
 #TODO: hook up real hardware instead of using the stuff below
 if FakeHardware:
-    temp = 65
-    battery = "100%"
+    temp = "NOT DETECTED"
+    battery = "NOT DETECTED"
     camfeed = cv2.VideoCapture(0)
-    logtext = "Test"
-    pressure = 0
+    logtext = "NOT DETECTED"
+    pressure = "NOT DETECTED"
 else:
     from loggers.ActionLogger import externaltemp,battery,cameraframe,action
 
-#puts info in labels
-batterydisplay = Label(root,text=battery)
-tempdisplay = Label(root,text=(str(temp) + "F"))
-camdisplay = Label(root)
-pressuredisplay = Label(root,text=(str(pressure) + "psi"))
-log = Label(bg="black",fg="white",text=logtext,height=10,anchor=W)
+#creates label for info to be put in
+infolabel = Label(root,width=155,anchor=W)
 
+log = Label(bg="black",fg="white",text=logtext,height=10,anchor=W)
+camdisplay = Label(root)
+
+#configures buttons that use imported functions for use with the FakeHardware variable
 if FakeHardware:
-    startbutton = Button(root,text="Start ROV program")
-    endbutton = Button(root,text="End ROV program")
+    startbutton = Button(root,text="Start ROV program",height=5,width=30)
+    endbutton = Button(root,text="End ROV program",height=5,width=30)
 else:
     from ClientApp import closepipython
     from ClientApp import startpipython
@@ -35,19 +37,23 @@ else:
     endbutton = Button(root,text="End ROV program",command=closepipython)
     
 #aligning things to grid
-batterydisplay.grid(row=1,column=1,sticky=N)
-tempdisplay.grid(row=1,column=2,sticky=N)
-pressuredisplay.grid(row=1,column=3,sticky=N)
-camdisplay.grid(row=1,column=4)
-startbutton.grid(row=2,column=2,sticky=N)
-endbutton.grid(row=3,column=2,sticky=N)
+
+infolabel.grid(row=1,columnspan=6,sticky=N)
+infolabel.grid_rowconfigure(1)
+
+camdisplay.grid(row=2,column=4)
+startbutton.grid(row=3,column=2,sticky=SW)
+endbutton.grid(row=3,column=3,sticky=SW)
 
 #control panel in bottom row
-log.grid(row=2,column=4,sticky=EW)
+log.grid(row=3,column=4,sticky=EW)
 
+#adds log
+def addLog(text) -> None:
+    logtext += str(text)
 
 #starts showing video from client's camera
-def startVideo():
+def startVideo() ->  None:
     
     #pulls a frame as an image
     _, frame = camfeed.read()
@@ -68,9 +74,9 @@ def startVideo():
 
 #Checks for updates
 def updateDisplays():
-    batterydisplay.configure(text=battery)
-    tempdisplay.configure(text=temp)
-    
+    infolabel.configure(text=(str(battery) + "%") + (" " * 5) + (str(temp) + "°C") + (" " * 5) + (str(pressure) + "psi"))
+    log.configure(text=logtext)
+
     root.after(1,updateDisplays)
 
 startVideo()
