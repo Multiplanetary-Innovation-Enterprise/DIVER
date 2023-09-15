@@ -9,6 +9,9 @@ FakeHardware = True
 root = Tk()
 root.configure(bg="Dark Gray",padx=0)
 root.title("ROV Control Panel")
+if FakeHardware:
+    icon = PhotoImage(file=r"C:\\Users\\notch\\OneDrive\\Documents\\GitHub\\DIVER\\Client Program\\src\\gui\\MINE.png")
+root.iconphoto(False,icon)
 
 #TODO: hook up real hardware instead of using the stuff below
 if FakeHardware:
@@ -21,7 +24,7 @@ else:
     from loggers.ActionLogger import externaltemp,battery,cameraframe,action
 
 #creates label for info to be put in
-infolabel = Label(root,width=155,anchor=W)
+infolabel = Label(root,width=155,anchor=W,bg="Light Gray")
 
 log = Label(bg="black",fg="white",text=logtext,height=10,anchor=W)
 camdisplay = Label(root)
@@ -74,7 +77,7 @@ def startVideo() ->  None:
 
 #Checks for updates
 def updateDisplays():
-    infolabel.configure(text=(str(battery) + "%") + (" " * 5) + (str(temp) + "°C") + (" " * 5) + (str(pressure) + "psi"))
+    infolabel.configure(text=(str(battery) + "%") + (" " * 20) + (str(temp) + "°C") + (" " * 20) + (str(pressure) + "psi"))
     log.configure(text=logtext)
 
     root.after(1,updateDisplays)
