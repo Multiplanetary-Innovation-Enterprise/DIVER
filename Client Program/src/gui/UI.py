@@ -6,12 +6,12 @@ FakeHardware = True
 #Notes:
 #Resolution: 640x480
 
-root = Tk()
-root.configure(bg="Dark Gray",padx=0)
-root.title("ROV Control Panel")
+Window = Tk()
+Window.configure(bg="Dark Gray",padx=0)
+Window.title("ROV Control Panel")
 if FakeHardware:
     icon = PhotoImage(file=r"C:\\Users\\notch\\OneDrive\\Documents\\GitHub\\DIVER\\Client Program\\src\\gui\\MINE.png")
-root.iconphoto(False,icon)
+Window.iconphoto(False,icon)
 
 #TODO: hook up real hardware instead of using the stuff below
 if FakeHardware:
@@ -24,27 +24,27 @@ else:
     from loggers.ActionLogger import externaltemp,battery,cameraframe,action
 
 #creates label for info to be put in
-infolabel = Label(root,width=155,anchor=W,bg="Light Gray")
+infolabel = Label(Window,width=155,anchor=W,bg="Light Gray")
 
-log = Label(bg="black",fg="white",text=logtext,height=10,anchor=W)
-camdisplay = Label(root)
+log = Label(bg="black",fg="white",text=logtext,height=10,anchor=SW)
+ImageFrame = Label(Window)
 
 #configures buttons that use imported functions for use with the FakeHardware variable
 if FakeHardware:
-    startbutton = Button(root,text="Start ROV program",height=5,width=30)
-    endbutton = Button(root,text="End ROV program",height=5,width=30)
+    startbutton = Button(Window,text="Start ROV program",height=5,width=30)
+    endbutton = Button(Window,text="End ROV program",height=5,width=30)
 else:
     from ClientApp import closepipython
     from ClientApp import startpipython
-    startbutton = Button(root,text="Start ROV program",command=startpipython)
-    endbutton = Button(root,text="End ROV program",command=closepipython)
+    startbutton = Button(Window,text="Start ROV program",command=startpipython)
+    endbutton = Button(Window,text="End ROV program",command=closepipython)
     
 #aligning things to grid
 
 infolabel.grid(row=1,columnspan=6,sticky=N)
 infolabel.grid_rowconfigure(1)
 
-camdisplay.grid(row=2,column=4)
+ImageFrame.grid(row=2,column=4)
 startbutton.grid(row=3,column=2,sticky=SW)
 endbutton.grid(row=3,column=3,sticky=SW)
 
@@ -69,19 +69,19 @@ def startVideo() ->  None:
     photo_image = ImageTk.PhotoImage(image=Arrayimage)
 
     #sets image in label to frame
-    camdisplay.photo_image = photo_image
-    camdisplay.configure(image=photo_image)
+    ImageFrame.photo_image = photo_image
+    ImageFrame.configure(image=photo_image)
 
     #repeats this process every 1ms
-    root.after(1,startVideo)
+    Window.after(1,startVideo)
 
 #Checks for updates
 def updateDisplays():
     infolabel.configure(text=(str(battery) + "%") + (" " * 20) + (str(temp) + "°C") + (" " * 20) + (str(pressure) + "psi"))
     log.configure(text=logtext)
 
-    root.after(1,updateDisplays)
+    Window.after(1,updateDisplays)
 
 startVideo()
 updateDisplays()
-root.mainloop()
+Window.mainloop()

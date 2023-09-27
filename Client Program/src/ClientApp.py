@@ -5,23 +5,23 @@ from tkinter import *
 import os.path
 import paramiko
 
-from ROVConnections.SocketWriter import SocketWriter
-from ROVConnections.SocketReader import SocketReader
-from ROVConnections.SocketConnection import SocketConnection
-from ROVConnections.PubListener import PubListener
-from ROVConnections.SubWriter import SubWriter
+from Common.Connections.ROVConnections.SocketWriter import SocketWriter
+from Common.Connections.ROVConnections.SocketReader import SocketReader
+from Common.Connections.ROVConnections.SocketConnection import SocketConnection
+from Common.Connections.ROVConnections.PubListener import PubListener
+from Common.Connections.ROVConnections.SubWriter import SubWriter
 
-from ROVMessaging.MessageChannel import *
-from ROVMessaging.MessageType import *
-from ROVMessaging.Message import *
-from ROVMessaging.Subscriber import *
-from ROVMessaging.SystemStatus import *
+from Common.Messaging.ROVMessaging.MessageChannel import *
+from Common.Messaging.ROVMessaging.MessageType import *
+from Common.Messaging.ROVMessaging.Message import *
+from Common.Messaging.ROVMessaging.Subscriber import *
+from Common.Messaging.ROVMessaging.SystemStatus import *
 
 from inputs.KeyboardInput import KeyboardInput
 from inputs.ControllerInput import ControllerInput
 from loggers.DataLogger import DataLogger
-from gui.Window import Window
-from gui.ImageFrame import ImageFrame
+from gui.UI import Window
+from gui.UI import ImageFrame
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
