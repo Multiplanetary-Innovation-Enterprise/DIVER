@@ -20,15 +20,13 @@ from Common.Messaging.ROVMessaging.SystemStatus import *
 from inputs.KeyboardInput import KeyboardInput
 from inputs.ControllerInput import ControllerInput
 from loggers.DataLogger import DataLogger
-from gui.UI import Window
-from gui.UI import ImageFrame
+from gui.UI import UI
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
     __config = None                                #The config data
     __serverConnection:SocketConnection = None     #The connection to the ROV
     __dataLogger:DataLogger = None                 #The sensor data logger
-    __window:Window = None                         #The GUI window
     __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
     __outgoingMessageChannel:MessageChannel = None #The message channel for sending messages to the ROV program
@@ -93,12 +91,9 @@ class ClientApp(Subscriber):
         self.__dataLogger.openFile("../logs/data/data_log")
 
         #Setups the GUI window
-        self.__window = Window()
-        self.__window.create()
+        ui = UI()
 
-        #Create a frame to show the camera feed and sets it to be the current one
-        imageFrame = ImageFrame(self.__window)
-        self.__window.switchFrame(imageFrame)
+        #TODO: Create a frame to show the camera feed and sets it to be the current one
 
         #Allows the client to send action and system status messages to the ROV
         self.__outgoingMessageChannel.subscribe(MessageType.ACTION, self.__subWriter)
@@ -110,8 +105,8 @@ class ClientApp(Subscriber):
         #Listens for any system status changes from either this program or the ROV
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
-        #Listens for new camera images from the ROV
-        incomingMessageChannel.subscribe(MessageType.VISION_DATA, imageFrame)
+        #TODO: Listens for new camera images from the ROV
+        #incomingMessageChannel.subscribe(MessageType.VISION_DATA, imageFrame)
 
     #Starts the ROV client if it is not already running
     def start(self) -> None:
