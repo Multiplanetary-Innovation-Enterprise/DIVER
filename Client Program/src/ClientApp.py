@@ -57,6 +57,8 @@ class ClientApp(Subscriber):
         #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
 
+        self.startpipython()
+
         #Attempts to connect to the ROV
         try:
             self.__serverConnection.connect()
@@ -134,6 +136,8 @@ class ClientApp(Subscriber):
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
         print("shutting down...")
+
+        self.closepipython()
 
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
