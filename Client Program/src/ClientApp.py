@@ -5,17 +5,17 @@ from tkinter import *
 import os.path
 import paramiko
 
-from Common.Connections.ROVConnections.SocketWriter import SocketWriter
-from Common.Connections.ROVConnections.SocketReader import SocketReader
-from Common.Connections.ROVConnections.SocketConnection import SocketConnection
-from Common.Connections.ROVConnections.PubListener import PubListener
-from Common.Connections.ROVConnections.SubWriter import SubWriter
+from ROVConnections.SocketWriter import SocketWriter
+from ROVConnections.SocketReader import SocketReader
+from ROVConnections.SocketConnection import SocketConnection
+from ROVConnections.PubListener import PubListener
+from ROVConnections.SubWriter import SubWriter
 
-from Common.Messaging.ROVMessaging.MessageChannel import *
-from Common.Messaging.ROVMessaging.MessageType import *
-from Common.Messaging.ROVMessaging.Message import *
-from Common.Messaging.ROVMessaging.Subscriber import *
-from Common.Messaging.ROVMessaging.SystemStatus import *
+from ROVMessaging.MessageChannel import *
+from ROVMessaging.MessageType import *
+from ROVMessaging.Message import *
+from ROVMessaging.Subscriber import *
+from ROVMessaging.SystemStatus import *
 
 from inputs.KeyboardInput import KeyboardInput
 from inputs.ControllerInput import ControllerInput
@@ -24,6 +24,7 @@ from gui.UI import UI
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
+    __window = UI()
     __config = None                                #The config data
     __serverConnection:SocketConnection = None     #The connection to the ROV
     __dataLogger:DataLogger = None                 #The sensor data logger
@@ -76,6 +77,9 @@ class ClientApp(Subscriber):
         socketReader = SocketReader(self.__serverConnection)
         self.__pubListener = PubListener(socketReader, incomingMessageChannel)
 
+
+        incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__window)
+
         #The input method that utilizes a keyboard
         keyboardInput = KeyboardInput(self.__outgoingMessageChannel)
 
@@ -90,8 +94,7 @@ class ClientApp(Subscriber):
         self.__dataLogger = DataLogger()
         self.__dataLogger.openFile("../logs/data/data_log")
 
-        #Setups the GUI window
-        ui = UI()
+        #Sets up the GUI window
 
         #TODO: Create a frame to show the camera feed and sets it to be the current one
 
@@ -120,7 +123,7 @@ class ClientApp(Subscriber):
         self.__setup()
 
         # while self.__isRunning:
-        self.__window.mainloop()
+        self.__window.startMainLoop()
 
         self.__cleanup()
 

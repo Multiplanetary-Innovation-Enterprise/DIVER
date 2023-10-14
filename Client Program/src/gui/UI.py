@@ -7,30 +7,20 @@ import cv2
 #Resolution: 640x480
 class UI():
     Window = Tk()
-    FakeHardware = True
-    temp = None
-    battery = None
-    camfeed = None
-    logtext = None
-    pressure = None
-    ImageFrame = None
+    Fakehardware = False
     
     def __init__(self) -> None:
         self.Window.configure(bg="Dark Gray",padx=0)
         self.Window.title("ROV Control Panel")
-        if self.FakeHardware:
-            icon = PhotoImage(file=r"C:\\Users\\notch\\OneDrive\\Documents\\GitHub\\DIVER\\Client Program\\src\\gui\\MINE.png")
+        icon = PhotoImage(file=r"C:\\Users\\notch\\OneDrive\\Documents\\GitHub\\DIVER\\Client Program\\src\\gui\\MINE.png")
         self.Window.iconphoto(False,icon)
 
-        #TODO: hook up real hardware instead of using the stuff below
-        if self.FakeHardware:
-            self.temp = "NOT DETECTED"
-            self.battery = "NOT DETECTED"
-            self.camfeed = cv2.VideoCapture(0)
-            self.logtext = "NOT DETECTED"
-            self.pressure = "NOT DETECTED"
-        else:
-            from loggers.ActionLogger import externaltemp,battery,cameraframe,action
+        self.internaltemp = "NOT DETECTED"
+        self.externaltemp = "NOT DETECTED"
+        self.battery = "NOT DETECTED"
+        self.camfeed = cv2.VideoCapture(0)
+        self.logtext = "NOT DETECTED"
+        self.pressure = "NOT DETECTED"
 
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
@@ -92,10 +82,18 @@ class UI():
 
     #Checks for updates
     def startTrackingDisplays(self):
-        self.infolabel.configure(text=(str(self.battery) + "%") + (" " * 20) + (str(self.temp) + "°C") + (" " * 20) + (str(self.pressure) + "psi"))
+        self.infolabel.configure(text=(str(self.internaltemp) + "°C") + (" " * 20) + (str(self.temp) + "°C") + (" " * 20) + (str(self.pressure) + "psi"))
         self.log.configure(text=self.logtext)
 
         self.Window.after(1,self.startTrackingDisplays)
 
-n = UI()
-n.startMainLoop()
+
+    def recieveMessage(self, message):
+        self.time = message.getContents()['time']
+        self.externaltemp = message.getContents()['externalTemp'] #added 3/28/22
+        self.pressure = message.getContents()['pressure']
+        self.internaltemp = message.getContents()['internalTemp']
+
+        #IMU data
+        self.action = message.getContents()['action']
+
