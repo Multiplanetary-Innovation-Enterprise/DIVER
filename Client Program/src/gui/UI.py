@@ -7,13 +7,11 @@ import cv2
 #Resolution: 640x480
 class UI():
     Window = Tk()
-    Fakehardware = False
+    FakeHardware = False
     
     def __init__(self) -> None:
         self.Window.configure(bg="Dark Gray",padx=0)
         self.Window.title("ROV Control Panel")
-        icon = PhotoImage(file=r"C:\\Users\\notch\\OneDrive\\Documents\\GitHub\\DIVER\\Client Program\\src\\gui\\MINE.png")
-        self.Window.iconphoto(False,icon)
 
         self.internaltemp = "NOT DETECTED"
         self.externaltemp = "NOT DETECTED"
@@ -29,14 +27,8 @@ class UI():
         self.ImageFrame = Label(self.Window)
 
         #configures buttons that use imported functions for use with the FakeHardware variable
-        if self.FakeHardware:
-            self.startbutton = Button(self.Window,text="Start ROV program",height=5,width=30)
-            self.endbutton = Button(self.Window,text="End ROV program",height=5,width=30)
-        else:
-            from ClientApp import closepipython
-            from ClientApp import startpipython
-            self.startbutton = Button(self.Window,text="Start ROV program",command=startpipython)
-            self.endbutton = Button(self.Window,text="End ROV program",command=closepipython)
+        self.startbutton = Button(self.Window,text="Start ROV program",height=5,width=30)
+        self.endbutton = Button(self.Window,text="End ROV program",height=5,width=30)
             
         #aligning things to grid
 

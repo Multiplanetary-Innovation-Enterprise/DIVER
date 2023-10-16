@@ -172,21 +172,21 @@ class ClientApp(Subscriber):
             self.stop()
     
     #starts the python program on the ROV
-    global sshClient
-    def startpipython():
-        if sshClient != None:
+    sshClient = None
+    def startpipython(self):
+        if self.sshClient != None:
             raise Exception()
-        sshClient = paramiko.SSHClient()
+        self.sshClient = paramiko.SSHClient()
         #TODO: add ROV IP Address
-        sshClient.connect("ROV IP",username="pi",password="Mine21",)
-        stdin,stdout,stderr = sshClient.exec_command("cd Programs\ROV\src")
+        self.sshClient.connect("raspberrypi",username="pi",password="Mine21",)
+        stdin,stdout,stderr = self.sshClient.exec_command("cd Programs\ROV\src")
         print(stdout)
-        stdin,stdout,stderr = sshClient.exec_command("python3 ROVLauncher.py")
+        stdin,stdout,stderr = self.sshClient.exec_command("python3 ROVLauncher.py")
         print(stdout)
     
     #closes the python program on the ROV
-    def closepipython():
-        if sshClient == None:
+    def closepipython(self):
+        if self.sshClient == None:
             raise Exception()
-        sshClient.exec_command("sudo shutdown -h now")
-        sshClient.close()
+        self.sshClient.exec_command("sudo shutdown -h now")
+        self.sshClient.close()
