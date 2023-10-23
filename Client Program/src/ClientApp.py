@@ -4,6 +4,8 @@ import configparser
 from tkinter import *
 import os.path
 import paramiko
+import socket
+import time
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -178,11 +180,14 @@ class ClientApp(Subscriber):
             raise Exception()
         self.sshClient = paramiko.SSHClient()
         #TODO: add ROV IP Address
-        self.sshClient.connect("raspberrypi",username="pi",password="Mine21",)
-        stdin,stdout,stderr = self.sshClient.exec_command("cd Programs\ROV\src")
-        print(stdout)
-        stdin,stdout,stderr = self.sshClient.exec_command("python3 ROVLauncher.py")
-        print(stdout)
+        self.sshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.sshClient.connect(socket.gethostbyname("raspberrypi"),port=22,username="pi",password="Mine21",)
+        stdin,stdout,stderr = self.sshClient.exec_command("cd Programs/ROV/src ; python3 ROVLauncher.py")
+        for line in stdout.read().splitlines():
+            print(line)
+        for line in stderr.read().splitlines():
+            print(line)
+        time.sleep(5)
     
     #closes the python program on the ROV
     def closepipython(self):
