@@ -33,9 +33,9 @@ class SensorDataCollector(DataCollector):
             sensorData["internalTemp"] = tempSensor.getTemperature()
 
         #Checks if the imu sensor is connected
-        if imu.isConnected():
-            #Appends the IMU data to the rest of the sensor data
-            sensorData.update(imu.getSensorData().toDict())
+        #if imu.isConnected():
+        #    #Appends the IMU data to the rest of the sensor data
+        #    sensorData.update(imu.getSensorData().toDict())
 
         #Checks if the external temperature sensor is connected
         if exTempSensor.isConnected():
