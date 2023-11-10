@@ -86,9 +86,7 @@ class UI(Subscriber):
         self.externaltemp = message.getContents()['externalTemp'] #added 3/28/22
         self.pressure = message.getContents()['pressure']
         self.internaltemp = message.getContents()['internalTemp']
-
-        self.frame = message.getContents()['Frame']
-
-        #IMU data
         self.action = message.getContents()['action']
+        self.frame = message.getContents()['Frame']
+        
 
