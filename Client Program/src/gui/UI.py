@@ -3,6 +3,7 @@ from PIL import Image,ImageTk
 import cv2
 
 
+
 #Notes:
 #Resolution: 640x480
 class UI():
@@ -20,28 +21,6 @@ class UI():
         self.logtext = "NOT DETECTED"
         self.pressure = "NOT DETECTED"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        #Adds ability to get sensor data from the ROV
-
-        incomingMessageChannel = MessageChannel()
-
-        try:
-            self.__serverConnection.connect()
-        except:
-            print("UI Failed to connect to ROV")
-
-        socketReader = SocketReader(self.__serverConnection)
-        self.pubListener = PubListener(socketReader, incomingMessageChannel)
-
-        incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__window)
-
-
-
-=======
->>>>>>> parent of b828913 (Integrated UI into Message-subscriber System)
-=======
->>>>>>> parent of b828913 (Integrated UI into Message-subscriber System)
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
 
