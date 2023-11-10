@@ -141,14 +141,14 @@ class ClientApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        print("Shutting down...")
+        print("shutting down...")
 
         self.closepipython()
 
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
 
-        print("Sending shutdown message...")
+        print("send shutdown mssage")
 
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
