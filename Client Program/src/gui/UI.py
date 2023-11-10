@@ -18,8 +18,9 @@ class UI():
         self.externaltemp = "NOT DETECTED"
         self.battery = "NOT DETECTED"
         self.camfeed = cv2.VideoCapture(0)
-        self.logtext = "NOT DETECTED"
+        self.logtext = "Log Started!"
         self.pressure = "NOT DETECTED"
+        self.time = 0
 
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
@@ -75,7 +76,8 @@ class UI():
 
     #Checks for updates
     def startTrackingDisplays(self):
-        self.infolabel.configure(text=(str(self.internaltemp) + "°C") + (" " * 20) + (str(self.externaltemp) + "°C") + (" " * 20) + (str(self.pressure) + "psi"))
+        self.infospacing = 20
+        self.infolabel.configure(text=( (str(self.time) + "s") + (" " * self.infospacing) + ("I:" + str(self.internaltemp) + "°C") + (" " * self.infospacing) + ("E: " + str(self.internaltemp) + "°C") + (" " * self.infospacing) + (str(self.pressure) + "psi") ))
         self.log.configure(text=self.logtext)
 
         self.Window.after(1,self.startTrackingDisplays)
