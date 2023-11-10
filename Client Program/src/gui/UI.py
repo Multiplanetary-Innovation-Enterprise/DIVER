@@ -32,6 +32,7 @@ class UI():
         self.logtext = "NOT DETECTED"
         self.pressure = "NOT DETECTED"
 
+        #Adds ability to get sensor data from the ROV
 
         incomingMessageChannel = MessageChannel()
 
