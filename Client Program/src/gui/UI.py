@@ -2,6 +2,18 @@ from tkinter import *
 from PIL import Image,ImageTk
 import cv2
 
+from ROVConnections.SocketWriter import SocketWriter
+from ROVConnections.SocketReader import SocketReader
+from ROVConnections.SocketConnection import SocketConnection
+from ROVConnections.PubListener import PubListener
+from ROVConnections.SubWriter import SubWriter
+
+from ROVMessaging.MessageChannel import *
+from ROVMessaging.MessageType import *
+from ROVMessaging.Message import *
+from ROVMessaging.Subscriber import *
+from ROVMessaging.SystemStatus import *
+
 
 #Notes:
 #Resolution: 640x480
@@ -19,6 +31,21 @@ class UI():
         self.camfeed = cv2.VideoCapture(0)
         self.logtext = "NOT DETECTED"
         self.pressure = "NOT DETECTED"
+
+
+        incomingMessageChannel = MessageChannel()
+
+        try:
+            self.__serverConnection.connect()
+        except:
+            print("UI Failed to connect to ROV")
+
+        socketReader = SocketReader(self.__serverConnection)
+        self.pubListener = PubListener(socketReader, incomingMessageChannel)
+
+        incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__window)
+
+
 
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
