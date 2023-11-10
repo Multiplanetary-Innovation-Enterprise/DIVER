@@ -83,7 +83,7 @@ class UI(Subscriber):
 
     def recieveMessage(self, message):
         self.time = message.getContents()['time']
-        self.externaltemp = message.getContents()['externalTemp'] #added 3/28/22
+        self.externaltemp = message.getContents()['externalTemp']
         self.pressure = message.getContents()['pressure']
         self.internaltemp = message.getContents()['internalTemp']
         self.action = message.getContents()['action']
