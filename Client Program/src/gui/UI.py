@@ -2,7 +2,8 @@ from tkinter import *
 from PIL import Image,ImageTk
 import cv2
 
-#from ROVMessaging.Subscriber import *
+#if testing on actual ROV, uncomment below line and add "Subscriber" to the inside of the parenthesis for UI()
+#from  ROVMessaging.Subscriber import *
 #Subscriber
 #Notes:
 #Resolution: 640x480
@@ -11,9 +12,12 @@ class UI():
     FakeHardware = True
     
     def __init__(self) -> None:
+        #configure window layout
         self.Window.configure(bg="Dark Gray",padx=0)
         self.Window.title("ROV Control Panel")
 
+
+        #Initializes instance variables
         self.internaltemp = "NOT DETECTED"
         self.externaltemp = "NOT DETECTED"
         self.battery = "NOT DETECTED"

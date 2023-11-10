@@ -55,7 +55,7 @@ class ClientApp(Subscriber):
         #Connection info for connecting to the ROV
         host = str(self.__config['ROV_CONNECTION']['Host'])
         port = int(self.__config['ROV_CONNECTION']['Port'])
-        print("PORT: " + str(port) + " Host: " + str(host))
+        self.__window.addLog("PORT: " + str(port) + " Host: " + str(host))
         #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
 
@@ -66,7 +66,7 @@ class ClientApp(Subscriber):
         try:
             self.__serverConnection.connect()
         except:
-            print("Failed to connect to ROV")
+            self.__window.addLog("Failed to connect to ROV")
             os.system('pause')
             sys.exit()
 
@@ -140,14 +140,14 @@ class ClientApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        print("shutting down...")
+        self.__window.addLog("Shutting down...")
 
         self.closepipython()
 
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
 
-        print("send shutdown mssage")
+        self.__window.addLog("send shutdown mssage")
 
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
@@ -187,9 +187,9 @@ class ClientApp(Subscriber):
         self.sshClient.connect(socket.gethostbyname("raspberrypi"),port=22,username="pi",password="Mine21",)
         stdin,stdout,stderr = self.sshClient.exec_command("cd Programs/ROV/src ; python3 ROVLauncher.py")
         for line in stdout.read().splitlines():
-            print(line)
+            self.__window.addLog(line)
         for line in stderr.read().splitlines():
-            print(line)
+            self.__window.addLog(line)
         time.sleep(5)
     
     #closes the python program on the ROV
