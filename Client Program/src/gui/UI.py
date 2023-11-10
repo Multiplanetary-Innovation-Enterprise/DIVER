@@ -2,11 +2,11 @@ from tkinter import *
 from PIL import Image,ImageTk
 import cv2
 
-
+from ROVMessaging.Subscriber import *
 
 #Notes:
 #Resolution: 640x480
-class UI():
+class UI(Subscriber):
     Window = Tk()
     FakeHardware = False
     
@@ -57,8 +57,8 @@ class UI():
     def startVideo(self) ->  None:
         
         #pulls a frame as an image
-        _, self.frame = self.camfeed.read()
-
+        if self.FakeHardware:
+            _, self.frame = self.camfeed.read()
         #Converts image to the proper colors for display
         self.displayableImage = cv2.cvtColor(self.frame,cv2.COLOR_BGR2RGBA)
 
@@ -86,6 +86,8 @@ class UI():
         self.externaltemp = message.getContents()['externalTemp'] #added 3/28/22
         self.pressure = message.getContents()['pressure']
         self.internaltemp = message.getContents()['internalTemp']
+
+        self.frame = message.getContents()['Frame']
 
         #IMU data
         self.action = message.getContents()['action']

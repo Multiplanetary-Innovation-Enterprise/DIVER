@@ -84,6 +84,7 @@ class ClientApp(Subscriber):
 
 
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__window)
+        incomingMessageChannel.subscribe(MessageType.VISION_DATA, self.__window)
 
         #The input method that utilizes a keyboard
         keyboardInput = KeyboardInput(self.__outgoingMessageChannel)
@@ -113,8 +114,6 @@ class ClientApp(Subscriber):
         #Listens for any system status changes from either this program or the ROV
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
-        #TODO: Listens for new camera images from the ROV
-        #incomingMessageChannel.subscribe(MessageType.VISION_DATA, imageFrame)
 
     #Starts the ROV client if it is not already running
     def start(self) -> None:
