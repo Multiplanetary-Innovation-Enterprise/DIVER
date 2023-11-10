@@ -61,6 +61,7 @@ class ClientApp(Subscriber):
 
         self.startpipython()
 
+        self.__window.Window.protocol("WM_DELETE_WINDOW", self.onclosewindow)
         #Attempts to connect to the ROV
         try:
             self.__serverConnection.connect()
@@ -130,6 +131,9 @@ class ClientApp(Subscriber):
         self.__window.startMainLoop()
 
         self.__cleanup()
+
+    def onclosewindow(self):
+        self.stop()
 
     #Tells the ROV client to stop running
     def stop(self) -> None:
