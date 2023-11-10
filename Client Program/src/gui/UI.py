@@ -2,18 +2,6 @@ from tkinter import *
 from PIL import Image,ImageTk
 import cv2
 
-from ROVConnections.SocketWriter import SocketWriter
-from ROVConnections.SocketReader import SocketReader
-from ROVConnections.SocketConnection import SocketConnection
-from ROVConnections.PubListener import PubListener
-from ROVConnections.SubWriter import SubWriter
-
-from ROVMessaging.MessageChannel import *
-from ROVMessaging.MessageType import *
-from ROVMessaging.Message import *
-from ROVMessaging.Subscriber import *
-from ROVMessaging.SystemStatus import *
-
 
 #Notes:
 #Resolution: 640x480
@@ -32,6 +20,7 @@ class UI():
         self.logtext = "NOT DETECTED"
         self.pressure = "NOT DETECTED"
 
+<<<<<<< HEAD
         #Adds ability to get sensor data from the ROV
 
         incomingMessageChannel = MessageChannel()
@@ -48,6 +37,8 @@ class UI():
 
 
 
+=======
+>>>>>>> parent of b828913 (Integrated UI into Message-subscriber System)
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
 
