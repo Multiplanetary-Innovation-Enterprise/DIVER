@@ -2,13 +2,13 @@ from tkinter import *
 from PIL import Image,ImageTk
 import cv2
 
-from ROVMessaging.Subscriber import *
-
+#from ROVMessaging.Subscriber import *
+#Subscriber
 #Notes:
 #Resolution: 640x480
-class UI(Subscriber):
+class UI():
     Window = Tk()
-    FakeHardware = False
+    FakeHardware = True
     
     def __init__(self) -> None:
         self.Window.configure(bg="Dark Gray",padx=0)
@@ -27,9 +27,9 @@ class UI(Subscriber):
         self.log = Label(bg="black",fg="white",text=self.logtext,height=10,anchor=SW)
         self.ImageFrame = Label(self.Window)
 
-        #configures buttons that use imported functions for use with the FakeHardware variable
-        self.startbutton = Button(self.Window,text="Start ROV program",height=5,width=30)
-        self.endbutton = Button(self.Window,text="End ROV program",height=5,width=30)
+        #If buttons are necessary, use this format:
+        #self.startbutton = Button(self.Window,text="Start ROV program",height=5,width=30)
+        #self.endbutton = Button(self.Window,text="End ROV program",height=5,width=30)
             
         #aligning things to grid
 
@@ -37,8 +37,8 @@ class UI(Subscriber):
         self.infolabel.grid_rowconfigure(1)
 
         self.ImageFrame.grid(row=2,column=4)
-        self.startbutton.grid(row=3,column=2,sticky=SW)
-        self.endbutton.grid(row=3,column=3,sticky=SW)
+        #self.startbutton.grid(row=3,column=2,sticky=SW)
+        #self.endbutton.grid(row=3,column=3,sticky=SW)
 
         #control panel in bottom row
         self.log.grid(row=3,column=4,sticky=EW)
@@ -75,7 +75,7 @@ class UI(Subscriber):
 
     #Checks for updates
     def startTrackingDisplays(self):
-        self.infolabel.configure(text=(str(self.internaltemp) + "°C") + (" " * 20) + (str(self.temp) + "°C") + (" " * 20) + (str(self.pressure) + "psi"))
+        self.infolabel.configure(text=(str(self.internaltemp) + "°C") + (" " * 20) + (str(self.externaltemp) + "°C") + (" " * 20) + (str(self.pressure) + "psi"))
         self.log.configure(text=self.logtext)
 
         self.Window.after(1,self.startTrackingDisplays)
@@ -89,4 +89,6 @@ class UI(Subscriber):
         self.action = message.getContents()['action']
         self.frame = message.getContents()['Frame']
         
-
+testui = UI()
+if testui.FakeHardware:
+    testui.startMainLoop()
