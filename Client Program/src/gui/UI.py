@@ -21,6 +21,7 @@ class UI():
         self.pressure = "NOT DETECTED"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         #Adds ability to get sensor data from the ROV
 
         incomingMessageChannel = MessageChannel()
@@ -37,6 +38,8 @@ class UI():
 
 
 
+=======
+>>>>>>> parent of b828913 (Integrated UI into Message-subscriber System)
 =======
 >>>>>>> parent of b828913 (Integrated UI into Message-subscriber System)
         #creates label for info to be put in
