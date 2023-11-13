@@ -21,7 +21,7 @@ class SensorSubsystem(Subsystem):
 
         #Sets up the sensors that will be used
         self.__internalTempSensor = DS18B20TempSensor(TempUnit.C)
-        #self.__imu = BNO055IMU()
+        self.__imu = BNO055IMU()
         self.__externalTempSensor = BlueRoboticsTempSensor(TempUnit.C) #added 4/6/22
         self.__pressureSensor = PressureSensor() #added 4/8/22
         self.__coreSensor = CoreTempSensor() #Added 3/24/2023

@@ -66,6 +66,7 @@ class ClientApp(Subscriber):
             self.__serverConnection.connect()
             print("Successfully Connected to ROV")
         except:
+            print("Failed to Connect to ROV")
             os.system('pause')
             sys.exit()
 
@@ -98,10 +99,6 @@ class ClientApp(Subscriber):
         #Sets up the data logger and creates a new log file
         self.__dataLogger = DataLogger()
         self.__dataLogger.openFile("../logs/data/data_log")
-
-        #Sets up the GUI window
-
-        #TODO: Create a frame to show the camera feed and sets it to be the current one
 
         #Allows the client to send action and system status messages to the ROV
         self.__outgoingMessageChannel.subscribe(MessageType.ACTION, self.__subWriter)
@@ -146,7 +143,7 @@ class ClientApp(Subscriber):
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
 
-        self.__window.addLog("send shutdown mssage")
+        self.__window.addLog("send shutdown message")
 
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
@@ -180,7 +177,7 @@ class ClientApp(Subscriber):
         print("SSHing into ROV...")
         self.sshClient = paramiko.SSHClient()
         self.sshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.sshClient.connect(socket.gethostbyname("raspberrypi"),port=22,username="pi",password="Mine21")
+        self.sshClient.connect(socket.gethostbyname(str(self.__config['ROV_CONNECTION']['Host'])),port=22,username="pi",password="Mine21")
         self.session = self.sshClient.invoke_shell()
         self.session.send("cd Programs/ROV/src ; python3 ROVLauncher.py ; bash\n")
         #stdin,stdout,stderr = self.sshClient.exec_command('cd Programs/ROV/src ; python3 ROVLauncher.py')
