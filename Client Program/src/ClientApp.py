@@ -59,14 +59,13 @@ class ClientApp(Subscriber):
         #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
 
-        self.startpipython()
-
         self.__window.Window.protocol("WM_DELETE_WINDOW", self.onclosewindow)
         #Attempts to connect to the ROV
+        print("Connecting to ROV...")
         try:
             self.__serverConnection.connect()
+            print("Successfully Connected to ROV")
         except:
-            self.__window.addLog("Failed to connect to ROV")
             os.system('pause')
             sys.exit()
 
@@ -142,7 +141,7 @@ class ClientApp(Subscriber):
     def __cleanup(self) -> None:
         self.__window.addLog("Shutting down...")
 
-        self.closepipython()
+        self.pyrunning = False
 
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
@@ -177,24 +176,24 @@ class ClientApp(Subscriber):
             self.stop()
     
     #starts the python program on the ROV
-    sshClient = None
     def startpipython(self):
-        if self.sshClient != None:
-            raise Exception()
+        print("SSHing into ROV...")
         self.sshClient = paramiko.SSHClient()
-        #TODO: add ROV IP Address
         self.sshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.sshClient.connect(socket.gethostbyname("raspberrypi"),port=22,username="pi",password="Mine21",)
-        stdin,stdout,stderr = self.sshClient.exec_command("cd Programs/ROV/src ; python3 ROVLauncher.py")
-        for line in stdout.read().splitlines():
-            self.__window.addLog(line)
-        for line in stderr.read().splitlines():
-            self.__window.addLog(line)
-        time.sleep(5)
+        self.sshClient.connect(socket.gethostbyname("raspberrypi"),port=22,username="pi",password="Mine21")
+        self.session = self.sshClient.invoke_shell()
+        self.session.send("cd Programs/ROV/src ; python3 ROVLauncher.py ; bash\n")
+        #stdin,stdout,stderr = self.sshClient.exec_command('cd Programs/ROV/src ; python3 ROVLauncher.py')
+        #for line in stdout.read().splitlines():
+        #    print(line.decode())
+        #for line in stderr.read().splitlines():
+        #    print(line)
+        print("Successfully started python on ROV")
     
     #closes the python program on the ROV
     def closepipython(self):
-        if self.sshClient == None:
-            raise Exception()
-        self.sshClient.exec_command("sudo shutdown -h now")
+        self.session.send("sudo shutdown -h now")
         self.sshClient.close()
+        print("Successfully shut down python on ROV")
+
+        

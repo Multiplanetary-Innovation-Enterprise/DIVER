@@ -3,13 +3,13 @@ from PIL import Image,ImageTk
 import cv2
 
 #if testing on actual ROV, uncomment below line and add "Subscriber" to the inside of the parenthesis for UI()
-#from  ROVMessaging.Subscriber import *
+from  ROVMessaging.Subscriber import *
 #Subscriber
 #Notes:
 #Resolution: 640x480
-class UI():
+class UI(Subscriber):
     Window = Tk()
-    FakeHardware = True
+    FakeHardware = False
     
     def __init__(self) -> None:
         #configure window layout
@@ -22,6 +22,7 @@ class UI():
         self.externaltemp = "NOT DETECTED"
         self.battery = "NOT DETECTED"
         self.camfeed = cv2.VideoCapture(0)
+        _, self.frame = self.camfeed.read()
         self.logtext = "Log Started!"
         self.pressure = "NOT DETECTED"
         self.time = 0
@@ -56,7 +57,7 @@ class UI():
 
     #adds log
     def addLog(self,text) -> None:
-        self.logtext += str(text)
+        self.logtext += ("\n" + str(text))
 
 #starts showing video from client's camera
     def startVideo(self) ->  None:
@@ -88,13 +89,16 @@ class UI():
 
 
     def recieveMessage(self, message):
-        self.time = message.getContents()['time']
-        self.externaltemp = message.getContents()['externalTemp']
-        self.pressure = message.getContents()['pressure']
-        self.internaltemp = message.getContents()['internalTemp']
-        self.action = message.getContents()['action']
-        self.frame = message.getContents()['Frame']
+        if 'time' in message.getContents():
+            self.time = message.getContents()['time']
+        if 'externalTemp' in message.getContents():
+            self.externaltemp = message.getContents()['externalTemp']
+        if 'pressure' in message.getContents():
+            self.pressure = message.getContents()['pressure']
+        if 'internalTemp' in message.getContents():
+            self.internaltemp = message.getContents()['internalTemp']
+        if 'action' in message.getContents():
+            self.action = message.getContents()['action']
+        if 'Frame' in message.getContents():
+            self.frame = message.getContents()['Frame']
         
-testui = UI()
-if testui.FakeHardware:
-    testui.startMainLoop()
