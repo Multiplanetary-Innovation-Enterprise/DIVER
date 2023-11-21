@@ -19,7 +19,7 @@ class PropulsionSubsystem(Subsystem):
         topFrontPin = int(config['Propulsion']['TopFrontThrusterPin'])
         topBackPin = int(config['Propulsion']['TopBackThrusterPin'])
 
-        #Creates three thrusters. Two for the x-y movement and two for z movement
+        #Creates four thrusters. Two for the x-y movement and two for z movement
         self.__leftThruster = Thruster(controller, leftPin, RotDirection.COUNTER_CLOCKWISE)
         self.__rightThruster = Thruster(controller, rightPin, RotDirection.COUNTER_CLOCKWISE)
         self.__topFrontThruster = Thruster(controller, topFrontPin, RotDirection.COUNTER_CLOCKWISE)
@@ -33,7 +33,7 @@ class PropulsionSubsystem(Subsystem):
         self.__topFrontThruster.arm()
         self.__topBackThruster.arm()
 
-    #Sets the speed of all three thrusters independently
+    #Sets the speed of all four thrusters independently
     def setSpeed(self, leftSpeed:float, rightSpeed:float, frontSpeed:float, backSpeed:float) -> None:
         self.setXYSpeed(leftSpeed, rightSpeed)
         self.setVerticalSpeed(frontSpeed, rightSpeed)
