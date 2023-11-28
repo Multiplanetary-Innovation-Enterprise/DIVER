@@ -3,10 +3,10 @@ from PIL import Image,ImageTk
 import cv2
 
 #if testing on actual ROV, uncomment below line and add "Subscriber" to the inside of the parenthesis for UI()
-from  ROVMessaging.Subscriber import *
-#Subscriber
+#from  ROVMessaging.Subscriber import *
+
 #Notes:
-#Resolution: 640x480
+#Camera Display Resolution: 640x480
 class UI(Subscriber):
     Window = Tk()
     FakeHardware = False
@@ -28,7 +28,7 @@ class UI(Subscriber):
         self.time = 0
 
         #creates label for info to be put in
-        self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
+        self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray",font=("Helvetica Bolt", 10))
 
         self.log = Label(bg="black",fg="white",text=self.logtext,height=10,anchor=SW)
         self.ImageFrame = Label(self.Window)
