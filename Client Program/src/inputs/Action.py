@@ -6,8 +6,8 @@ class Action(Enum):
     MOVE_XY_STOP = 1
     MOVE_XY_FORWARD = 2
     MOVE_XY_BACKWARD = 3
-    TURN_XY_LEFT = 4
-    TURN_XY_RIGHT = 5
+    MOVE_XY_LEFT = 4
+    MOVE_XY_RIGHT = 5
     MOVE_Z_STOP = 6
     MOVE_Z_UP = 7
     MOVE_Z_DOWN = 8
@@ -17,3 +17,6 @@ class Action(Enum):
     BRIGHTNESS_INCREASE = 12
     BRIGHTNESS_DECREASE = 13
     CAPTURE_IMAGE = 14
+    TURN_XY_CW = 15
+    TURN_XY_CCW =16
+

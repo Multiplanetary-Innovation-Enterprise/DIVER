@@ -37,12 +37,22 @@ class Input(Publisher, ABC):
 
     #Sends the move right action message
     def right(self, event) -> None:
-        message = Message(MessageType.ACTION, Action.TURN_XY_RIGHT.value)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_RIGHT.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the move left action message
     def left(self, event) -> None:
-        message = Message(MessageType.ACTION, Action.TURN_XY_LEFT.value)
+        message = Message(MessageType.ACTION, Action.MOVE_XY_LEFT.value)
+        self.sendMessage(message, self.__messageChannel)
+
+    #Sends the turn clockeise action message
+    def cw(self, event) -> None:
+        message = Message(MessageType.ACTION, Action.TURN_XY_CW.value)
+        self.sendMessage(message, self.__messageChannel)
+
+    #Sends the turn counterclockeise action message
+    def ccw(self, event) -> None:
+        message = Message(MessageType.ACTION, Action.TURN_XY_CCW.value)
         self.sendMessage(message, self.__messageChannel)
 
     #Sends the stop XY action message
@@ -94,3 +104,6 @@ class Input(Publisher, ABC):
     def captureImage(self, event) -> None:
         message = Message(MessageType.ACTION, Action.CAPTURE_IMAGE.value)
         self.sendMessage(message, self.__messageChannel)
+
+   
+

@@ -27,10 +27,19 @@ class CommandFactory:
                 command = MoveForwardCommand(self.__rov.getPropSystem())
         elif actionCode == MoveBackwardCommand.getActionCode():
                 command = MoveBackwardCommand(self.__rov.getPropSystem())
-        elif actionCode == TurnLeftCommand.getActionCode():
-                command = TurnLeftCommand(self.__rov.getPropSystem())
-        elif actionCode == TurnRightCommand.getActionCode():
-                command = TurnRightCommand(self.__rov.getPropSystem())
+        
+        
+        elif actionCode == MoveLeftCommand.getActionCode():
+                command = MoveLeftCommand(self.__rov.getPropSystem())
+        elif actionCode == MoveRightCommand.getActionCode():
+                command = MoveRightCommand(self.__rov.getPropSystem())
+                
+                
+        elif actionCode == TurnCCWCommand.getActionCode():
+                command = TurnCCWCommand(self.__rov.getPropSystem())
+        elif actionCode == TurnCWCommand.getActionCode():
+                command = TurnCWCommand(self.__rov.getPropSystem())
+
         elif actionCode == MoveZStopCommand.getActionCode():
                 command = MoveZStopCommand(self.__rov.getPropSystem())
         elif actionCode == MoveUpCommand.getActionCode():

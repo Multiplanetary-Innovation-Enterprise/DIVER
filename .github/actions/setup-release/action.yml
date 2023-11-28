@@ -1,5 +1,6 @@
 # Peforms the setup requried to create a new release
 name: Setup For Release
+description: filler
 
 # The list of tasks to perform
   #Sets up all the required tools required to build the libraries and applications

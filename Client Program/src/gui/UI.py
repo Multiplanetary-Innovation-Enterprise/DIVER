@@ -109,4 +109,3 @@ root = Tk()
 rov_UI = UI(root)
 root.mainloop()
 UI.update_clock()
->>>>>>> 7015b38e1e8a2bec0faaa5b4c7e478130ef7eb26
