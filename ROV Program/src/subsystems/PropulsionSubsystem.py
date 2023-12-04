@@ -30,10 +30,8 @@ class PropulsionSubsystem(Subsystem):
         self.__BackLeftThruster   = Thruster(controller, backLeftPin, RotDirection.COUNTER_CLOCKWISE)
         self.__BackRightThruster  = Thruster(controller, backRightPin, RotDirection.COUNTER_CLOCKWISE)
 
-        # self.__leftThruster = Thruster(controller, leftPin, RotDirection.COUNTER_CLOCKWISE)
-        # self.__rightThruster = Thruster(controller, rightPin, RotDirection.COUNTER_CLOCKWISE)
         self.__TopLeftThruster  = Thruster(controller, topLeftPin, RotDirection.COUNTER_CLOCKWISE)
-        self.__TopRightThruster   = Thruster(controller, topRightPin, RotDirection.CLOCKWISE)
+        self.__TopRightThruster = Thruster(controller, topRightPin, RotDirection.CLOCKWISE)
 
     #Arms all of the thrusters
     def arm(self) -> None:
@@ -47,14 +45,13 @@ class PropulsionSubsystem(Subsystem):
         # self.__rightThruster.arm()
         self.__TopLeftThruster.arm()
         self.__TopRightThruster.arm()
-
+        
     #Sets the speed of all three thrusters independently
     #0 = RightTop, 1 = LeftTop, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = Backeft
     def setSpeed(self, RightTopSpeed:float, LeftTopSpeed:float, FrontRightSpeed:float, FrontLeftSpeed:float, BackRightSpeed:float, BackLeftSpeed:float) -> None:
         
         self.setXYSpeed(FrontRightSpeed, FrontLeftSpeed,  BackRightSpeed, BackLeftSpeed)
         self.setVerticalSpeed(RightTopSpeed, LeftTopSpeed)
-
 
     #Sets all the thrusters to the same speed (python does not allow function overloading)
     def setSpeedSame(self, speed:float) -> None:

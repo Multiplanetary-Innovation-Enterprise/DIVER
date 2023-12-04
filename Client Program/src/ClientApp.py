@@ -3,6 +3,9 @@ import socket
 import configparser
 from tkinter import *
 import os.path
+import paramiko
+import socket
+import time
 
 from ROVConnections.SocketWriter import SocketWriter
 from ROVConnections.SocketReader import SocketReader
@@ -19,15 +22,14 @@ from ROVMessaging.SystemStatus import *
 from inputs.KeyboardInput import KeyboardInput
 from inputs.ControllerInput import ControllerInput
 from loggers.DataLogger import DataLogger
-from gui.Window import Window
-from gui.ImageFrame import ImageFrame
+from gui.UI import UI
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
+    __window = UI()
     __config = None                                #The config data
     __serverConnection:SocketConnection = None     #The connection to the ROV
     __dataLogger:DataLogger = None                 #The sensor data logger
-    __window:Window = None                         #The GUI window
     __pubListener:PubListener = None               #Listens for messages from the ROV program
     __isRunning:bool = False                       #Whether or not the program is running
     __outgoingMessageChannel:MessageChannel = None #The message channel for sending messages to the ROV program
@@ -53,15 +55,17 @@ class ClientApp(Subscriber):
         #Connection info for connecting to the ROV
         host = str(self.__config['ROV_CONNECTION']['Host'])
         port = int(self.__config['ROV_CONNECTION']['Port'])
-        print("PORT: " + str(port) + " Host: " + str(host))
+        self.__window.addLog("PORT: " + str(port) + " Host: " + str(host))
         #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
 
+        self.__window.Window.protocol("WM_DELETE_WINDOW", self.onclosewindow)
         #Attempts to connect to the ROV
+        print("Connecting to ROV...")
         try:
             self.__serverConnection.connect()
+            print("Successfully Connected to ROV")
         except:
-            print("Failed to connect to ROV")
             os.system('pause')
             sys.exit()
 
@@ -77,6 +81,10 @@ class ClientApp(Subscriber):
         socketReader = SocketReader(self.__serverConnection)
         self.__pubListener = PubListener(socketReader, incomingMessageChannel)
 
+
+        incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__window)
+        incomingMessageChannel.subscribe(MessageType.VISION_DATA, self.__window)
+
         #The input method that utilizes a keyboard
         keyboardInput = KeyboardInput(self.__outgoingMessageChannel)
 
@@ -91,13 +99,9 @@ class ClientApp(Subscriber):
         self.__dataLogger = DataLogger()
         self.__dataLogger.openFile("../logs/data/data_log")
 
-        #Setups the GUI window
-        self.__window = Window()
-        self.__window.create()
+        #Sets up the GUI window
 
-        #Create a frame to show the camera feed and sets it to be the current one
-        imageFrame = ImageFrame(self.__window)
-        self.__window.switchFrame(imageFrame)
+        #TODO: Create a frame to show the camera feed and sets it to be the current one
 
         #Allows the client to send action and system status messages to the ROV
         self.__outgoingMessageChannel.subscribe(MessageType.ACTION, self.__subWriter)
@@ -109,8 +113,6 @@ class ClientApp(Subscriber):
         #Listens for any system status changes from either this program or the ROV
         incomingMessageChannel.subscribe(MessageType.SYSTEM_STATUS, self)
 
-        #Listens for new camera images from the ROV
-        incomingMessageChannel.subscribe(MessageType.VISION_DATA, imageFrame)
 
     #Starts the ROV client if it is not already running
     def start(self) -> None:
@@ -124,9 +126,12 @@ class ClientApp(Subscriber):
         self.__setup()
 
         # while self.__isRunning:
-        self.__window.mainloop()
+        self.__window.startMainLoop()
 
         self.__cleanup()
+
+    def onclosewindow(self):
+        self.stop()
 
     #Tells the ROV client to stop running
     def stop(self) -> None:
@@ -134,12 +139,14 @@ class ClientApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        print("shutting down...")
+        self.__window.addLog("Shutting down...")
+
+        self.pyrunning = False
 
         #Stops the xbox controller listener thread
         self.__controllerInput.stop()
 
-        print("send shutdown mssage")
+        self.__window.addLog("send shutdown mssage")
 
         #Tells the server that it is shutting down
         message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
@@ -167,3 +174,26 @@ class ClientApp(Subscriber):
             message.getContents() == SystemStatus.SHUT_DOWN):
 
             self.stop()
+    
+    #starts the python program on the ROV
+    def startpipython(self):
+        print("SSHing into ROV...")
+        self.sshClient = paramiko.SSHClient()
+        self.sshClient.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.sshClient.connect(socket.gethostbyname("raspberrypi"),port=22,username="pi",password="Mine21")
+        self.session = self.sshClient.invoke_shell()
+        self.session.send("cd Programs/ROV/src ; python3 ROVLauncher.py ; bash\n")
+        #stdin,stdout,stderr = self.sshClient.exec_command('cd Programs/ROV/src ; python3 ROVLauncher.py')
+        #for line in stdout.read().splitlines():
+        #    print(line.decode())
+        #for line in stderr.read().splitlines():
+        #    print(line)
+        print("Successfully started python on ROV")
+    
+    #closes the python program on the ROV
+    def closepipython(self):
+        self.session.send("sudo shutdown -h now")
+        self.sshClient.close()
+        print("Successfully shut down python on ROV")
+
+        
