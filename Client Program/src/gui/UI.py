@@ -101,4 +101,3 @@ class UI(Subscriber):
             self.action = message.getContents()['action']
         if 'Frame' in message.getContents():
             self.frame = message.getContents()['Frame']
-        

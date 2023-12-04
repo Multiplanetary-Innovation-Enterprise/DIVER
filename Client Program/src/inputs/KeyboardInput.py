@@ -25,14 +25,20 @@ class KeyboardInput(Input):
         keyboard.on_press_key('d', self.right, True)
         keyboard.on_release_key('d', self.stopXY, True)
 
+        keyboard.on_press_key('left', self.ccw, True)
+        keyboard.on_release_key('left', self.stopXY, True)
+        
+        keyboard.on_press_key('right', self.cw, True)
+        keyboard.on_release_key('right', self.stopXY, True)
+
         keyboard.on_press_key('up', self.up, True)
         keyboard.on_release_key('up', self.stopZ, True)
 
         keyboard.on_press_key('down', self.down, True)
         keyboard.on_release_key('down', self.stopZ, True)
 
-        keyboard.on_press_key('right', self.increaseSpeed, True)
-        keyboard.on_press_key('left', self.decreaseSpeed, True)
+        keyboard.on_press_key('.', self.increaseSpeed, True)
+        keyboard.on_press_key(',', self.decreaseSpeed, True)
 
         keyboard.on_release_key('l', self.toggleLight, True)
 

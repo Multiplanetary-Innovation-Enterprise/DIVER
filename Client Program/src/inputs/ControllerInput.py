@@ -69,7 +69,7 @@ class ControllerInput(Input):
                     self.forward(None)
                     isMoveXY = True
                 else:
-                    isMoveXY = False\
+                    isMoveXY = False
                 #Bottom right joystick controls right and left
                 if joystick.get_axis(2) > .5:
                     self.right(None);

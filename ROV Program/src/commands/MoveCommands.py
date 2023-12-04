@@ -15,7 +15,7 @@ class MoveXYStopCommand(MoveCommand):
     def execute(self) -> None:
         print("XY Stop")
         #Turns off the  thrusters in the XY plane
-        self._propSystem.setXYStates(False, False)
+        self._propSystem.setXYStates(False, False, False, False)
 
     #The action code associated with this command
     @staticmethod
@@ -30,10 +30,10 @@ class MoveForwardCommand(MoveCommand):
 
         #Sets both thruster speeds push forwards
         speeds = self._propSystem.getXYSpeeds()
-        self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]))
+        self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1])), abs(speeds[2]), abs(speeds[3])
 
         #Turns on the XY thrusters
-        self._propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True, True, True)
 
     #The action code associated with this command
     @staticmethod
@@ -48,51 +48,93 @@ class MoveBackwardCommand(MoveCommand):
 
         #Sets both thruster speeds push backwards
         speeds = self._propSystem.getXYSpeeds()
-        self._propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]))
+        self._propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]),  -abs(speeds[2]),  -abs(speeds[3]))
 
         #Turns on the XY thrusters
-        self._propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True, True, True)
 
     #The action code associated with this command
     @staticmethod
     def getActionCode() -> int:
         return 3
 
-#The command for turning the ROV to the left
-class TurnLeftCommand(MoveCommand):
+#The command for moving the ROV to the left
+class MoveLeftCommand(MoveCommand):
     #Executes the command
     def execute(self) -> None:
-        print("Turn Left")
+        print("Move Left")
 
         #Sets the left thruster speed to pull and the right thruster speed to push
         speeds = self._propSystem.getXYSpeeds()
-        self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]))
+        self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]*0.76), abs(speeds[2]*0.76), -abs(speeds[3]))
 
         #Turns on the XY thrusters
-        self._propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True, True, True)
 
     #The action code associated with this command
     @staticmethod
     def getActionCode() -> int:
         return 4
 
-#The command for turning the ROV to the right
-class TurnRightCommand(MoveCommand):
+#The command for moving the ROV to the right
+class MoveRightCommand(MoveCommand):
     #Executes the command
     def execute(self) -> None:
-        print("Turn Right")
+        print("Move Right")
 
         #Sets the left thruster speed to push and the right thruster speed to pull
         speeds = self._propSystem.getXYSpeeds()
-        self._propSystem.setXYSpeed(abs(speeds[0]), -abs(speeds[1]))
+        self._propSystem.setXYSpeed(abs(speeds[0]*0.76), -abs(speeds[1]), -abs(speeds[2]), abs(speeds[3]*0.76))
 
         #Turns on the XY thrusters
-        self._propSystem.setXYStates(True, True)
+        self._propSystem.setXYStates(True, True, True, True)
 
     #The action code associated with this command
     @staticmethod
     def getActionCode() -> int:
         return 5
+    
+
+
+#The command for turning the ROV to the left
+class TurnCWCommand(MoveCommand):
+    #Executes the command
+    def execute(self) -> None:
+        print("Turn clockwise")
+
+        #Sets the left thruster speed to pull and the right thruster speed to push
+        speeds = self._propSystem.getXYSpeeds()
+        self._propSystem.setXYSpeed(abs(speeds[0]*0.76), -abs(speeds[1]), abs(speeds[2]*0.76),- abs(speeds[3]))
+
+        #Turns on the XY thrusters
+        self._propSystem.setXYStates(True, True, True, True)
+
+    #The action code associated with this command
+    @staticmethod
+    def getActionCode() -> int:
+        return 15
+
+#The command for turning the ROV to the right
+class TurnCCWCommand(MoveCommand):
+    #Executes the command
+    def execute(self) -> None:
+        print("Turn counterclockwise")
+
+        #Sets the left thruster speed to push and the right thruster speed to pull
+        speeds = self._propSystem.getXYSpeeds()
+        self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]*0.76), -abs(speeds[2]), abs(speeds[3]*0.76))
+
+        #Turns on the XY thrusters
+        self._propSystem.setXYStates(True, True, True, True)
+
+    #The action code associated with this command
+    @staticmethod
+    def getActionCode() -> int:
+        return 16
+    
+
+
+
 
 #The command for stopping the ROV's vertical movement
 class MoveZStopCommand(MoveCommand):
