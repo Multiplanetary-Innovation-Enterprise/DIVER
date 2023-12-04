@@ -1,6 +1,6 @@
 # from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
-# import board
-# import adafruit_bno055
+import board
+import adafruit_bno055
 
 from components.sensors.IMUData import IMUData
 from components.sensors.IMU import IMU
