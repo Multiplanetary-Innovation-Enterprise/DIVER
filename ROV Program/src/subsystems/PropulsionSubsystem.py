@@ -59,10 +59,10 @@ class PropulsionSubsystem(Subsystem):
 
     #Sets the speed of the thrusters mountd in the XY plane
     def setXYSpeed(self, FrontRightSpeed:float, FrontLeftSpeed:float, BackRightSpeed:float, BackLeftSpeed:float) -> None:
-        self.__FrontLeftThruster.setSpeed(FrontRightSpeed)
-        self.__FrontRightThruster.setSpeed(FrontLeftSpeed)
-        self.__BackLeftThruster.setSpeed(BackLeftSpeed)
+        self.__FrontRightThruster.setSpeed(FrontRightSpeed)
+        self.__FrontLeftThruster.setSpeed(FrontLeftSpeed)
         self.__BackRightThruster.setSpeed(BackRightSpeed)
+        self.__BackLeftThruster.setSpeed(BackLeftSpeed)
 
     #Sets the XY thrusters to the same speed (python does not allow function overloading)
     def setXYSpeedSame(self, speed:float) -> None:
@@ -70,23 +70,24 @@ class PropulsionSubsystem(Subsystem):
 
     #Sets the speed of the thrusters mounted vertically
     def setVerticalSpeed(self, TopRightSpeed:float, TopLeftSpeed:float) -> None:
-        self.__TopLeftThruster.setSpeed(TopRightSpeed)
-        self.__TopRightThruster.setSpeed(TopLeftSpeed)
+        self.__TopRightThruster.setSpeed(TopRightSpeed)
+        self.__TopLeftThruster.setSpeed(TopLeftSpeed)
 
     #Sets the vertical thrusters to the same speed (python does not allow function overloading)
     def setVerticalSpeedSame(self, speed:float) -> None:
         self.setVerticalSpeed(speed, speed)
 
     #Gets the speeds of all the thrusters
-    #0 = RightTop, 1 = LeftTop, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = Backeft
+    #0 = TopRight, 1 = TopLeft, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = Backeft
     def getSpeeds(self) -> list:
         speeds = [
-            self.__FrontLeftThruster.getSpeed(),
-            self.__FrontRightThruster.getSpeed(),
-            self.__BackLeftThruster.getSpeed(),
-            self.__BackRightThruster.getSpeed(),
+            self.__TopRightThruster.getSpeed(),
             self.__TopLeftThruster.getSpeed(),
-            self.__TopRightThruster.getSpeed()
+            self.__FrontRightThruster.getSpeed(),
+            self.__FrontLeftThruster.getSpeed(),
+            self.__BackRightThruster.getSpeed(),
+            self.__BackLeftThruster.getSpeed()
+            
         ]
 
         return speeds
@@ -94,10 +95,10 @@ class PropulsionSubsystem(Subsystem):
     #Gets the speeds of the thrusters mounted in the XY plane
     def getXYSpeeds(self) -> list:
         speeds = [
-            self.__FrontLeftThruster.getSpeed(),
             self.__FrontRightThruster.getSpeed(),
-            self.__BackLeftThruster.getSpeed(),
+            self.__FrontLeftThruster.getSpeed(),
             self.__BackRightThruster.getSpeed()
+            self.__BackLeftThruster.getSpeed()
         ]
 
         return speeds
@@ -105,8 +106,8 @@ class PropulsionSubsystem(Subsystem):
     #Gets the speeds of the vertical thrusters
     def getVerticalSpeeds(self) -> list:
         speeds = [
-            self.__TopLeftThruster.getSpeed(),
-            self.__TopRightThruster.getSpeed()
+            self.__TopRightThruster.getSpeed(),
+            self.__TopLeftThruster.getSpeed()
         ]
 
         return speeds
@@ -115,49 +116,50 @@ class PropulsionSubsystem(Subsystem):
     def stop(self) -> None:
         self.setStates(False, False, False, False, False, False)
 
-    #0 = RightTop, 1 = LeftTop, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = Backeft
+    #0 = TopRight, 1 = TopLeft, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = Backeft
     #Sets the rotational direction for all thrusters
-    def setRotDirections(self, RightTopRotDir:RotDirection, LeftTopRotDir:RotDirection, FrontRightRotDir:RotDirection, FrontLeftRotDir:RotDirection, BackRightRotDir:RotDirection, BackLeftRotDir:RotDirection) -> None:
+    def setRotDirections(self, TopRightRotDir:RotDirection, TopLeftRotDir:RotDirection, FrontRightRotDir:RotDirection, FrontLeftRotDir:RotDirection, BackRightRotDir:RotDirection, BackLeftRotDir:RotDirection) -> None:
         self.setXYRotDirections(FrontRightRotDir, FrontLeftRotDir, BackRightRotDir, BackLeftRotDir)
-        self.setZRotDirections(RightTopRotDir, LeftTopRotDir)
+        self.setZRotDirections(TopRightRotDir, TopLeftRotDir)
 
     #Sets the rotational direction for the thrusters in the XY plane
     def setXYRotDirections(self, FrontRightRotDir:RotDirection, FrontLeftRotDir:RotDirection, BackRightRotDir:RotDirection, BackLeftRotDir:RotDirection) -> None:
-        self.__FrontLeftThruster.setRotDirection(FrontRightRotDir)
-        self.__FrontRightThruster.setRotDirection(FrontLeftRotDir)
-        self.__BackLeftThruster.setRotDirection(BackRightRotDir)
-        self.__BackRightThruster.setRotDirection(BackLeftRotDir)
+        self.__FrontRightThruster.setRotDirection(FrontRightRotDir)
+        self.__FrontLeftThruster.setRotDirection(FrontLeftRotDir)
+        self.__BackRightThruster.setRotDirection(BackRightRotDir)
+        self.__BackLeftThruster.setRotDirection(BackLeftRotDir)
 
     #Sets the rotational direction for the vertical thrusters
     def setZRotDirections(self, TopRightRotDir:RotDirection, TopLeftRotDir:RotDirection) -> None:
-        self.__TopLeftThruster.setRotDirection(TopRightRotDir)
-        self.__TopRightThruster.setRotDirection(TopLeftRotDir)
+        self.__TopRightThruster.setRotDirection(TopRightRotDir)
+        self.__TopLeftThruster.setRotDirection(TopLeftRotDir)
 
     #Gets the rotation directions of all the thrusters
     def getRotDirections(self) -> list:
         dirs = [
-            self.__FrontLeftThruster.getRotDirection(),
-            self.__FrontRightThruster.getRotDirection(),
-            self.__BackLeftThruster.getRotDirection(),
-            self.__BackRightThruster.getRotDirection(),
+            self.__TopRightThruster.getRotDirection(),
             self.__TopLeftThruster.getRotDirection(),
-            self.__TopRightThruster.getRotDirection()
+            self.__FrontRightThruster.getRotDirection(),
+            self.__FrontLeftThruster.getRotDirection(),
+            self.__BackRightThruster.getRotDirection(),
+            self.__BackLeftThruster.getRotDirection()
+  
         ]
 
         return dirs
 
-    #0 = RightTop, 1 = LeftTop, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = BackLeft
+    #0 = TopRight, 1 = TopLeft, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = BackLeft
     #Sets the states of all the thrusters(active/not-active)
-    def setStates(self, RightTopActive:bool, LeftTopActive:bool, FrontRightActive:bool, FrontLeftActive:bool, BackRightActive:bool, BackLeftActive:bool) -> None:
+    def setStates(self, TopRightActive:bool, TopLeftActive:bool, FrontRightActive:bool, FrontLeftActive:bool, BackRightActive:bool, BackLeftActive:bool) -> None:
         self.setXYStates(FrontRightActive, FrontLeftActive, BackRightActive, BackLeftActive)
-        self.setZStates(RightTopActive, LeftTopActive)
+        self.setZStates(TopRightActive, TopLeftActive)
 
     #Sets the states of all the thrusters in the XY plane(active/not-active)
     def setXYStates(self, FrontRightActive:bool, FrontLeftActive:bool, BackRightActive:bool, BackLeftActive:bool) -> None:
-        self.__FrontLeftThruster.setState(FrontRightActive)
-        self.__FrontRightThruster.setState(FrontLeftActive)
-        self.__BackLeftThruster.setState(BackRightActive)
-        self.__BackRightThruster.setState(BackLeftActive)
+        self.__FrontRightThruster.setState(FrontRightActive)
+        self.__FrontLeftThruster.setState(FrontLeftActive)
+        self.__BackRightThruster.setState(BackRightActive)
+        self.__BackLeftThruster.setState(BackLeftActive)
 
 
     #Sets the states of the vertical thrusters(active/not-active)
@@ -168,12 +170,13 @@ class PropulsionSubsystem(Subsystem):
     #Gets the states of all the thrusters
     def getStates(self) -> list:
         states = [
-            self.__FrontLeftThruster.isActive(),
-            self.__FrontRightThruster.isActive(),
-            self.__BackLeftThruster.isActive(),
-            self.__BackRightThruster.isActive(),
+            self.__TopRightThruster.isActive(),
             self.__TopLeftThruster.isActive(),
-            self.__TopRightThruster.isActive()
+            self.__FrontRightThruster.isActive(),
+            self.__FrontLeftThruster.isActive(),
+            self.__BackRightThruster.isActive(),
+            self.__BackLeftThruster.isActive(),
+          
         ]
 
         return states
