@@ -97,7 +97,7 @@ class PropulsionSubsystem(Subsystem):
         speeds = [
             self.__FrontRightThruster.getSpeed(),
             self.__FrontLeftThruster.getSpeed(),
-            self.__BackRightThruster.getSpeed()
+            self.__BackRightThruster.getSpeed(),
             self.__BackLeftThruster.getSpeed()
         ]
 
@@ -175,7 +175,7 @@ class PropulsionSubsystem(Subsystem):
             self.__FrontRightThruster.isActive(),
             self.__FrontLeftThruster.isActive(),
             self.__BackRightThruster.isActive(),
-            self.__BackLeftThruster.isActive(),
+            self.__BackLeftThruster.isActive()
           
         ]
 
