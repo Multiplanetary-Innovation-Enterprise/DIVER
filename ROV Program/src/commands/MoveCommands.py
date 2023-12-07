@@ -30,7 +30,7 @@ class MoveForwardCommand(MoveCommand):
 
         #Sets both thruster speeds push forwards
         speeds = self._propSystem.getXYSpeeds()
-        self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1])), abs(speeds[2]), abs(speeds[3])
+        self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]), abs(speeds[2]), abs(speeds[3]))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
