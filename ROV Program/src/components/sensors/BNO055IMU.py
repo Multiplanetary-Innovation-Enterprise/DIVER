@@ -1,4 +1,4 @@
-# from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
+from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
 import board
 import adafruit_bno055
 
@@ -18,7 +18,7 @@ class BNO055IMU(IMU):
             #the libraries got updated
             self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
             self._isConnected = True
-        Except ValueError:
+        except ValueError:
             self._isConnected = False
             print("Failed to Detect IMU sensor")
 
