@@ -61,8 +61,8 @@ class PropulsionSubsystem(Subsystem):
     def setXYSpeed(self, FrontRightSpeed:float, FrontLeftSpeed:float, BackRightSpeed:float, BackLeftSpeed:float) -> None:
         self.__FrontLeftThruster.setSpeed(FrontRightSpeed)
         self.__FrontRightThruster.setSpeed(FrontLeftSpeed)
-        self.__BackLeftThruster.setSpeed(BackRightSpeed)
-        self.__BackRightThruster.setSpeed(BackLeftSpeed)
+        self.__BackLeftThruster.setSpeed(BackLeftSpeed)
+        self.__BackRightThruster.setSpeed(BackRightSpeed)
 
     #Sets the XY thrusters to the same speed (python does not allow function overloading)
     def setXYSpeedSame(self, speed:float) -> None:
