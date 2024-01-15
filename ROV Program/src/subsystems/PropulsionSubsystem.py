@@ -92,13 +92,13 @@ class PropulsionSubsystem(Subsystem):
 
         return speeds
 
-    #Gets the speeds of the thrusters mounted in the XY plane
-    def getXYSpeeds(self) -> list:
+    #Gets the flat speed of the thrusters to undo 76% adjustment
+    def getFlatSpeeds(self) -> list:
         speeds = [
-            self.__FrontRightThruster.getSpeed(),
-            self.__FrontLeftThruster.getSpeed(),
-            self.__BackRightThruster.getSpeed(),
-            self.__BackLeftThruster.getSpeed()
+            self.__TopRightThruster.getSpeed(),
+            self.__TopLeftThruster.getSpeed(),
+            self.__TopRightThruster.getSpeed(),
+            self.__TopLeftThruster.getSpeed()
         ]
 
         return speeds
