@@ -18,5 +18,6 @@ class Action(Enum):
     BRIGHTNESS_DECREASE = 13
     CAPTURE_IMAGE = 14
     TURN_XY_CW = 15
-    TURN_XY_CCW =16
+    TURN_XY_CCW = 16
+    E_STOP = 17
 

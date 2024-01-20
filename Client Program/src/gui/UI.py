@@ -1,17 +1,24 @@
 from tkinter import *
+from tkinter.messagebox import askyesno
 from PIL import Image,ImageTk
 import cv2
+from ROVMessaging.Message import Message
+from ROVMessaging.MessageChannel import MessageChannel
+from ROVMessaging.MessageType import MessageType
 
-#if testing on actual ROV, uncomment below line and add "Subscriber" to the inside of the parenthesis for UI()
+#if testing on actual ROV, uncomment below lines and add "Subscriber" to the inside of the parenthesis for UI()
 from  ROVMessaging.Subscriber import *
+from  ROVMessaging.Publisher import *
+from inputs.Action import Action
+
 #Subscriber
 #Notes:
 #Resolution: 640x480
-class UI(Subscriber):
+class UI(Subscriber, Publisher):
     Window = Tk()
     FakeHardware = False
     
-    def __init__(self) -> None:
+    def __init__(self,outgoingmessagechannel) -> None:
         #configure window layout
         self.Window.configure(bg="Dark Gray",padx=0)
         self.Window.title("ROV Control Panel")
@@ -26,6 +33,8 @@ class UI(Subscriber):
         self.logtext = "Log Started!"
         self.pressure = "NOT DETECTED"
         self.time = 0
+        self.outgoingmessagechannel = outgoingmessagechannel
+
 
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
@@ -34,7 +43,7 @@ class UI(Subscriber):
         self.ImageFrame = Label(self.Window)
 
         #If buttons are necessary, use this format:
-        #self.startbutton = Button(self.Window,text="Start ROV program",height=5,width=30)
+        self.Estop = Button(self.Window,text="E-Stop",height=5,width=30,bg="red",fg="white",command=self.Estop)
         #self.endbutton = Button(self.Window,text="End ROV program",height=5,width=30)
             
         #aligning things to grid
@@ -43,7 +52,7 @@ class UI(Subscriber):
         self.infolabel.grid_rowconfigure(1)
 
         self.ImageFrame.grid(row=2,column=4)
-        #self.startbutton.grid(row=3,column=2,sticky=SW)
+        self.Estop.grid(row=3,column=2,sticky=SW)
         #self.endbutton.grid(row=3,column=3,sticky=SW)
 
         #control panel in bottom row
@@ -101,3 +110,9 @@ class UI(Subscriber):
             self.action = message.getContents()['action']
         if 'Frame' in message.getContents():
             self.frame = message.getContents()['Frame']
+
+    def Estop(self):
+        answer = askyesno(title="E-Stop Confirmation Dialogue",message="Are you sure you want to trigger E-Stop?")
+        if answer:
+            self.addLog("E-STOP TRIGGERED")
+            self.outgoingmessagechannel.broadcast(Message(MessageType.ACTION,Action.E_STOP.value))

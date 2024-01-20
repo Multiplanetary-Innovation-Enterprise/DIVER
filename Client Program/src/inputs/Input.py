@@ -104,6 +104,10 @@ class Input(Publisher, ABC):
     def captureImage(self, event) -> None:
         message = Message(MessageType.ACTION, Action.CAPTURE_IMAGE.value)
         self.sendMessage(message, self.__messageChannel)
+    
+    def Estop(self, event) -> None:
+        message = Message(MessageType.ACTION, Action.E_STOP.value)
+        self.sendMessage(message,self.__messageChannel)
 
    
 
