@@ -4,6 +4,7 @@ from commands.MoveCommands import *
 from commands.SpeedCommands import *
 from commands.IlluminationCommands import *
 from commands.CaptureImageCommand import *
+from commands.EstopCommand import *
 
 from ROV import ROV
 
@@ -57,6 +58,7 @@ class CommandFactory:
         elif actionCode == DecreaseLightBrightnessCommand.getActionCode():
                 command = DecreaseLightBrightnessCommand(self.__rov.getIlluminationSystem())
         elif actionCode == CaptureImageCommand.getActionCode():
-            command = CaptureImageCommand(self.__rov.getVisionSystem())
-
+                command = CaptureImageCommand(self.__rov.getVisionSystem())
+        elif  actionCode == EstopCommand.getActionCode():
+               pass
         return command

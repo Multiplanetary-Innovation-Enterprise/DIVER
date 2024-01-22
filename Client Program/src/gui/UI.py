@@ -14,11 +14,11 @@ from inputs.Action import Action
 #Subscriber
 #Notes:
 #Resolution: 640x480
-class UI(Subscriber, Publisher):
+class UI(Subscriber, Input):
     Window = Tk()
     FakeHardware = False
     
-    def __init__(self,outgoingmessagechannel) -> None:
+    def __init__(self,messageChannel) -> None:
         #configure window layout
         self.Window.configure(bg="Dark Gray",padx=0)
         self.Window.title("ROV Control Panel")
@@ -33,8 +33,9 @@ class UI(Subscriber, Publisher):
         self.logtext = "Log Started!"
         self.pressure = "NOT DETECTED"
         self.time = 0
-        self.outgoingmessagechannel = outgoingmessagechannel
+        self.messageChannel = messageChannel
 
+        super().__init__(messageChannel)
 
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
@@ -43,7 +44,7 @@ class UI(Subscriber, Publisher):
         self.ImageFrame = Label(self.Window)
 
         #If buttons are necessary, use this format:
-        self.Estop = Button(self.Window,text="E-Stop",height=5,width=30,bg="red",fg="white",command=self.Estop)
+        self.EstopButton = Button(self.Window,text="E-Stop",height=5,width=30,bg="red",fg="white",command=self.runEstop)
         #self.endbutton = Button(self.Window,text="End ROV program",height=5,width=30)
             
         #aligning things to grid
@@ -52,7 +53,7 @@ class UI(Subscriber, Publisher):
         self.infolabel.grid_rowconfigure(1)
 
         self.ImageFrame.grid(row=2,column=4)
-        self.Estop.grid(row=3,column=2,sticky=SW)
+        self.EstopButton.grid(row=3,column=2,sticky=SW)
         #self.endbutton.grid(row=3,column=3,sticky=SW)
 
         #control panel in bottom row
@@ -111,8 +112,8 @@ class UI(Subscriber, Publisher):
         if 'Frame' in message.getContents():
             self.frame = message.getContents()['Frame']
 
-    def Estop(self):
+    def runEstop(self):
         answer = askyesno(title="E-Stop Confirmation Dialogue",message="Are you sure you want to trigger E-Stop?")
         if answer:
             self.addLog("E-STOP TRIGGERED")
-            self.outgoingmessagechannel.broadcast(Message(MessageType.ACTION,Action.E_STOP.value))
+            self.Estop(None)

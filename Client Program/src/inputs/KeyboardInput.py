@@ -46,3 +46,5 @@ class KeyboardInput(Input):
         keyboard.on_press_key('[', self.decreaseBrightness, True)
 
         keyboard.on_press_key('c', self.captureImage, True)
+
+        keyboard.on_press_key('E', self.Estop, True)

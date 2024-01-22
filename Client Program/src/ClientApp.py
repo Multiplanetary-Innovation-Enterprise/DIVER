@@ -26,7 +26,7 @@ from gui.UI import UI
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
-    __window = UI()
+    __window = None
     __config = None                                #The config data
     __serverConnection:SocketConnection = None     #The connection to the ROV
     __dataLogger:DataLogger = None                 #The sensor data logger
@@ -55,7 +55,7 @@ class ClientApp(Subscriber):
         #Connection info for connecting to the ROV
         host = str(self.__config['ROV_CONNECTION']['Host'])
         port = int(self.__config['ROV_CONNECTION']['Port'])
-        self.__window.addLog("PORT: " + str(port) + " Host: " + str(host))
+        
         #The connection to the ROV
         self.__serverConnection = SocketConnection(host=host, port=port)
 
@@ -73,6 +73,9 @@ class ClientApp(Subscriber):
         incomingMessageChannel = MessageChannel()
         self.__outgoingMessageChannel = MessageChannel()
 
+        self.__window = UI(self.__outgoingMessageChannel)
+        self.__window.Window.protocol("WM_DELETE_WINDOW".self.onclosewindow)
+        self.__window.addLog("PORT: " + str(port) + " Host: " + str(host))
         #Sets up ability to send messages to the ROV
         socketWriter = SocketWriter(self.__serverConnection)
         self.__subWriter = SubWriter(socketWriter)
