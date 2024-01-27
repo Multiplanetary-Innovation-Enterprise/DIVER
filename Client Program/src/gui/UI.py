@@ -2,22 +2,21 @@ from tkinter import *
 from tkinter.messagebox import askyesno
 from PIL import Image,ImageTk
 import cv2
-from ROVMessaging.Message import Message
-from ROVMessaging.MessageChannel import MessageChannel
-from ROVMessaging.MessageType import MessageType
+FakeHardware = False
+if not FakeHardware:
+    from ROVMessaging.Message import Message
+    from ROVMessaging.MessageChannel import MessageChannel
+    from ROVMessaging.MessageType import MessageType
+    from  ROVMessaging.Subscriber import *
+    from  ROVMessaging.Publisher import *
+    from inputs.Action import Action
 
-#if testing on actual ROV, uncomment below lines and add "Subscriber" to the inside of the parenthesis for UI()
-from  ROVMessaging.Subscriber import *
-from  ROVMessaging.Publisher import *
-from inputs.Action import Action
-
+#if testing on actual ROV, add "Subscriber, Input" to the inside of the parenthesis for UI() and disable FakeHardware
 #Subscriber
 #Notes:
 #Resolution: 640x480
 class UI(Subscriber, Input):
     Window = Tk()
-    FakeHardware = False
-    
     def __init__(self,messageChannel) -> None:
         #configure window layout
         self.Window.configure(bg="Dark Gray",padx=0)
@@ -35,7 +34,8 @@ class UI(Subscriber, Input):
         self.time = 0
         self.messageChannel = messageChannel
 
-        super().__init__(messageChannel)
+        if not FakeHardware:
+            super().__init__(messageChannel)
 
         #creates label for info to be put in
         self.infolabel = Label(self.Window,width=155,anchor=W,bg="Light Gray")
@@ -73,7 +73,7 @@ class UI(Subscriber, Input):
     def startVideo(self) ->  None:
         
         #pulls a frame as an image
-        if self.FakeHardware:
+        if FakeHardware:
             _, self.frame = self.camfeed.read()
         #Converts image to the proper colors for display
         self.displayableImage = cv2.cvtColor(self.frame,cv2.COLOR_BGR2RGBA)
@@ -116,4 +116,8 @@ class UI(Subscriber, Input):
         answer = askyesno(title="E-Stop Confirmation Dialogue",message="Are you sure you want to trigger E-Stop?")
         if answer:
             self.addLog("E-STOP TRIGGERED")
-            self.Estop(None)
+            if not FakeHardware:
+                self.Estop(None)
+
+testUI = UI(None)
+testUI.startMainLoop()

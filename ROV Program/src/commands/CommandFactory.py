@@ -60,5 +60,5 @@ class CommandFactory:
         elif actionCode == CaptureImageCommand.getActionCode():
                 command = CaptureImageCommand(self.__rov.getVisionSystem())
         elif  actionCode == EstopCommand.getActionCode():
-               pass
+                command = EstopCommand()
         return command
