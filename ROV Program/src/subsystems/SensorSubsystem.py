@@ -8,6 +8,7 @@ from components.sensors.BlueRoboticsTempSensor import BlueRoboticsTempSensor #4/
 from components.sensors.PressureSensor import PressureSensor
 from components.sensors.TempUnit import TempUnit
 from components.sensors.CoreTempSensor import CoreTempSensor #3/24/23
+from components.sensors.BatteryLevelSensor import BatteryLevelSensor
 
 #Represents the subsystem for collecting data
 class SensorSubsystem(Subsystem):
@@ -16,6 +17,7 @@ class SensorSubsystem(Subsystem):
     __externalTempSensor:TempSensor = None #Blue Robotics sensor (added 4-6-22)
     __pressureSensor:PressureSensor = None #Pressure sensor added 4/8/22
     __coreSensor:TempSensor = None #Core Sensor ##Added 3/24/23##
+    __batteryLevelSensor:BatteryLevelSensor = None #Battery Level sensor added 1/27/2024
     def __init__(self, controller:Controller, config): ##changed 3/24/23##
         super().__init__(controller, config)
 
@@ -46,6 +48,8 @@ class SensorSubsystem(Subsystem):
     def getCoreSensor(self) -> TempSensor: #NEW
         return self.__coreSensor   #NEW
 
+    def getBatteryLevelSensor(self) -> BatteryLevelSensor:
+        return self.__batteryLevelSensor
 
     #Performs any clean up on system shutdown
     def shutdown(self) -> None:

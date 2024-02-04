@@ -23,7 +23,7 @@ class SensorDataCollector(DataCollector):
         exTempSensor = self.__subsystem.getExternalTempSensor() #added 4/6/22
         pressureSensor = self.__subsystem.getPressureSensor()             # added 4/8/22
         coreSensor = self.__subsystem.getCoreSensor() #added 3/24/23
-        
+        batteryLevelSensor = self.__subsystem.getBatteryLevelSensor()
 
         #The collected sensor data
         sensorData = {}
@@ -46,6 +46,9 @@ class SensorDataCollector(DataCollector):
             pressureSensor._read()  #added 4/8/22
             sensorData["pressure"]=pressureSensor._getPressure()
         
+        if batteryLevelSensor.isConnected():
+            sensorData["batterylevel"] = batteryLevelSensor._getlevelbyCoulombs()
+
         sensorData["Core Temp"]=coreSensor.getCoreTemp() #added 3-24-23
 
         return sensorData
