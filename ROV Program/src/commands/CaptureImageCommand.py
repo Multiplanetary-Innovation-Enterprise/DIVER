@@ -9,7 +9,7 @@ class CaptureImageCommand(Command):
     __visionSystem:VisionSubsystem = None #The ROV's propulsion system
 
     def __init__(self, visionSystem:VisionSubsystem):
-        self.__visionSystem =visionSystem
+        self.__visionSystem = visionSystem
 
     #Executes the command
     def execute(self) -> None:
