@@ -11,7 +11,7 @@ if not FakeHardware:
     from ROVMessaging.Publisher import *
     from inputs.Action import Action
     from inputs.Input import *
-#test
+
 #if testing on actual ROV, add "Subscriber, Input" to the inside of the parenthesis for UI() and disable FakeHardware
 #Subscriber, Input
 #Notes:
