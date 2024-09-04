@@ -6,7 +6,7 @@ from commands.IlluminationCommands import *
 from commands.CaptureImageCommand import *
 from commands.EstopCommand import *
 from commands.ChangeAutoCommand import *
-from subsystems.AutonomySubsystem import 
+from subsystems.AutonomySubsystem import *
 from ROV import ROV
 
 #Creates any command from its corresponding action code

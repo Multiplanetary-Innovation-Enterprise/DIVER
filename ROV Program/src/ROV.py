@@ -7,6 +7,7 @@ from subsystems.IlluminationSubsystem import IlluminationSubsystem
 from subsystems.SensorSubsystem import SensorSubsystem
 from subsystems.VisionSubsystem import VisionSubsystem
 from subsystems.AutonomySubsystem import AutonomySubsystem
+from subsystems.EStopSubSystem import EStopSubsystem
 
 #Represents the ROV and all the subsystems that it encompasses
 class ROV:
@@ -16,6 +17,7 @@ class ROV:
     __sensorSystem:SensorSubsystem = None             #The sensor subsystem
     __visionSystem:VisionSubsystem = None             #The vision subsytem
     __autonomySystem:AutonomySubsystem = None
+    __estopSystem:EStopSubsystem = None
     __config = None                                   #The configuration file
 
     def __init__(self, config):
@@ -32,7 +34,8 @@ class ROV:
         self.__illuminationSystem = IlluminationSubsystem(self.__controller, self.__config)
         self.__sensorSystem = SensorSubsystem(self.__controller, self.__config)
         self.__visionSystem = VisionSubsystem(self.__controller, self.__config)
-        self.__autonomySystem = AutonomySubsystem()
+        self.__autonomySystem = AutonomySubsystem(self.__controller, self.__config)
+        self.__estopSystem = EStopSubsystem(self.__controller, self.__config)
 
     #Gets the propulsion subsystem
     def getPropSystem(self) -> PropulsionSubsystem:
@@ -53,8 +56,12 @@ class ROV:
     def getVisionSystem(self) -> VisionSubsystem:
         return self.__visionSystem
 
+    def getEStopSystem(self) -> EStopSubsystem:
+        return self.__estopSystem
+
     #Shuts down all of the subsystems
     def shutdown(self) -> None:
+        self.__estopSystem.shutdown()
         self.__autonomySystem.shutdown()
         self.__propSystem.shutdown()
         self.__illuminationSystem.shutdown()
