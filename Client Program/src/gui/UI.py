@@ -7,12 +7,13 @@ if not FakeHardware:
     from ROVMessaging.Message import Message
     from ROVMessaging.MessageChannel import MessageChannel
     from ROVMessaging.MessageType import MessageType
-    from  ROVMessaging.Subscriber import *
-    from  ROVMessaging.Publisher import *
+    from ROVMessaging.Subscriber import *
+    from ROVMessaging.Publisher import *
     from inputs.Action import Action
+    from inputs.Input import *
 
 #if testing on actual ROV, add "Subscriber, Input" to the inside of the parenthesis for UI() and disable FakeHardware
-#Subscriber
+#Subscriber, Input
 #Notes:
 #Resolution: 640x480
 class UI(Subscriber, Input):
