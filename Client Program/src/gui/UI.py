@@ -102,14 +102,26 @@ class UI(Subscriber, Input):
     def recieveMessage(self, message):
         if 'time' in message.getContents():
             self.time = message.getContents()['time']
+        else:
+            self.time = "NOT DETECTED"
+
         if 'externalTemp' in message.getContents():
             self.externaltemp = message.getContents()['externalTemp']
+        else:
+            self.externaltemp = "NOT DETECTED"
+
         if 'pressure' in message.getContents():
             self.pressure = message.getContents()['pressure']
+        else:
+            self.pressure = "NOT DETECTED"
         if 'internalTemp' in message.getContents():
             self.internaltemp = message.getContents()['internalTemp']
+        else:
+            self.internaltemp = "NOT DETECTED"
         if 'action' in message.getContents():
             self.action = message.getContents()['action']
+        else:
+            self.action = "NOT DETECTED"
         if 'Frame' in message.getContents():
             self.frame = message.getContents()['Frame']
 
