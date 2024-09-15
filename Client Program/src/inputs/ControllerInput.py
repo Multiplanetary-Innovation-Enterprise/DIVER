@@ -1,6 +1,5 @@
 import pygame
 import threading
-
 from ROVMessaging.MessageChannel import MessageChannel
 
 from inputs.Input import Input
@@ -61,22 +60,42 @@ class ControllerInput(Input):
                 joystick = pygame.joystick.Joystick(0)
                 joystick.init()
 
-                #Bottom right joystick controls forward and backward
-                if joystick.get_axis(3) > .5:
+                #top left joystick controls for forward, backward, left, and right translation
+                if joystick.get_axis(1) > .5:
                     self.backward(None)
                     isMoveXY = True
-                elif joystick.get_axis(3) < -.5:
+                elif joystick.get_axis(1) < -.5:
                     self.forward(None)
                     isMoveXY = True
-                else:
-                    isMoveXY = False
-                #Bottom right joystick controls right and left
-                if joystick.get_axis(2) > .5:
+
+                if joystick.get_axis(0) > .5:
                     self.right(None);
                     isMoveXY = True
-                elif joystick.get_axis(2) < -.5:
+                elif joystick.get_axis(0) < -.5:
                     self.left(None);
                     isMoveXY = True
+
+                #bottom right joystick controls for rotation
+                if joystick.get_axis(3) > 0.5:
+                    self.cw(None)
+                    isMoveXY = True
+
+                elif joystick.get_axis(3) < -0.5:
+                    self.ccw(None)
+                    isMoveXY = True
+                
+                
+                if joystick.get_axis(0) < 0.5 and joystick.get_axis(0) > -0.5 and joystick.get_axis(1) < 0.5 and joystick.get_axis(1) > -0.5:
+                    leftStickMove = False
+                else:
+                    leftStickMove = True
+
+                if joystick.get_axis(3) < 0.5 and joystick.get_axis(3) > -0.5 and joystick.get_axis(4) < 0.5 and joystick.get_axis(4) > -0.5:
+                    rightStickMove = False
+                else:
+                    rightStickMove = True
+
+                
 
                 #Checks if a movement is the XY plane messgae has been  sent, if so,
                 #the ROV is no longer stopped
@@ -90,15 +109,16 @@ class ControllerInput(Input):
                     isStoppedXY = True
                     self.stopXY(None);
 
-                #The upper left joystick controls for the Z-axis
-                if joystick.get_axis(1) > .5:
-                    self.down(None);
-                    isMoveZ = True
-                elif joystick.get_axis(1) < -.5:
+                #The right bumper controls for the Z-axis (right(down) takes priority)
+                if joystick.get_button(5) > .5:
                     self.up(None);
+                    isMoveZ = True
+                elif joystick.get_button(4) > .5:
+                    self.down(None);
                     isMoveZ = True
                 else:
                     isMoveZ = False
+
 
                 #Checks if a movement in the Z axis message has been sent, if so,
                 #the ROV is no longer stopped in that direction
@@ -122,3 +142,5 @@ class ControllerInput(Input):
     #Stops the controller input processor
     def stop(self) -> None:
         self.__isRunning = False
+        pygame.joystick.quit()
+        pygame.quit()
