@@ -6,7 +6,7 @@ from math import sqrt
 
 class AutonomySubsystem(Subsystem):
     __isEnabled = False
-    __graph = Graph()
+    __graph = Graph(undirected=True)
     #scale currently somewhat abstract, will be better defined later
     #size of box of points that ROV will navigate through
     __boxSize = 20
@@ -36,13 +36,14 @@ class AutonomySubsystem(Subsystem):
             for x in range((self.__boxSize * -1 * (1 / self.__pointdensity)),self.__boxSize * (1 / self.__pointdensity)):
                 for y in range((self.__boxSize * -1) * (1 / self.__pointdensity),self.__boxSize * (1 / self.__pointdensity)):
                     for z in range((self.__boxSize * -1) * (1 / self.__pointdensity),self.__boxSize * (1 / self.__pointdensity)):
-                        #interconnect to 27 closest points (including self)
-                        for xoffset in range(-1,1):
-                            for yoffset in range(-1,1):
-                                for zoffset in range(-1,1):
+                        #interconnect to 26 closest points (not including self)
+                        for xoffset in range(-1,1,2):
+                            for yoffset in range(-1,1,2):
+                                for zoffset in range(-1,1,2):
                                     #CHANGE THIS WHEN INTEGRATING SENSOR DATA!!!
                                     #Do not allow a point to connect to point if a wall is in between them
-                                    if (True):
+                                    #Do this by changing True to a condition that tests if there is a wall between the points
+                                    if (True and (self.__graph.get_edge((x,y,z),(x+xoffset,y+yoffset,z+zoffset))) != 1):
                                         self.__graph.add_edge((x,y,z),(x+xoffset,y+yoffset,z+zoffset),1)
             
             #navigate across defined points to goal
