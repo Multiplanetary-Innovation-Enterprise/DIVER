@@ -37,13 +37,13 @@ class AutonomySubsystem(Subsystem):
                 for y in range((self.__boxSize * -1) * (1 / self.__pointdensity),self.__boxSize * (1 / self.__pointdensity)):
                     for z in range((self.__boxSize * -1) * (1 / self.__pointdensity),self.__boxSize * (1 / self.__pointdensity)):
                         #interconnect to 26 closest points (not including self)
-                        for xoffset in range(-1,1,2):
-                            for yoffset in range(-1,1,2):
-                                for zoffset in range(-1,1,2):
+                        for xoffset in range(-1,1):
+                            for yoffset in range(-1,1):
+                                for zoffset in range(-1,1):
                                     #CHANGE THIS WHEN INTEGRATING SENSOR DATA!!!
                                     #Do not allow a point to connect to point if a wall is in between them
                                     #Do this by changing True to a condition that tests if there is a wall between the points
-                                    if (True and (self.__graph.get_edge((x,y,z),(x+xoffset,y+yoffset,z+zoffset))) != 1):
+                                    if (True and (self.__graph.get_edge((x,y,z),(x+xoffset,y+yoffset,z+zoffset))) != 1 and not (x == 0 and y ==0 and z == 0)):
                                         self.__graph.add_edge((x,y,z),(x+xoffset,y+yoffset,z+zoffset),1)
             
             #navigate across defined points to goal
