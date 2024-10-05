@@ -29,6 +29,7 @@ class AutonomySubsystem(Subsystem):
             #assuming y is vertical
             #Goal Point will give algorithm a "motivation" to go deeper
             #Will therefore only surface once all other options have been exhausted
+            #Need to add ability for the ROV to return to the surface to charge if necessary
             goalPoint = (0,-50,0) 
 
             #for every point (x, y, z)
