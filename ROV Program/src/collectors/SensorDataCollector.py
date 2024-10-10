@@ -24,9 +24,13 @@ class SensorDataCollector(DataCollector):
         pressureSensor = self.__subsystem.getPressureSensor()             # added 4/8/22
         coreSensor = self.__subsystem.getCoreSensor() #added 3/24/23
         
+        sonarSensor = self.__subsystem.getSonarSensor()
 
         #The collected sensor data
         sensorData = {}
+
+        if sonarSensor.isConnected():
+            sensorData["sonar"] = sonarSensor.getData()
 
         #Checks if the temperature sensor is connected
         if tempSensor.isConnected():
