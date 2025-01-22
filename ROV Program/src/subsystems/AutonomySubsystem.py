@@ -25,6 +25,7 @@ class AutonomySubsystem(Subsystem):
 
     #may add thread or process to refresh independently
     def refresh(self,sensorData:list):
+        #EGGS
         if self.__isEnabled:
             #assuming y is vertical
             #Goal Point will give algorithm a "motivation" to go deeper
