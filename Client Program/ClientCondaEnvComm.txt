@@ -1,0 +1,13 @@
+conda create -n DIVER 
+python=3.10.4 
+bcrypt=4.0.1 
+cffi=1.16.0 
+click=8.1.7 
+colorama=0.4.6 
+cryptography=41.0.4 
+keyboard=0.13.5 
+numpy=1.22.3 
+opencv-python=4.5.5.64 
+paramiko=3.3.1 
+pigpio=1.78 
+Pillow=9.0.1 pycparser=2.21 pygame=2.1.2 PyNaCl=1.5.0 ROV-Connections=0.3.6 ROV-Messaging 0.3.5 setuptools=58.1.0 smbus2=0.4.3 w1thermsensor=2.3.0 libffi=3.3
