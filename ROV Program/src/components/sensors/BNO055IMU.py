@@ -1,5 +1,6 @@
 from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
 import board
+import busio
 import adafruit_bno055
 
 from components.sensors.IMUData import IMUData
@@ -13,7 +14,11 @@ class BNO055IMU(IMU):
     def __init__(self):
         #Attempts to connect to the IMU: modified 11/11/23
         try:
-            i2c = board.I2C()
+            #BEFORE YOU TRY EDITING THIS: The other pair of I2C pins on the Pi is burnt out, so do not use it
+            board.SDA = 0
+            board.SCL = 1
+            i2c = busio.I2C(board.SCL,board.SDA)
+            #i2c = board.I2C()
             #^ formally I2C(0, mode=I2C.MASTER, baudrate=1000000), but this doesn't work since
             #the libraries got updated
             self.__sensor = adafruit_bno055.BNO055_I2C(i2c)
