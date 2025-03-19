@@ -18,6 +18,7 @@ from ROVMessaging.MessageType import *
 from ROVMessaging.Message import *
 from ROVMessaging.Subscriber import *
 from ROVMessaging.SystemStatus import *
+from AutonomySystem import *
 
 from inputs.KeyboardInput import KeyboardInput
 from inputs.ControllerInput import ControllerInput
@@ -35,6 +36,7 @@ class ClientApp(Subscriber):
     __outgoingMessageChannel:MessageChannel = None #The message channel for sending messages to the ROV program
     __controllerInput:ControllerInput = None       #The xbox controller
     __subWriter:SubWriter = None                   #Sends messages to the ROV
+    __autonomySystem:AutonomySystem                #Handles Autonomous Navigation
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
@@ -87,7 +89,8 @@ class ClientApp(Subscriber):
 
         incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__window)
         incomingMessageChannel.subscribe(MessageType.VISION_DATA, self.__window)
-
+        incomingMessageChannel.subscribe(MessageType.SENSOR_DATA, self.__autonomySystem)
+        
         #The input method that utilizes a keyboard
         keyboardInput = KeyboardInput(self.__outgoingMessageChannel)
 
