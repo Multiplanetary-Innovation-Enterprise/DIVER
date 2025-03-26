@@ -1,5 +1,6 @@
 from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
 import board
+import busio
 import time
 import adafruit_mcp9808
 
@@ -14,12 +15,15 @@ class MCP9808TempSensor(TempSensor):
     def __init__(self):
         #Attempts to connect to the Temp Sensor
         try:
-            i2c = board.I2C()
+            #BEFORE YOU TRY EDITING THIS: The other pair of I2C pins on the Pi is burnt out, so do not use it
+            board.SDA = 0
+            board.SCL = 1
+            i2c = busio.I2C(board.SCL,board.SDA)
             self.__sensor = adafruit_mcp9808.MCP980(i2c)
             self._isConnected = True
         except ValueError:
             self._isConnected = False
-            print("Failed to Detect IMU sensor")
+            print("Failed to Detect Tempature sensor")
 
 
     #Gets the temperature reading from the sensor
