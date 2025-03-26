@@ -1,7 +1,6 @@
 from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
 import board
 import busio
-import time
 import adafruit_mcp9808
 
 from components.sensors.TempUnit import TempUnit
@@ -12,7 +11,7 @@ from components.sensors.TempSensor import TempSensor
 class MCP9808TempSensor(TempSensor):
     __sensor = None #The Temp Sensor sensor
 
-    def __init__(self):
+    def __init__(self, tempUnit:TempUnit = TempUnit.C):
         #Attempts to connect to the Temp Sensor
         try:
             #BEFORE YOU TRY EDITING THIS: The other pair of I2C pins on the Pi is burnt out, so do not use it
@@ -39,13 +38,13 @@ class MCP9808TempSensor(TempSensor):
 
     #Returns the current temperature value in celsius
     def _getTemperatureC(self) -> float:
-        return self.__sensor.temperature()
+        return self.__sensor.temperature
 
     #Returns the current temperature value in fahrenheit
     def _getTemperatureF(self) -> float:
-        return (self.__sensor.temperature() * 9/5) + 32
+        return (self.__sensor.temperature * 9/5) + 32
 
-    #Returns the current temperature value in fahrenheit
+    #Returns the current temperature value in kelvin
     def _getTemperatureK(self) -> float:
-        return self.__sensor.temperature() + 273.15
+        return self.__sensor.temperature + 273.15
 
