@@ -12,6 +12,7 @@ class MCP9808TempSensor(TempSensor):
     __sensor = None #The Temp Sensor sensor
 
     def __init__(self, tempUnit:TempUnit = TempUnit.C):
+        super().__init__(tempUnit)
         #Attempts to connect to the Temp Sensor
         try:
             #BEFORE YOU TRY EDITING THIS: The other pair of I2C pins on the Pi is burnt out, so do not use it
@@ -34,7 +35,7 @@ class MCP9808TempSensor(TempSensor):
         #Performs the temperature reading, probably unnecessary
         #tempC = self.__sensor.temperature
 
-        super().getTemperature()
+        return super().getTemperature()
 
     #Returns the current temperature value in celsius
     def _getTemperatureC(self) -> float:
