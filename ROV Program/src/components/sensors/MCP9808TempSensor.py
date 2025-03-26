@@ -19,7 +19,7 @@ class MCP9808TempSensor(TempSensor):
             board.SDA = 0
             board.SCL = 1
             i2c = busio.I2C(board.SCL,board.SDA)
-            self.__sensor = adafruit_mcp9808.MCP980(i2c)
+            self.__sensor = adafruit_mcp9808.MCP9808(i2c)
             self._isConnected = True
         except ValueError:
             self._isConnected = False
