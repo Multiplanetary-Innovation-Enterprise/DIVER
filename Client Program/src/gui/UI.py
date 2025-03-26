@@ -1,6 +1,7 @@
 from tkinter import *
 from PIL import Image,ImageTk
 import cv2
+from math import sqrt
 
 #if testing on actual ROV, uncomment below line and add "Subscriber" to the inside of the parenthesis for UI()
 from  ROVMessaging.Subscriber import *
@@ -25,6 +26,7 @@ class UI(Subscriber):
         _, self.frame = self.camfeed.read()
         self.logtext = "Log Started!"
         self.pressure = "NOT DETECTED"
+        self.acc = "NOT DETECTED"
         self.time = 0
 
         #creates label for info to be put in
@@ -82,7 +84,7 @@ class UI(Subscriber):
     #Checks for updates
     def startTrackingDisplays(self):
         self.infospacing = 20
-        self.infolabel.configure(text=( (str(self.time) + "s") + (" " * self.infospacing) + ("I:" + str(self.internaltemp) + "°C") + (" " * self.infospacing) + ("E: " + str(self.internaltemp) + "°C") + (" " * self.infospacing) + (str(self.pressure) + "psi") ))
+        self.infolabel.configure(text=( (str(self.time) + "s") + (" " * self.infospacing) + ("I:" + str(self.internaltemp) + "°C") + (" " * self.infospacing) + ("E: " + str(self.internaltemp) + "°C") + (" " * self.infospacing) + (str(self.pressure) + "bar") + (" " * self.infospacing) + str(self.acc) + "m/(s^2)"))
         self.log.configure(text=self.logtext)
 
         self.Window.after(1,self.startTrackingDisplays)
@@ -101,3 +103,5 @@ class UI(Subscriber):
             self.action = message.getContents()['action']
         if 'Frame' in message.getContents():
             self.frame = message.getContents()['Frame']
+        if 'linAcc_x' in message.getContents():
+            self.acc = sqrt((message.getContents()['linAcc_x'] ** 2.0) + (message.getContents()['linAcc_y'] ** 2.0) + (message.getContents()['linAcc_z'] ** 2.0))
