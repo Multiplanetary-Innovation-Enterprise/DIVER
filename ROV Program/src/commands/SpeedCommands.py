@@ -7,7 +7,7 @@ class IncreaseSpeedCommand(PropulsionCommand):
     #Executes the command
     def execute(self) -> None:
         #Gets the speeds of all the thrusters
-        #0 = RightTop, 1 = LeftTop, 2 = FrontRight, 3 = FrontLeft, 4 = BackRight, 5 = BackLeft
+        #0 = TopFront, 1 = TopBack, 2 = FrontLeft, 3 = BackLeft, 4 = FrontRight, 5 = BackRight
         speeds = self._propSystem.getSpeeds()
 
         #Increments all of the thrusters speeds by 5%
