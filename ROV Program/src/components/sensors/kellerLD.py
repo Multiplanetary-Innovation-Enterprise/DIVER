@@ -19,7 +19,7 @@ class KellerLD(object):
 	)
 	_P_MODE_OFFSETS = (1.01325, 1.0, 0.0)
 
-	def __init__(self, bus=1):
+	def __init__(self, bus=0):
 		self._bus = None
 
 		try:

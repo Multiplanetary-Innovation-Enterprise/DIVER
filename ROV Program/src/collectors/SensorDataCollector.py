@@ -44,7 +44,7 @@ class SensorDataCollector(DataCollector):
         #Checks if the external pressure sensor is connected
         if pressureSensor.isConnected():
             pressureSensor._read()  #added 4/8/22
-            sensorData["pressure"]=pressureSensor._getPressure()
+            sensorData["pressure"]=pressureSensor.getPressure()
         
         if batteryLevelSensor.isConnected():
             sensorData["batterylevel"] = batteryLevelSensor._getlevelbyCoulombs()

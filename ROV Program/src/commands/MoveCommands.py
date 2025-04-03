@@ -29,7 +29,7 @@ class MoveForwardCommand(MoveCommand):
         print("Forwards")
 
         #Sets both thruster speeds push forwards
-        speeds = self._propSystem.getXYSpeeds()
+        speeds = self._propSystem.getFlatSpeeds()
         self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]), abs(speeds[2]), abs(speeds[3]))
 
         #Turns on the XY thrusters
@@ -47,7 +47,7 @@ class MoveBackwardCommand(MoveCommand):
         print("Backwards")
 
         #Sets both thruster speeds push backwards
-        speeds = self._propSystem.getXYSpeeds()
+        speeds = self._propSystem.getFlatSpeeds()
         self._propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]),  -abs(speeds[2]),  -abs(speeds[3]))
 
         #Turns on the XY thrusters
@@ -65,7 +65,7 @@ class MoveLeftCommand(MoveCommand):
         print("Move Left")
 
         #Sets the left thruster speed to pull and the right thruster speed to push
-        speeds = self._propSystem.getXYSpeeds()
+        speeds = self._propSystem.getFlatSpeeds()
         self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]*0.76), abs(speeds[2]*0.76), -abs(speeds[3]))
 
         #Turns on the XY thrusters
@@ -83,7 +83,7 @@ class MoveRightCommand(MoveCommand):
         print("Move Right")
 
         #Sets the left thruster speed to push and the right thruster speed to pull
-        speeds = self._propSystem.getXYSpeeds()
+        speeds = self._propSystem.getFlatSpeeds()
         self._propSystem.setXYSpeed(abs(speeds[0]*0.76), -abs(speeds[1]), -abs(speeds[2]), abs(speeds[3]*0.76))
 
         #Turns on the XY thrusters
@@ -103,7 +103,7 @@ class TurnCWCommand(MoveCommand):
         print("Turn clockwise")
 
         #Sets the left thruster speed to pull and the right thruster speed to push
-        speeds = self._propSystem.getXYSpeeds()
+        speeds = self._propSystem.getFlatSpeeds()
         self._propSystem.setXYSpeed(abs(speeds[0]*0.76), -abs(speeds[1]), abs(speeds[2]*0.76),- abs(speeds[3]))
 
         #Turns on the XY thrusters
@@ -121,7 +121,7 @@ class TurnCCWCommand(MoveCommand):
         print("Turn counterclockwise")
 
         #Sets the left thruster speed to push and the right thruster speed to pull
-        speeds = self._propSystem.getXYSpeeds()
+        speeds = self._propSystem.getFlatSpeeds()
         self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]*0.76), -abs(speeds[2]), abs(speeds[3]*0.76))
 
         #Turns on the XY thrusters
