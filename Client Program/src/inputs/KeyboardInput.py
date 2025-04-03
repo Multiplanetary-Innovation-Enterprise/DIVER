@@ -45,6 +45,7 @@ class KeyboardInput(Input):
         keyboard.on_press_key(']', self.increaseBrightness, True)
         keyboard.on_press_key('[', self.decreaseBrightness, True)
 
-        keyboard.on_press_key('c', self.captureImage, True)
+        #not c anymore because it meant you couldn't do ctrl+C to stop the program
+        keyboard.on_press_key('i', self.captureImage, True)
 
         keyboard.on_press_key('E', self.Estop, True)
