@@ -25,12 +25,12 @@ class PropulsionSubsystem(Subsystem):
         topFrontPin   = int(config['Propulsion']['TopFrontThrusterPin'])
 
         #Creates three thrusters. Two for the x-y movement and two for z movement
-        self.__FrontLeftThruster  = Thruster(controller, frontLeftPin, RotDirection.COUNTER_CLOCKWISE)
-        self.__FrontRightThruster = Thruster(controller, frontRightPin, RotDirection.COUNTER_CLOCKWISE)   
-        self.__BackLeftThruster   = Thruster(controller, backLeftPin, RotDirection.COUNTER_CLOCKWISE)
-        self.__BackRightThruster  = Thruster(controller, backRightPin, RotDirection.COUNTER_CLOCKWISE)
+        self.__FrontLeftThruster  = Thruster(controller, frontLeftPin, RotDirection.CLOCKWISE)
+        self.__FrontRightThruster = Thruster(controller, frontRightPin, RotDirection.CLOCKWISE)   
+        self.__BackLeftThruster   = Thruster(controller, backLeftPin, RotDirection.CLOCKWISE)
+        self.__BackRightThruster  = Thruster(controller, backRightPin, RotDirection.CLOCKWISE)
 
-        self.__TopBackThruster  = Thruster(controller, topBackPin, RotDirection.COUNTER_CLOCKWISE)
+        self.__TopBackThruster  = Thruster(controller, topBackPin, RotDirection.CLOCKWISE)
         self.__TopFrontThruster = Thruster(controller, topFrontPin, RotDirection.CLOCKWISE)
 
     #Arms all of the thrusters
@@ -40,7 +40,6 @@ class PropulsionSubsystem(Subsystem):
         self.__FrontRightThruster.arm()
         self.__BackLeftThruster.arm()
         self.__BackRightThruster.arm()
-
         self.__TopBackThruster.arm()
         self.__TopFrontThruster.arm()
         
@@ -92,6 +91,8 @@ class PropulsionSubsystem(Subsystem):
     #Gets the flat speed of the thrusters to undo 76% adjustment, use Top thrusters sine they are never multipled by 0.76
     def getFlatSpeeds(self) -> list:
         speeds = [
+            self.__TopFrontThruster.getSpeed(),
+            self.__TopBackThruster.getSpeed(),
             self.__TopFrontThruster.getSpeed(),
             self.__TopBackThruster.getSpeed(),
             self.__TopFrontThruster.getSpeed(),
