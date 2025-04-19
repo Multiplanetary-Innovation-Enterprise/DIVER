@@ -30,7 +30,7 @@ class MoveForwardCommand(MoveCommand):
 
         #Sets both thruster speeds push forwards
         speeds = self._propSystem.getFlatSpeeds()
-        self._propSystem.setXYSpeed(abs(speeds[0]), abs(speeds[1]), abs(speeds[2]), abs(speeds[3]))
+        self._propSystem.setXYSpeed(abs(speeds[2]), -abs(speeds[3]*0.76), abs(speeds[4]*0.76), -abs(speeds[5]))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
@@ -48,7 +48,7 @@ class MoveBackwardCommand(MoveCommand):
 
         #Sets both thruster speeds push backwards
         speeds = self._propSystem.getFlatSpeeds()
-        self._propSystem.setXYSpeed(-abs(speeds[0]), -abs(speeds[1]),  -abs(speeds[2]),  -abs(speeds[3]))
+        self._propSystem.setXYSpeed(-abs(speeds[2]), abs(speeds[3]*0.76),  -abs(speeds[4]),  abs(speeds[5]*0.76))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
@@ -66,7 +66,7 @@ class MoveLeftCommand(MoveCommand):
 
         #Sets the left thruster speed to pull and the right thruster speed to push
         speeds = self._propSystem.getFlatSpeeds()
-        self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]*0.76), abs(speeds[2]*0.76), -abs(speeds[3]))
+        self._propSystem.setXYSpeed(-abs(speeds[2]), -abs(speeds[3]), abs(speeds[4]*0.76), abs(speeds[5]*0.76))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
@@ -84,7 +84,7 @@ class MoveRightCommand(MoveCommand):
 
         #Sets the left thruster speed to push and the right thruster speed to pull
         speeds = self._propSystem.getFlatSpeeds()
-        self._propSystem.setXYSpeed(abs(speeds[0]*0.76), -abs(speeds[1]), -abs(speeds[2]), abs(speeds[3]*0.76))
+        self._propSystem.setXYSpeed(abs(speeds[2]*0.76), abs(speeds[3]*0.76), -abs(speeds[4]), -abs(speeds[5]))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
@@ -104,7 +104,7 @@ class TurnCWCommand(MoveCommand):
 
         #Sets the left thruster speed to pull and the right thruster speed to push
         speeds = self._propSystem.getFlatSpeeds()
-        self._propSystem.setXYSpeed(abs(speeds[0]*0.76), -abs(speeds[1]), abs(speeds[2]*0.76),- abs(speeds[3]))
+        self._propSystem.setXYSpeed(abs(speeds[2]*0.76), -abs(speeds[3]), -abs(speeds[4]), abs(speeds[5]*0.76))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
@@ -122,7 +122,7 @@ class TurnCCWCommand(MoveCommand):
 
         #Sets the left thruster speed to push and the right thruster speed to pull
         speeds = self._propSystem.getFlatSpeeds()
-        self._propSystem.setXYSpeed(-abs(speeds[0]), abs(speeds[1]*0.76), -abs(speeds[2]), abs(speeds[3]*0.76))
+        self._propSystem.setXYSpeed(-abs(speeds[2]), abs(speeds[3]*0.76), abs(speeds[4]*0.76), -abs(speeds[5]))
 
         #Turns on the XY thrusters
         self._propSystem.setXYStates(True, True, True, True)
@@ -131,10 +131,6 @@ class TurnCCWCommand(MoveCommand):
     @staticmethod
     def getActionCode() -> int:
         return 16
-    
-
-
-
 
 #The command for stopping the ROV's vertical movement
 class MoveZStopCommand(MoveCommand):
