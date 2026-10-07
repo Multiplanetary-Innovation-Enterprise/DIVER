@@ -27,6 +27,10 @@ class CommandFactory:
                 command = MoveForwardCommand(self.__rov.getPropSystem())
         elif actionCode == MoveBackwardCommand.getActionCode():
                 command = MoveBackwardCommand(self.__rov.getPropSystem())
+        elif actionCode == PitchUpCommand.getActionCode():
+                command = PitchUpCommand(self.__rov.getPropSystem())
+        elif actionCode == PitchDownCommand.getActionCode():
+                command = PitchDownCommand(self.__rov.getPropSystem())
         
         
         elif actionCode == MoveLeftCommand.getActionCode():

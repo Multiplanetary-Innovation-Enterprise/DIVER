@@ -17,7 +17,9 @@ class USBCamera(Camera):
 
     #The implementation specific setup process
     def _setup(self) -> None:
-        self.__camera = cv.VideoCapture(self.__id)
+        # if camera not detected try swapping for uncommented line
+        self.__camera = cv.VideoCapture(self.__id, cv.CAP_V4L2)
+        #self.__camera = cv.VideoCapture(self.__id)
 
         #Checks if the camera was detected
         if not self.__camera.isOpened():

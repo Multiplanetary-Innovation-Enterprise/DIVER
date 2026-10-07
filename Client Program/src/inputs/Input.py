@@ -70,6 +70,16 @@ class Input(Publisher, ABC):
         message = Message(MessageType.ACTION, Action.MOVE_Z_DOWN.value)
         self.sendMessage(message, self.__messageChannel)
 
+    #Sends the pitch up action message
+    def pitchUp(self, event) -> None:
+        message = Message(MessageType.ACTION, Action.MOVE_PITCH_UP.value)
+        self.sendMessage(message, self.__messageChannel)
+
+    #Sends the pitch down action message
+    def pitchDown(self, event) -> None:
+        message = Message(MessageType.ACTION, Action.MOVE_PITCH_DOWN.value)
+        self.sendMessage(message, self.__messageChannel)
+
     #Sends the stop vertical movement action message
     def stopZ(self, event) -> None:
         message = Message(MessageType.ACTION, Action.MOVE_Z_STOP.value)

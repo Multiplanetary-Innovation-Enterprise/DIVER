@@ -6,7 +6,7 @@ from subsystems.VisionSubsystem import VisionSubsystem
 
 #The command for capturing an image
 class CaptureImageCommand(Command):
-    __visionSystem:VisionSubsystem = None #The ROV's propulsion system
+    __visionSystem:VisionSubsystem = None #The ROV's Vision system
 
     def __init__(self, visionSystem:VisionSubsystem):
         self.__visionSystem =visionSystem

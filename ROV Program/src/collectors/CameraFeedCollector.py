@@ -29,7 +29,7 @@ class CameraFeedCollector(DataCollector):
 
         #Gets the camera data if it is connectd
         if camera.isConnected():
-            visionData["camera"] =  camera.getFrame()
+            visionData["camera"] =  camera.getRawFrame() 
 
         self.lastTime = self.currTime
         self.currTime = time.time_ns()

@@ -37,6 +37,12 @@ class KeyboardInput(Input):
         keyboard.on_press_key('down', self.down, True)
         keyboard.on_release_key('down', self.stopZ, True)
 
+        keyboard.on_press_key('=', self.pitchUp, True)
+        keyboard.on_release_key('=', self.stopZ, True)
+
+        keyboard.on_press_key('-', self.pitchDown, True)
+        keyboard.on_release_key('-', self.stopZ, True)
+
         keyboard.on_press_key('.', self.increaseSpeed, True)
         keyboard.on_press_key(',', self.decreaseSpeed, True)
 

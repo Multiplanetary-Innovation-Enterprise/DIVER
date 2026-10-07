@@ -11,7 +11,7 @@ class IncreaseSpeedCommand(PropulsionCommand):
         speeds = self._propSystem.getSpeeds()
 
         #Increments all of the thrusters speeds by 5%
-        if speeds[0] <= .98:
+        if speeds[0] < 1:
             speeds[0] += 0.05
             speeds[1] += 0.05
             speeds[2] += 0.05
@@ -42,7 +42,7 @@ class DecreaseSpeedCommand(PropulsionCommand):
         speeds = self._propSystem.getSpeeds()
 
         #Decrements all of the thrusters speeds by 5%
-        if speeds[0] >= 0.02:
+        if speeds[0] > 0:
             speeds[0] -= 0.05
             speeds[1] -= 0.05
             speeds[2] -= 0.05
@@ -63,3 +63,10 @@ class DecreaseSpeedCommand(PropulsionCommand):
     @staticmethod
     def getActionCode() -> int:
         return 10
+    
+def boundValues(array) -> None:
+    for index, value in enumerate(array):
+        if value < 0:
+            array[index] = 0
+        elif value > 1:
+            array[index] = 1

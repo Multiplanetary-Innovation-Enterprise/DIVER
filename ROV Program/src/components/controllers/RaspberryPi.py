@@ -4,7 +4,7 @@ import time
 try:
 	import pigpio
 except:
-	print("Failed to import the required libraries for the Raspberry Pi Sensor")
+	import pc_wrappers.simulator_pigpio as pigpio
 
 from signals.PinMode import PinMode
 from components.controllers.ResistorType import ResistorType

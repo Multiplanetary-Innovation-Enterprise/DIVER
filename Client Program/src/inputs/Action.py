@@ -19,4 +19,6 @@ class Action(Enum):
     CAPTURE_IMAGE = 14
     TURN_XY_CW = 15
     TURN_XY_CCW =16
+    MOVE_PITCH_UP = 17
+    MOVE_PITCH_DOWN = 18
 

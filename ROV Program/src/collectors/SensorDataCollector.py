@@ -1,3 +1,4 @@
+import sys
 from ROVMessaging.MessageChannel import MessageChannel
 from ROVMessaging.MessageType import MessageType
 
@@ -46,6 +47,9 @@ class SensorDataCollector(DataCollector):
             pressureSensor._read()  #added 4/8/22
             sensorData["pressure"]=pressureSensor.getPressure()
         
-        sensorData["Core Temp"]=coreSensor.getCoreTemp() #added 3-24-23
+        if 'pigpio' in sys.modules:
+            sensorData["Core Temp"]=coreSensor.getCoreTemp() #added 3-24-23
+        else:
+            sensorData["Core Temp"] = 0
 
         return sensorData

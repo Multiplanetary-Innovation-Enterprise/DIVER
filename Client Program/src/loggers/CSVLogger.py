@@ -17,18 +17,43 @@ class CSVLogger(Subscriber, ABC):
         super(Subscriber, self).__init__()
 
     #Opens the file with the provided name as the prefix
-    def openFile(self, fileName:str) -> None:
-        #Creates the logs directory if it does not exist
-        dir = "../logs/data/"
-        os.makedirs(dir, exist_ok = True)
+    #def openFile(self, fileName:str) -> None:
+     #   #Creates the logs directory if it does not exist
+      #  dir = "../logs/data/"
+       # os.makedirs(dir, exist_ok = True)
 
-        #Gets the date to append to the file
+        ##Gets the date to append to the file
+        #now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+        ##Opens the file with the provided name or creates a new one if it does
+        ##not exist
+        #self.__file = open(str(fileName) + str(" ") + str(now) + str(".csv"), "w+");
+        #self.__writer = csv.writer(self.__file)
+
+    def openFile(self, fileName: str) -> None:
+        # 1. Sanitize fileName to prevent accidental subdirectories
+        # This replaces slashes with underscores so Linux doesn't look for non-existent folders
+        safe_file_name = str(fileName).replace("/", "_").replace("\\", "_")
+
+        # 2. Safely get the absolute directory of this script file
+        script_dir = os.path.dirname(os.path.realpath(__file__))
+        
+        # 3. Form absolute path to the logs directory and create it
+        dir_path = os.path.abspath(os.path.join(script_dir, "../logs/data/"))
+        os.makedirs(dir_path, exist_ok=True)
+        
+        # 4. Get the current date and time
         now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        #Opens the file with the provided name or creates a new one if it does
-        #not exist
-        self.__file = open(fileName + str(" ") + str(now) + str(".csv"), "w+");
+        
+        # 5. Build final file path safely
+        file_name = f"{safe_file_name}_{now}.csv"
+        file_path = os.path.join(dir_path, file_name)
+        
+        # 6. Open the file securely
+        # This is the line that was crashing.
+        self.__file = open(file_path, "w+", newline='')
         self.__writer = csv.writer(self.__file)
+
 
     #Writes the next row to the csv file using the provided data in dict form
     def writeRow(self, data:dict, missingVal:str="X") -> None:

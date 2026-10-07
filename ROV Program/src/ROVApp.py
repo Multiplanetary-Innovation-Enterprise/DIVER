@@ -21,6 +21,8 @@ from ROV import ROV
 from collectors.SensorDataCollector import SensorDataCollector
 from collectors.CameraFeedCollector import CameraFeedCollector
 
+from pathlib import Path
+
 #Represents the ROV program
 class ROVApp(Subscriber):
     __config = None                                  #The config data
@@ -37,14 +39,17 @@ class ROVApp(Subscriber):
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
+        #Get the absolute path to the directory containing ROVApp.py
+        thisDir = Path(__file__).resolve().parent
+
         #Checks for which config path to use
         #The default is up one directory for development
-        configPath = '../config.ini'
+        configPath = thisDir.parent / 'config.ini'
 
         # Checks if the config file was not found. It is in
         # the same folder when packaged as an exe file
         if not os.path.isfile(configPath):
-            configPath = 'config.ini'
+            configPath = thisDir / 'config.ini'
 
         print("Using config file: " + str(configPath))
 

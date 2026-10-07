@@ -10,7 +10,8 @@ class VisionSubsystem(Subsystem):
     def __init__(self, controller:Controller, config):
         super().__init__(controller, config)
 
-        self.__camera = USBCamera(0)
+        # default to 0, use other if testing off of rov
+        self.__camera = USBCamera(11) 
         self.__camera.setResolution(640, 480)
         self.__camera.setFPS(60)
 

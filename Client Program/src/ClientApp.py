@@ -23,6 +23,7 @@ from inputs.KeyboardInput import KeyboardInput
 from inputs.ControllerInput import ControllerInput
 from loggers.DataLogger import DataLogger
 from gui.UI import UI
+from pathlib import Path
 
 #Represents the ROV Client program
 class ClientApp(Subscriber):
@@ -38,22 +39,27 @@ class ClientApp(Subscriber):
 
     #The setup used for initializing all of the resources that will be needed
     def __setup(self) -> None:
+        #Get the absolute path to the directory containing ROVApp.py
+        thisDir = Path(__file__).resolve().parent
 
         #Checks for which config path to use
         #The default is up one directory for development
-        configPath = '..\config.ini' #..\config.ini for Windows because Windows
+        configPath = thisDir.parent / 'config.ini'
 
         # Checks if the config file was not found. It is in
         # the same folder when packaged as an exe file
         if not os.path.isfile(configPath):
-            configPath = 'config.ini'
+            configPath = thisDir / 'config.ini'
 
         #Opens the config file
         self.__config = configparser.ConfigParser()
         self.__config.read(configPath)
 
         #Connection info for connecting to the ROV
-        host = str(self.__config['ROV_CONNECTION']['Host'])
+        if self.__config['ROV_CONNECTION']['FakeHardware']:
+            host = str(self.__config['ROV_CONNECTION']['FakeHost'])
+        else: 
+            host = str(self.__config['ROV_CONNECTION']['Host'])
         port = int(self.__config['ROV_CONNECTION']['Port'])
         self.__window.addLog("PORT: " + str(port) + " Host: " + str(host))
         #The connection to the ROV
@@ -65,9 +71,15 @@ class ClientApp(Subscriber):
         try:
             self.__serverConnection.connect()
             print("Successfully Connected to ROV")
+        
+        #UI testing
         except:
-            os.system('pause')
-            sys.exit()
+            #os.system('pause')
+            
+            print("Could not connect to ROV, starting anyway...")
+            self.__window.startMainLoop()
+            return
+            #sys.exit()
 
         #The sending and receiving message channels
         incomingMessageChannel = MessageChannel()
@@ -97,7 +109,7 @@ class ClientApp(Subscriber):
 
         #Sets up the data logger and creates a new log file
         self.__dataLogger = DataLogger()
-        self.__dataLogger.openFile("../logs/data/data_log")
+        self.__dataLogger.openFile(thisDir.parent.parent / 'logs' / 'data' / 'data_log')
 
         #Sets up the GUI window
 
@@ -131,6 +143,7 @@ class ClientApp(Subscriber):
         self.__cleanup()
 
     def onclosewindow(self):
+        self.__window.close()
         self.stop()
 
     #Tells the ROV client to stop running
@@ -139,34 +152,37 @@ class ClientApp(Subscriber):
 
     #Used to close resources as part of the shutdown process
     def __cleanup(self) -> None:
-        self.__window.addLog("Shutting down...")
+        #UI testing
+        try:
+            self.__window.addLog("Shutting down...")
 
-        self.pyrunning = False
+            self.pyrunning = False
 
-        #Stops the xbox controller listener thread
-        self.__controllerInput.stop()
+            #Stops the xbox controller listener thread
+            self.__controllerInput.stop()
 
-        self.__window.addLog("send shutdown mssage")
+            self.__window.addLog("send shutdown mssage")
 
-        #Tells the server that it is shutting down
-        message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
-        self.__outgoingMessageChannel.broadcast(message)
+            #Tells the server that it is shutting down
+            message = Message(MessageType.SYSTEM_STATUS, SystemStatus.SHUT_DOWN)
+            self.__outgoingMessageChannel.broadcast(message)
 
-        self.__subWriter.stop()
+            self.__subWriter.stop()
 
-        #Sends EOF to the server, so that its socket reader stops blocking
-        self.__serverConnection.shutdown(socket.SHUT_WR)
+            #Sends EOF to the server, so that its socket reader stops blocking
+            self.__serverConnection.shutdown(socket.SHUT_WR)
 
-        #Waits for pub listener to stop blocking (occurs once the server sends EOF
-        #by shutting down its side of the socekt)
-        self.__pubListener.stop()
+            #Waits for pub listener to stop blocking (occurs once the server sends EOF
+            #by shutting down its side of the socekt)
+            self.__pubListener.stop()
 
-        #Finally closes the socket, since the server is disconnected
-        self.__serverConnection.close()
+            #Finally closes the socket, since the server is disconnected
+            self.__serverConnection.close()
 
-        #Closes the data log file
-        self.__dataLogger.close()
-
+            #Closes the data log file
+            self.__dataLogger.close()
+        except:
+            pass
     #Listens for system status updates
     def recieveMessage(self, message:Message) -> None:
         #Checks if the message is a shutdown message

@@ -1,7 +1,22 @@
-from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
-import board
-import busio
-import adafruit_mcp9808
+try:
+    from adafruit_blinka.microcontroller.generic_linux.i2c import I2C
+except ImportError:
+    from pc_wrappers.simulator_adafruit_blinka import I2C
+
+try:
+    import board
+except ImportError:
+    import pc_wrappers.simulator_board as board
+
+try:    
+    import busio
+except ImportError:
+    import pc_wrappers.simulator_busio as busio
+
+try:
+    import adafruit_mcp9808
+except ImportError:
+    import pc_wrappers.simulator_adafruit_mcp9808 as adafruit_mcp9808
 
 from components.sensors.TempUnit import TempUnit
 from components.sensors.TempSensor import TempSensor

@@ -180,3 +180,40 @@ class MoveDownCommand(MoveCommand):
     @staticmethod
     def getActionCode() -> int:
         return 8
+    
+#The command for pitching the ROV nose upwards
+class PitchUpCommand(MoveCommand):
+    #Executes the command
+    def execute(self) -> None: 
+        print("Pitch Up")
+
+        #Sets both vertical thruster speeds to pitch upwards
+        speeds = self._propSystem.getVerticalSpeeds()
+        self._propSystem.setVerticalSpeed(abs(speeds[0]), -abs(speeds[1]))
+
+        #Turns on the vertical thrusters
+        self._propSystem.setZStates(True, True)
+
+    #The action code associated with this command
+    @staticmethod
+    def getActionCode() -> int:
+        return 17
+    
+
+#The command for pitching the ROV nose downwards
+class PitchDownCommand(MoveCommand):
+    #Executes the command
+    def execute(self) -> None: 
+        print("Pitch Down")
+
+        #Sets both vertical thruster speeds to pitch downwards
+        speeds = self._propSystem.getVerticalSpeeds()
+        self._propSystem.setVerticalSpeed(-abs(speeds[0]), abs(speeds[1]))
+
+        #Turns on the vertical thrusters
+        self._propSystem.setZStates(True, True)
+
+    #The action code associated with this command
+    @staticmethod
+    def getActionCode() -> int:
+        return 18

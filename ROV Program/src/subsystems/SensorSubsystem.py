@@ -47,7 +47,6 @@ class SensorSubsystem(Subsystem):
     def getCoreSensor(self) -> TempSensor: #NEW
         return self.__coreSensor   #NEW
 
-
     #Performs any clean up on system shutdown
     def shutdown(self) -> None:
         pass
