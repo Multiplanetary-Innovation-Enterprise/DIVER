@@ -12,3 +12,5 @@ Common/Messaging/dist
 Common/Messaging/ROV_Messaging.egg-info
 
 Client Program/logs
+
+*.csv

@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import cv2
 import math
 import time
+from pathlib import Path
 
 
 #if testing on actual ROV, uncomment below line and add "Subscriber" to the inside of the parenthesis for UI()
@@ -16,6 +17,9 @@ class UI(Subscriber):
     FakeHardware = False
     
     def __init__(self) -> None:
+        #Get the absolute path to the directory containing UI.py
+        thisDir = Path(__file__).resolve().parent
+
         # configure window layout
         self.Window.title("ROV Control Panel")
         self.Window.configure(bg="#2b2b2b")
